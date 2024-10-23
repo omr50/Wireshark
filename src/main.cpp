@@ -69,7 +69,7 @@ int main()
 
     // create bpf program to indicate what we want to capture
     struct bpf_program fp;
-    char filter_exp[] = "port 8000"; // filter expression
+    char filter_exp[] = "dst port 8000"; // filter expression
     bpf_u_int32 net = 0, mask = 0;
 
     // get network address and netmask (extra info but not needed)
