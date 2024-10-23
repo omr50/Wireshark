@@ -4,6 +4,7 @@
 #include <arpa/inet.h>
 #include <pcap/pcap.h>
 #include <err.h>
+void packet_handler(u_char *args, const struct pcap_pkthdr *header, const u_char *packet);
 
 int main()
 {
@@ -69,7 +70,7 @@ int main()
 
     // create bpf program to indicate what we want to capture
     struct bpf_program fp;
-    char filter_exp[] = "dst port 8000"; // filter expression
+    char filter_exp[] = "port 8000"; // filter expression
     bpf_u_int32 net = 0, mask = 0;
 
     // get network address and netmask (extra info but not needed)
@@ -104,5 +105,26 @@ int main()
         exit(1);
     }
 
+    // Start capturing packets
+    // pcap_loop(handle, 10, packet_handler, NULL);
+    int res = pcap_loop(handle, 0, packet_handler, NULL);
+    if (res == -1)
+    {
+        fprintf(stderr, "Error occurred in pcap_loop: %s\n", pcap_geterr(handle));
+    }
+    else if (res == -2)
+    {
+        fprintf(stderr, "pcap_breakloop() was called; loop terminated.\n");
+    }
+    else
+    {
+        printf("pcap_loop() exited with code %d\n", res);
+    }
+
     pcap_freecode(&fp); // free compiled filter
+}
+
+void packet_handler(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
+{
+    printf("Packet captured with length: %d\n", header->len);
 }
