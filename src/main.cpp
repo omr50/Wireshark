@@ -45,6 +45,7 @@ int main()
     }
 
     // get the selected device
+    // lo for loop back or any to capture on all
     pcap_if_t *d;
     for (d = devices, i = 1; i < dev_num; d = d->next, i++)
         ;
@@ -99,7 +100,7 @@ int main()
     // privileges to avoid errors.
     if (pcap_setfilter(handle, &fp) == -1)
     {
-        fprintf(stderr, "Couldn't install iflter %s: %s\n", filter_exp, pcap_geterr(handle));
+        fprintf(stderr, "Couldn't install filter %s: %s\n", filter_exp, pcap_geterr(handle));
         pcap_freealldevs(devices);
         pcap_close(handle);
         exit(1);
