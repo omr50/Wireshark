@@ -60,7 +60,7 @@ int main()
     handle = pcap_open_live(d->name, 65536, 1, 1000, errbuff);
     printf("handle opened successfully!\n");
 
-    if (handle = NULL)
+    if (handle == NULL)
     {
         fprintf(stderr, "Couldn't open device %s: %s\n", d->name, errbuff);
         pcap_freealldevs(devices);
@@ -94,6 +94,8 @@ int main()
     printf("Compiled bpf successfully\n");
 
     // Set the filter
+    // make sure to run with correct
+    // privileges to avoid errors.
     if (pcap_setfilter(handle, &fp) == -1)
     {
         fprintf(stderr, "Couldn't install iflter %s: %s\n", filter_exp, pcap_geterr(handle));
