@@ -16,6 +16,7 @@ public:
     Packet() = default;
     virtual ~Packet() = default;
     // should parse its own protocol specific data within the parser class
+    // make sure virtual functions are implemented in the concrete classes
     virtual void parse(const u_char *data, size_t length) = 0;
     virtual void print() const = 0;
 };
