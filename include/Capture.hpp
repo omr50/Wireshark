@@ -23,6 +23,10 @@ public:
     void select_interface();
     void present_dev_options();
     void change_filter_expression(std::string new_filter_expression);
+    void create_handle();
+    void compile_filter();
+    void set_filter();
+    void start_loop();
     // when new setting are added (bpf, changed device, etc.) restart
     void restart_sniffer();
 };
