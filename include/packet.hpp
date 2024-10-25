@@ -1,6 +1,12 @@
 // abstract packet class which will be a parent
 // for more concrete packet types (eth, ip, arp, tcp)
 #include <memory>
+#include "packet.hpp"
+#include <stdio.h>
+#include <stdlib.h>
+#include <netinet/ether.h>
+#include <arpa/inet.h>
+#include <pcap/pcap.h>
 
 class Packet
 {
