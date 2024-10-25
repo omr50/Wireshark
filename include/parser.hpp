@@ -7,7 +7,8 @@ the packet structure contained with in.
 pointer to packet data          packet classes eth -> ip -> tcp -> http (etc.)
 
 */
+#pragma once
 
-class parser
+class Parser
 {
 };
