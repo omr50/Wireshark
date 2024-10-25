@@ -2,8 +2,8 @@
     This class will iniitialize the packet capturer
     and then basically forward everything to the parser.
 */
-#include "packet.hpp"
-#include "./include/Capture.hpp"
+#include "../include/packet.hpp"
+#include "../include/Capture.hpp"
 #include <stdio.h>
 #include <stdlib.h>
 #include <netinet/ether.h>
@@ -111,11 +111,18 @@ void Capture::set_filter()
         pcap_close(this->handle);
         exit(1);
     }
+    printf("Correctly set filter!\n");
+}
+
+void Capture::packet_handler(u_char *userData, const struct pcap_pkthdr *pkthdr, const u_char *packet)
+{
+    printf("Packet handler currently working!\n");
+    printf("Packet header size = %d\n", pkthdr->len);
 }
 
 void Capture::start_loop()
 {
-    int res = pcap_loop(this->handle, 0, packet_handler, NULL);
+    int res = pcap_loop(this->handle, 0, this->packet_handler, NULL);
     if (res == -1)
     {
         fprintf(stderr, "Error occurred in pcap_loop: %s\n", pcap_geterr(handle));
@@ -134,62 +141,16 @@ void Capture::start_loop()
 
 Capture::Capture()
 {
-    // char errbuff[PCAP_ERRBUF_SIZE];
-    // pcap_if_t *devices;
-
-    // if (pcap_findalldevs(&devices, errbuff) == 0)
-    // {
-    //     printf("Successfully found devices!\n");
-    // }
-    // else
-    // {
-    //     printf("%s\n", errbuff);
-    //     exit(0);
-    // }
-
     this->get_all_devs();
     this->present_dev_options();
 
     printf("Enter the interface number (1-%d): ", this->total_devs);
     scanf("%d", &this->dev_num);
+
     this->select_interface();
     this->create_handle();
     this->change_filter_expression("port 8000");
+    this->compile_filter();
     this->set_filter();
-
-    // get the selected device
-    // lo for loop back or any to capture on all
-
-    // get network address and netmask (extra info but not needed)
-    // if (pcap_lookupnet(d->name, &net, &mask, errbuff) == -1)
-    // {
-    //     fprintf(stderr, "Couldn't get netmask for device %s: %s\n", d->name, errbuff);
-    //     net = 0;
-    //     mask = 0;
-    // }
-    // printf("network lookup worked!\n");
-
-    // compile filter (why does this take in the handle if we need to again use handle in the set filter
-    // function below)
-
-    // Set the filter
-    // make sure to run with correct
-    // privileges to avoid errors.
-    // Start capturing packets
-    // pcap_loop(handle, 10, packet_handler, NULL);
-    int res = pcap_loop(handle, 0, packet_handler, NULL);
-    if (res == -1)
-    {
-        fprintf(stderr, "Error occurred in pcap_loop: %s\n", pcap_geterr(handle));
-    }
-    else if (res == -2)
-    {
-        fprintf(stderr, "pcap_breakloop() was called; loop terminated.\n");
-    }
-    else
-    {
-        printf("pcap_loop() exited with code %d\n", res);
-    }
-
-    pcap_freecode(&fp); // free compiled filter   pcap_freecode(&fp); // free compiled filter
+    this->start_loop();
 }

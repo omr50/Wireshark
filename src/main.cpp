@@ -4,12 +4,14 @@
 #include <arpa/inet.h>
 #include <pcap/pcap.h>
 #include <err.h>
+#include "../include/Capture.hpp"
+
 void packet_handler(u_char *args, const struct pcap_pkthdr *header, const u_char *packet);
 
 int main()
 {
-}
-void packet_handler(u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
-{
-    printf("Packet captured with length: %d\n", header->len);
+
+    Capture packet_capture = Capture();
+
+    return 0;
 }

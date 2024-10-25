@@ -29,4 +29,5 @@ public:
     void start_loop();
     // when new setting are added (bpf, changed device, etc.) restart
     void restart_sniffer();
+    static void packet_handler(u_char *userData, const struct pcap_pkthdr *pkthdr, const u_char *packet);
 };

@@ -1,5 +1,6 @@
 // abstract packet class which will be a parent
 // for more concrete packet types (eth, ip, arp, tcp)
+#pragma once
 #include <memory>
 #include <stdio.h>
 #include <stdlib.h>
