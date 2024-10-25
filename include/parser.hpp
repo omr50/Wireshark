@@ -28,5 +28,7 @@ public:
                 // to parse its own headers. Then continue on to the next packet.
                 // Also another function will be responsible for linking all the
                 // packets together.
+
+                // does the callback allocate pointer on the heap?
         }
 };
