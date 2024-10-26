@@ -21,14 +21,8 @@ class Parser
 {
 
 public:
+        Parser();
         // Determine class type and return a pointer to it
-        std::weak_ptr<Packet> Determine_Packet(pcap_pkthdr *header, const u_char *packet)
-        {
-                // use the header to determine packet, create packet, allow packet
-                // to parse its own headers. Then continue on to the next packet.
-                // Also another function will be responsible for linking all the
-                // packets together.
-
-                // does the callback allocate pointer on the heap?
-        }
+        // CHANGE FUNCTION TYPE LATER
+        void Determine_Packet(pcap_pkthdr *header, const u_char *packet);
 };

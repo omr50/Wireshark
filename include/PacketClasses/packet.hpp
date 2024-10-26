@@ -13,6 +13,7 @@ class Packet
 public:
     std::shared_ptr<Packet> encapsulatedPacket;
     std::weak_ptr<Packet> parentPacket;
+    std::weak_ptr<Packet> rootPacket;
 
     Packet() = default;
     virtual ~Packet() = default;
