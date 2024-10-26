@@ -2,7 +2,7 @@
     This class will iniitialize the packet capturer
     and then basically forward everything to the parser.
 */
-#include "../include/packet.hpp"
+#include "../include/PacketClasses/packet.hpp"
 #include "../include/Capture.hpp"
 #include <stdio.h>
 #include <stdlib.h>
@@ -165,6 +165,8 @@ Capture::Capture()
     this->change_filter_expression("tcp");
     this->compile_filter();
     this->set_filter();
+
+    // if datalink = 1 then we have ethernet as the link layer
     int datalink = pcap_datalink(handle);
     printf("Data Link Type: %d\n", datalink);
 

@@ -10,7 +10,7 @@ pointer to packet data          packet classes eth -> ip -> tcp -> http (etc.)
 #pragma once
 
 #include <memory>
-#include "packet.hpp"
+#include "./PacketClasses/packet.hpp"
 #include <stdio.h>
 #include <stdlib.h>
 #include <netinet/ether.h>
