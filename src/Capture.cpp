@@ -10,7 +10,7 @@
 #include <arpa/inet.h>
 #include <pcap/pcap.h>
 
-Capture::Capture()
+Capture::Capture(std::string filter_exp) : filter_exp(filter_exp)
 {
     printf("Capture begin!\n");
 }
@@ -25,7 +25,7 @@ void Capture::start()
 
     this->select_interface();
     this->create_handle();
-    this->change_filter_expression("tcp");
+    this->change_filter_expression(this->filter_exp.c_str());
     this->compile_filter();
     this->set_filter();
 

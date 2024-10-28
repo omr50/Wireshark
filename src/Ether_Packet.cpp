@@ -27,7 +27,7 @@ void Ether_Packet::parse()
         // ip_packet->parse();
         printf("IP PACKET PARSE\n");
     }
-    else if (ntohs(eth_hdr->ether_type == 0x0806))
+    else if (ntohs(eth_hdr->ether_type) == 0x0806)
     {
         std::shared_ptr<Packet> shared = shared_from_this();
         // Create a weak_ptr from self
