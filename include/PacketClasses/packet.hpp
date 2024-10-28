@@ -12,10 +12,11 @@ class Packet
 {
 public:
     std::shared_ptr<Packet> encapsulatedPacket;
-    std::shared_ptr<Packet> parentPacket;
-    std::shared_ptr<Packet> rootPacket;
+    std::weak_ptr<Packet> parentPacket;
+
     u_char *start_data;
     size_t data_length;
+    timeval timestamp;
 
     Packet() = default;
     virtual ~Packet() = default;

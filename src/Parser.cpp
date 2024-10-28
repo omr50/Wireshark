@@ -17,7 +17,7 @@ std::shared_ptr<Packet> Parser::Determine_Packet(pcap_pkthdr *header, const u_ch
     // actually return.
 
     // ref count = 1
-    auto root_packet = std::make_shared<Ether_Packet>(data, header->len);
+    auto root_packet = std::make_shared<Ether_Packet>(data, header->len, time_stamp);
     // call the parse of ethernet packet and it will cause a chain reaction
     // that will cause all packets to be parsed and created.
     root_packet->parse();

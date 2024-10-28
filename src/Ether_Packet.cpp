@@ -1,26 +1,31 @@
 #include "../include/PacketClasses/Ether_Packet.hpp"
 #include "../include/PacketClasses/IP_Packet.hpp"
+#include "../include/PacketClasses/ARP_Packet.hpp"
 
-Ether_Packet::Ether_Packet(const u_char *data, size_t length)
+Ether_Packet::Ether_Packet(const u_char *data, size_t length, timeval time_stamp)
 {
     this->eth_hdr = (ether_header *)start_data;
-    this->parentPacket = nullptr;
+    this->timestamp = time_stamp;
+    // not sure if there is a better way to make the
+    // parent node set to null
+    std::shared_ptr<Packet> null_packet = nullptr;
+    this->parentPacket = null_packet;
     this->encapsulatedPacket = nullptr;
     this->parse();
-    // copy the memory first into heap allocated value.
 }
 
 void Ether_Packet::parse()
 {
-    // basically use the eth_hdr to determine the EtherType and
-    // find the next packet and create it.
-    // ip
     if (ntohs(eth_hdr->ether_type) == 0x0800)
     {
         // THIS IS AN IP PACKET
         // ip header pointer = eth hdr + eth hdr length
         std::shared_ptr<IP_Packet> ip_packet = std::make_shared<IP_Packet>(start_data + 1, this->data_length - sizeof(eth_hdr));
         ip_packet->parse();
+    }
+    else if (ntohs(eth_hdr->ether_type == 0x0806))
+    {
+        std::shared_ptr<ARP_Packet> arp_packet = std::make_shared<ARP_Packet>(start_data + 1, this->data_length - sizeof(eth_hdr));
     }
 }
 
