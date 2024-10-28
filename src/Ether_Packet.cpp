@@ -2,7 +2,7 @@
 
 Ether_Packet::Ether_Packet(const u_char *data, size_t length)
 {
-    this->copy_data(data, length);
+    Parser::copy_data(data, length);
     this->eth_hdr = (ether_header *)start_data;
     this->parentPacket = nullptr;
     this->encapsulatedPacket = nullptr;

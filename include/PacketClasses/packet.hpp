@@ -18,7 +18,6 @@ public:
     size_t data_length;
 
     Packet() = default;
-    void copy_data(const u_char *data, size_t length);
     virtual ~Packet() = default;
     // should parse its own protocol specific data within the parser class
     // make sure virtual functions are implemented in the concrete classes
