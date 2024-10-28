@@ -9,8 +9,11 @@ std::shared_ptr<Packet> Parser::Determine_Packet(pcap_pkthdr *header, const u_ch
     // end and basically get rid of it after. The memory should no longer be needed once we
     // have sent to the frontend.
 
+    // USE THE TIME STAMP AS WELL IN THE CLASS (not sure if only in base or all)
+    timeval time_stamp = header->ts;
     u_char *data = Parser::copy_data(packet, header->len);
-    //
+    // In the end we want to return the ether packet, but
+    // we also want to keep track of the
     return std::make_shared<Ether_Packet>(data, header->len);
 }
 
