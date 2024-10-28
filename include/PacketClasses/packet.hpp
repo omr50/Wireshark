@@ -12,13 +12,16 @@ class Packet
 {
 public:
     std::shared_ptr<Packet> encapsulatedPacket;
-    std::weak_ptr<Packet> parentPacket;
-    std::weak_ptr<Packet> rootPacket;
+    std::shared_ptr<Packet> parentPacket;
+    std::shared_ptr<Packet> rootPacket;
+    u_char *start_data;
+    size_t data_length;
 
     Packet() = default;
+    void copy_data(const u_char *data, size_t length);
     virtual ~Packet() = default;
     // should parse its own protocol specific data within the parser class
     // make sure virtual functions are implemented in the concrete classes
-    virtual void parse(const u_char *data, size_t length) = 0;
-    virtual void print() const = 0;
+    virtual void parse() = 0;
+    virtual void print() = 0;
 };

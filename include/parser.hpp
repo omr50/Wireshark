@@ -24,5 +24,5 @@ public:
         Parser();
         // Determine class type and return a pointer to it
         // CHANGE FUNCTION TYPE LATER
-        void Determine_Packet(pcap_pkthdr *header, const u_char *packet);
+        std::shared_ptr<Packet> Determine_Packet(pcap_pkthdr *header, const u_char *packet);
 };
