@@ -21,6 +21,6 @@ public:
     virtual ~Packet() = default;
     // should parse its own protocol specific data within the parser class
     // make sure virtual functions are implemented in the concrete classes
-    virtual std::shared_ptr<Packet> parse() = 0;
+    virtual void parse() = 0;
     virtual void print() = 0;
 };

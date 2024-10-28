@@ -1,4 +1,5 @@
 #include "../include/PacketClasses/Ether_Packet.hpp"
+#include "../include/PacketClasses/IP_Packet.hpp"
 
 Ether_Packet::Ether_Packet(const u_char *data, size_t length)
 {
@@ -11,6 +12,16 @@ Ether_Packet::Ether_Packet(const u_char *data, size_t length)
 
 void Ether_Packet::parse()
 {
+    // basically use the eth_hdr to determine the EtherType and
+    // find the next packet and create it.
+    // ip
+    if (ntohs(eth_hdr->ether_type) == 0x0800)
+    {
+        // THIS IS AN IP PACKET
+        // ip header pointer = eth hdr + eth hdr length
+        std::shared_ptr<IP_Packet> ip_packet = std::make_shared<IP_Packet>(start_data + 1, this->data_length - sizeof(eth_hdr));
+        ip_packet->parse();
+    }
 }
 
 void Ether_Packet::print_dest_mac()
