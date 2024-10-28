@@ -1,6 +1,6 @@
 #include "./packet.hpp"
 
-class Ether_Packet : public Packet
+class Ether_Packet : public Packet, public std::enable_shared_from_this<Packet>
 {
 public:
     ether_header *eth_hdr;

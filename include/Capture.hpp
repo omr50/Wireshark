@@ -16,10 +16,9 @@ public:
     std::string filter_exp;
     struct bpf_program fp;
     bpf_u_int32 net = 0, mask = 0;
-    Parser parser = Parser();
 
-    Parser parser;
     Capture();
+    void start();
     void get_all_devs();
     void select_interface();
     void present_dev_options();

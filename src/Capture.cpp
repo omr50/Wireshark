@@ -10,6 +10,32 @@
 #include <arpa/inet.h>
 #include <pcap/pcap.h>
 
+Capture::Capture()
+{
+    printf("Capture begin!\n");
+}
+
+void Capture::start()
+{
+    this->get_all_devs();
+    this->present_dev_options();
+
+    printf("Enter the interface number (1-%d): ", this->total_devs);
+    scanf("%d", &this->dev_num);
+
+    this->select_interface();
+    this->create_handle();
+    this->change_filter_expression("tcp");
+    this->compile_filter();
+    this->set_filter();
+
+    // if datalink = 1 then we have ethernet as the link layer
+    int datalink = pcap_datalink(handle);
+    printf("Data Link Type: %d\n", datalink);
+
+    this->start_loop();
+}
+
 void Capture::get_all_devs()
 {
     char errbuff[PCAP_ERRBUF_SIZE];
@@ -116,26 +142,12 @@ void Capture::set_filter()
 
 void Capture::packet_handler(u_char *userData, const struct pcap_pkthdr *pkthdr, const u_char *packet)
 {
-    printf("Packet handler currently working!\n");
-    printf("Packet header size = %d\n", pkthdr->len);
-    // cast to eth header
-    ether_header *eth_hdr = (ether_header *)packet;
-
-    printf("Destination MAC: %02x:%02x:%02x:%02x:%02x:%02x\n",
-           eth_hdr->ether_dhost[0], eth_hdr->ether_dhost[1], eth_hdr->ether_dhost[2],
-           eth_hdr->ether_dhost[3], eth_hdr->ether_dhost[4], eth_hdr->ether_dhost[5]);
-
-    printf("Source MAC: %02x:%02x:%02x:%02x:%02x:%02x\n",
-           eth_hdr->ether_shost[0], eth_hdr->ether_shost[1], eth_hdr->ether_shost[2],
-           eth_hdr->ether_shost[3], eth_hdr->ether_shost[4], eth_hdr->ether_shost[5]);
-
-    u_short ether_type = ntohs(eth_hdr->ether_type);
-    printf("EtherType: 0x%04x\n", ether_type);
+    Parser::Determine_Packet(pkthdr, packet);
 }
 
 void Capture::start_loop()
 {
-    int res = pcap_loop(this->handle, 0, this->packet_handler, NULL);
+    int res = pcap_loop(this->handle, 0, packet_handler, NULL);
     if (res == -1)
     {
         fprintf(stderr, "Error occurred in pcap_loop: %s\n", pcap_geterr(handle));
@@ -150,25 +162,4 @@ void Capture::start_loop()
     }
 
     pcap_freecode(&fp); // free compiled filter   pcap_freecode(&fp); // free compiled filter
-}
-
-Capture::Capture()
-{
-    this->get_all_devs();
-    this->present_dev_options();
-
-    printf("Enter the interface number (1-%d): ", this->total_devs);
-    scanf("%d", &this->dev_num);
-
-    this->select_interface();
-    this->create_handle();
-    this->change_filter_expression("tcp");
-    this->compile_filter();
-    this->set_filter();
-
-    // if datalink = 1 then we have ethernet as the link layer
-    int datalink = pcap_datalink(handle);
-    printf("Data Link Type: %d\n", datalink);
-
-    this->start_loop();
 }

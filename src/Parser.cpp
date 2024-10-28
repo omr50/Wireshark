@@ -1,8 +1,13 @@
 #include "../include/parser.hpp"
 #include "../include/PacketClasses/Ether_Packet.hpp"
 
+Parser::Parser()
+{
+    printf("Test\n");
+}
+
 // change function type later.
-std::shared_ptr<Packet> Parser::Determine_Packet(pcap_pkthdr *header, const u_char *packet)
+std::shared_ptr<Packet> Parser::Determine_Packet(const struct pcap_pkthdr *header, const u_char *packet)
 {
     // parser will keep track of the root parent packet node, and build up the object linked
     // list, and then return the root packet which we can later use to transfer to the front
@@ -20,13 +25,9 @@ std::shared_ptr<Packet> Parser::Determine_Packet(pcap_pkthdr *header, const u_ch
     auto root_packet = std::make_shared<Ether_Packet>(data, header->len, time_stamp);
     // call the parse of ethernet packet and it will cause a chain reaction
     // that will cause all packets to be parsed and created.
+    printf("Started parser\n");
     root_packet->parse();
     return root_packet;
-}
-
-Parser::Parser()
-{
-    printf("Test\n");
 }
 
 u_char *Parser::copy_data(const u_char *data, size_t length)

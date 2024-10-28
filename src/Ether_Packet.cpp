@@ -4,6 +4,7 @@
 
 Ether_Packet::Ether_Packet(const u_char *data, size_t length, timeval time_stamp)
 {
+    this->start_data = (u_char *)data;
     this->eth_hdr = (ether_header *)start_data;
     this->timestamp = time_stamp;
     // not sure if there is a better way to make the
@@ -11,22 +12,34 @@ Ether_Packet::Ether_Packet(const u_char *data, size_t length, timeval time_stamp
     std::shared_ptr<Packet> null_packet = nullptr;
     this->parentPacket = null_packet;
     this->encapsulatedPacket = nullptr;
-    this->parse();
+    printf("Ether packet created!\n");
 }
 
 void Ether_Packet::parse()
 {
+    printf("Reached parse\n");
+    this->print_type();
     if (ntohs(eth_hdr->ether_type) == 0x0800)
     {
         // THIS IS AN IP PACKET
         // ip header pointer = eth hdr + eth hdr length
-        std::shared_ptr<IP_Packet> ip_packet = std::make_shared<IP_Packet>(start_data + 1, this->data_length - sizeof(eth_hdr));
-        ip_packet->parse();
+        // std::shared_ptr<IP_Packet> ip_packet = std::make_shared<IP_Packet>(start_data + 1, this->data_length - sizeof(eth_hdr));
+        // ip_packet->parse();
+        printf("IP PACKET PARSE\n");
     }
     else if (ntohs(eth_hdr->ether_type == 0x0806))
     {
-        std::shared_ptr<ARP_Packet> arp_packet = std::make_shared<ARP_Packet>(start_data + 1, this->data_length - sizeof(eth_hdr));
+        std::shared_ptr<Packet> shared = shared_from_this();
+        // Create a weak_ptr from self
+        std::weak_ptr<Packet> weak_self = shared;
+        std::shared_ptr<ARP_Packet> arp_packet = std::make_shared<ARP_Packet>(start_data + 1, this->data_length - sizeof(eth_hdr), weak_self, this->timestamp);
+        this->encapsulatedPacket = arp_packet;
     }
+}
+
+void Ether_Packet::print()
+{
+    printf("PRINT\n");
 }
 
 void Ether_Packet::print_dest_mac()

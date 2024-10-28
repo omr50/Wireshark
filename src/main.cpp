@@ -11,7 +11,9 @@ void packet_handler(u_char *args, const struct pcap_pkthdr *header, const u_char
 int main()
 {
 
-    Capture packet_capture = Capture();
+    Capture *packet_capture = new Capture();
+    printf("working?\n");
+    packet_capture->start();
 
     return 0;
 }

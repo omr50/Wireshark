@@ -6,6 +6,7 @@ ARP_Packet::ARP_Packet(const u_char *data, size_t length, std::weak_ptr<Packet> 
     this->timestamp = time_stamp;
     this->parentPacket = parent;
     // this will set the child node
+    printf("ARP packet created!\n");
     this->parse();
 }
 
@@ -14,4 +15,9 @@ void ARP_Packet::parse()
     // ARP has no encapsulated packets
     this->encapsulatedPacket = nullptr;
     return;
+}
+
+void ARP_Packet::print()
+{
+    printf("PRINT\n");
 }

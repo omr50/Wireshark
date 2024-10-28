@@ -24,6 +24,6 @@ public:
         Parser();
         // Determine class type and return a pointer to it
         // CHANGE FUNCTION TYPE LATER
-        std::shared_ptr<Packet> Determine_Packet(pcap_pkthdr *header, const u_char *packet);
+        static std::shared_ptr<Packet> Determine_Packet(const struct pcap_pkthdr *header, const u_char *packet);
         static u_char *copy_data(const u_char *packet, size_t length);
 };
