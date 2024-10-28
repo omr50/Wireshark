@@ -13,8 +13,15 @@ std::shared_ptr<Packet> Parser::Determine_Packet(pcap_pkthdr *header, const u_ch
     timeval time_stamp = header->ts;
     u_char *data = Parser::copy_data(packet, header->len);
     // In the end we want to return the ether packet, but
-    // we also want to keep track of the
-    return std::make_shared<Ether_Packet>(data, header->len);
+    // we also want to build up the entire list( of packets ) before we
+    // actually return.
+
+    // ref count = 1
+    auto root_packet = std::make_shared<Ether_Packet>(data, header->len);
+    // call the parse of ethernet packet and it will cause a chain reaction
+    // that will cause all packets to be parsed and created.
+    root_packet->parse();
+    return root_packet;
 }
 
 Parser::Parser()
