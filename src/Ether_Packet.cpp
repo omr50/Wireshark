@@ -23,9 +23,9 @@ void Ether_Packet::parse()
     {
         // THIS IS AN IP PACKET
         // ip header pointer = eth hdr + eth hdr length
-        // std::shared_ptr<IP_Packet> ip_packet = std::make_shared<IP_Packet>(start_data + 1, this->data_length - sizeof(eth_hdr));
-        // ip_packet->parse();
         printf("IP PACKET PARSE\n");
+        std::shared_ptr<IP_Packet> ip_packet = std::make_shared<IP_Packet>((const u_char *)(eth_hdr + 1), this->data_length - sizeof(eth_hdr), this->timestamp);
+        ip_packet->parse();
     }
     else if (ntohs(eth_hdr->ether_type) == 0x0806)
     {
