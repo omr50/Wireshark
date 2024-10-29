@@ -36,7 +36,7 @@ void Ether_Packet::parse()
     else if (ntohs(eth_hdr->ether_type) == 0x0806)
     {
 
-        std::shared_ptr<ARP_Packet> arp_packet = std::make_shared<ARP_Packet>(start_data + 1, this->data_length - sizeof(eth_hdr), weak_self, this->timestamp);
+        std::shared_ptr<ARP_Packet> arp_packet = std::make_shared<ARP_Packet>((const u_char *)(eth_hdr + 1), this->data_length - sizeof(eth_hdr), weak_self, this->timestamp);
         this->encapsulatedPacket = arp_packet;
     }
 }

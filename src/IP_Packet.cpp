@@ -25,3 +25,8 @@ void IP_Packet::parse()
         printf("UDP Packet!\n");
     }
 }
+
+void IP_Packet::print()
+{
+    printf("IP Packet print!\n");
+}
