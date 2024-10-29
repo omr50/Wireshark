@@ -19,19 +19,23 @@ void Ether_Packet::parse()
 {
     printf("Reached parse\n");
     this->print_type();
+
+    std::shared_ptr<Packet> shared = shared_from_this();
+    // Create a weak_ptr from self
+    std::weak_ptr<Packet> weak_self = shared;
+
     if (ntohs(eth_hdr->ether_type) == 0x0800)
     {
         // THIS IS AN IP PACKET
         // ip header pointer = eth hdr + eth hdr length
         printf("IP PACKET PARSE\n");
-        std::shared_ptr<IP_Packet> ip_packet = std::make_shared<IP_Packet>((const u_char *)(eth_hdr + 1), this->data_length - sizeof(eth_hdr), this->timestamp);
+        std::shared_ptr<IP_Packet> ip_packet = std::make_shared<IP_Packet>((const u_char *)(eth_hdr + 1), (size_t)(this->data_length - sizeof(eth_hdr)), this->timestamp);
         ip_packet->parse();
+        this->encapsulatedPacket = ip_packet;
     }
     else if (ntohs(eth_hdr->ether_type) == 0x0806)
     {
-        std::shared_ptr<Packet> shared = shared_from_this();
-        // Create a weak_ptr from self
-        std::weak_ptr<Packet> weak_self = shared;
+
         std::shared_ptr<ARP_Packet> arp_packet = std::make_shared<ARP_Packet>(start_data + 1, this->data_length - sizeof(eth_hdr), weak_self, this->timestamp);
         this->encapsulatedPacket = arp_packet;
     }
