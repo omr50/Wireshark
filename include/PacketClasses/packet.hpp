@@ -24,5 +24,9 @@ public:
     // make sure virtual functions are implemented in the concrete classes
     virtual void parse() = 0;
     virtual void print() = 0;
+    // we will create a function that should take the current packets structure
+    // and prepare a partial json structure, and that too will be added to the
+    // total json structure.
+
     // virtual void prepare_json() = 0;
 };
