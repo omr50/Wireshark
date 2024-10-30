@@ -24,4 +24,5 @@ public:
     // make sure virtual functions are implemented in the concrete classes
     virtual void parse() = 0;
     virtual void print() = 0;
+    // virtual void prepare_json() = 0;
 };
