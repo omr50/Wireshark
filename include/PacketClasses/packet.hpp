@@ -22,6 +22,9 @@ public:
     virtual ~Packet() = default;
     // should parse its own protocol specific data within the parser class
     // make sure virtual functions are implemented in the concrete classes
+    // the parser can also give back valuable information in the host byte
+    // order instead of the network byte order so that we can use it more
+    // effectively.
     virtual void parse() = 0;
     virtual void print() = 0;
     // we will create a function that should take the current packets structure
