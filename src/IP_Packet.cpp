@@ -1,5 +1,6 @@
 #include "../include/PacketClasses/IP_Packet.hpp"
 #include "../include/PacketClasses/TCP_Packet.hpp"
+#include "../include/PacketClasses/UDP_Packet.hpp"
 
 IP_Packet::IP_Packet(const u_char *data, size_t length, timeval time_stamp)
 {
@@ -22,7 +23,7 @@ void IP_Packet::parse()
     else if (this->ip_hdr->protocol == 0x06)
     {
         printf("TCP PACKET!\n");
-        std::shared_ptr<TCP_Packet> tcp_packet = std::make_shared<TCP_Packet>((u_char *)(this->ip_hdr + 1), this->data_length, this->timestamp);
+        std::shared_ptr<TCP_Packet> tcp_packet = std::make_shared<TCP_Packet>((u_char *)(this->ip_hdr + 1), this->data_length - sizeof(ip_hdr), this->timestamp);
         tcp_packet->parse();
 
         this->encapsulatedPacket = tcp_packet;
@@ -30,7 +31,12 @@ void IP_Packet::parse()
     }
     else if (this->ip_hdr->protocol == 0x11)
     {
-        printf("UDP Packet!\n");
+        printf("TCP PACKET!\n");
+        std::shared_ptr<UDP_Packet> udp_packet = std::make_shared<UDP_Packet>((u_char *)(this->ip_hdr + 1), this->data_length - sizeof(ip_hdr), this->timestamp);
+        udp_packet->parse();
+
+        this->encapsulatedPacket = udp_packet;
+        udp_packet->parentPacket = weak_self;
     }
 }
 
