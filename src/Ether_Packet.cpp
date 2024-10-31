@@ -32,12 +32,14 @@ void Ether_Packet::parse()
         std::shared_ptr<IP_Packet> ip_packet = std::make_shared<IP_Packet>((const u_char *)(eth_hdr + 1), (size_t)(this->data_length - sizeof(eth_hdr)), this->timestamp);
         ip_packet->parse();
         this->encapsulatedPacket = ip_packet;
+        ip_packet->parentPacket = weak_self;
     }
     else if (ntohs(eth_hdr->ether_type) == 0x0806)
     {
 
         std::shared_ptr<ARP_Packet> arp_packet = std::make_shared<ARP_Packet>((const u_char *)(eth_hdr + 1), this->data_length - sizeof(eth_hdr), weak_self, this->timestamp);
         this->encapsulatedPacket = arp_packet;
+        arp_packet->parentPacket = weak_self;
     }
 }
 

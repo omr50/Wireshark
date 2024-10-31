@@ -1,7 +1,7 @@
 #include "./packet.hpp"
 #include <netinet/ip.h>
 
-class IP_Packet : public Packet
+class IP_Packet : public Packet, public std::enable_shared_from_this<Packet>
 {
 public:
     iphdr *ip_hdr;
