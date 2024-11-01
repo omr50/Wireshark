@@ -35,7 +35,7 @@ function toggleSubItems(event, element) {
 }
 
 function search(event, element) {
-    let searchTerms = ['tcp', 'udp', 'ip', 'eth', 'icmp', 'arp', '']
+    let searchTerms = ['http', 'tcp', 'udp', 'ip', 'eth', 'icmp', 'arp', '']
     const searchQuery = element.value.toLowerCase();
     if (searchTerms.includes(searchQuery)) {
         if (searchQuery === '')
