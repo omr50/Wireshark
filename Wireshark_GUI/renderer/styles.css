@@ -1,0 +1,88 @@
+body {
+    font-family: consolas;
+}
+
+.packets-overview {
+    height: 50vh;
+    border: 1px solid black;
+    background-color: #E7E6FF;
+}
+
+.packet-details {
+    height: 44vh;
+    display: flex;
+    padding: 0px;
+    margin: 0px;
+}
+
+.left-protocol-info {
+    border: 1px solid black;
+    flex: 1;
+}
+
+.right-hex-info {
+    border: 1px solid black;
+    flex: 1;
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  font-weight: 500;
+}
+
+tr {
+    cursor: pointer;
+}
+
+tr:hover {
+    background-color: #CFDDFF;
+}
+
+.control-bar {
+    width: 98vw;
+    height: 4vh;
+    background-color: lightblue;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding:0;
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+}
+.search-bar {
+    width: 98vw;
+    height: 3vh;
+    resize: none;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.item {
+  cursor: pointer;
+  height: fit-content;
+}
+
+.sub-items {
+  overflow: hidden;
+  display: none;
+}
+
+.sub-items.expanded {
+    display: block;
+    height: auto;
+}
+
+.dropdown {
+    cursor: pointer;
+    transition: rotate 0.4s ease-in-out;
+    rotate: -90deg;
+}
+
+.dropdown.expanded {
+    rotate: 0deg;
+}

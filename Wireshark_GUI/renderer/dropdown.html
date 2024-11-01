@@ -1,0 +1,21 @@
+    <div class="item" onclick="toggleSubItems(event, this)">
+        <img class="dropdown" src="./dropdown.png" width="20px" height="20px">
+        Ethernet 
+        <div class="sub-items">
+            <div class="item" onclick="toggleSubItems(event, this)">
+                <img class="dropdown" src="./dropdown.png" width="20px" height="20px">
+                IP
+                <div class="sub-items">
+                    <div class="item" onclick="toggleSubItems(event, this)">
+                        <img class="dropdown" src="./dropdown.png" width="20px" height="20px">
+                        TCP
+                        <div class="sub-items" onclick="toggleSubItems(event, this)">
+                            <!-- no image since no more encapsulated packets -->
+                            HTTP
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expandable List</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="control-bar">Control bar for now</div>
+    <div class="search-container">
+        <textarea class="search-bar" placeholder="Apply a display filter..." onkeyup="search(event, this);"></textarea>
+    </div>
+    <div class="packets-overview">
+        <table style="width:100%; background-color: #E7E6FF;"</table>
+            <tr style="background-color: white;">
+                <th style="width:8%">No.</th>
+                <th style="width:15%">Time</th>
+                <th style="width:18%">Source</th>
+                <th style="width:18%">Destination</th>
+                <th style="width:10%">Protocol</th>
+                <th style="width:7%">Length</th>
+                <th>Info</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>0.1054412</td>
+                <td>192.186.22.255</td>
+                <td>192.186.22.255</td>
+                <td>TCP</td>
+                <td>112</td>
+                <td>Application Data</td>
+            </tr>
+
+            <tr>
+                <td>2</td>
+                <td>0.1054412</td>
+                <td>43.11.234.2</td>
+                <td>232.5.222.5</td>
+                <td>UDP</td>
+                <td>992</td>
+                <td>Application Data</td>
+            </tr>
+
+            <tr>
+                <td>3</td>
+                <td>0.2334444</td>
+                <td>192.96.2.25</td>
+                <td>142.16.2.55</td>
+                <td>HTTP</td>
+                <td>2</td>
+                <td>Application Data</td>
+            </tr>
+
+        </table>
+    </div>
+    <div class="packet-details">
+        <div class="left-protocol-info"></div>
+        <div class="right-hex-info"></div>
+    </div>
+
+  <script src="events.js"></script>
+</body>
+</html>

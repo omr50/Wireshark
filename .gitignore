@@ -1,2 +1,3 @@
-/new_server.crt
-/new_server.key
+/Backend_Packet_Sniffer/new_server.crt
+/Backend_Packet_Sniffer/new_server.key
+/Wireshark_GUI/node_modules
