@@ -7,6 +7,7 @@
 #include <netinet/ether.h>
 #include <arpa/inet.h>
 #include <pcap/pcap.h>
+// #include <boost/asio.hpp>
 
 class Packet
 {
@@ -17,6 +18,7 @@ public:
     u_char *start_data;
     size_t data_length;
     timeval timestamp;
+    //  boost::asio::io_service io_service;
 
     Packet() = default;
     virtual ~Packet() = default;
