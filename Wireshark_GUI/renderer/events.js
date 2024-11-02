@@ -1,9 +1,3 @@
-const button = document.querySelector('.button1');
-
-button.addEventListener('click', () => {
-    console.log("Clicked!");
-})
-
 // function toggleSubItems(event, element) {
 //     event.stopPropagation();
 //     const subItems = element.querySelector('.sub-items');
