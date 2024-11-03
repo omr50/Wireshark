@@ -19,14 +19,16 @@ void TCP_Server::start_read(std::shared_ptr<boost::asio::ip::tcp::socket> socket
 {
     auto buf = std::make_shared<boost::asio::streambuf>();
 
-    boost::asio::async_read_until(*socket_, *buf, "\n", [socket_, buf](const boost::system::error_code &error, std::size_t)
+    boost::asio::async_read_until(*socket_, *buf, "\n", [this, socket_, buf](const boost::system::error_code &error, std::size_t)
                                   {
         if (!error) {
             std::istream is(buf.get());
             std::string message;
             std::getline(is, message);
 
-            std::cout << "Received: " << message << std::endl;
+            std::cout << "Received: " << message << std::endl << "Now sending!" << std::endl;
+            std::string write_message = "TESTING!\n"; 
+            this->start_write(socket_, write_message);
         } });
 }
 
@@ -36,7 +38,7 @@ void TCP_Server::start_server()
     this->io_context.run();
 }
 
-void start_write(std::shared_ptr<boost::asio::ip::tcp::socket> socket_, const std::string &message)
+void TCP_Server::start_write(std::shared_ptr<boost::asio::ip::tcp::socket> socket_, const std::string &message)
 {
     auto msg = std::make_shared<std::string>(message);
 
