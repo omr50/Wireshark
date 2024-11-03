@@ -1,27 +1,48 @@
 #include "../include/TCP_Server.hpp"
 
-TCP_Server::TCP_Server(int port) : port(port)
+TCP_Server::TCP_Server(int port) : io_context(), acceptor_(io_context, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)), port(port)
 {
-
-    this->acceptor_ = boost::asio::ip::tcp::acceptor(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), this->port));
-    this->socket_ = boost::asio::ip::tcp::socket(this->io_service);
 }
 
-std::string TCP_Server::read_(boost::asio::ip::tcp::socket &socket)
+void TCP_Server::start_accept()
 {
-    boost::asio::streambuf buf;
-    boost::asio::read_until(socket, buf, "\n");
-    std::string data = boost::asio::buffer_cast<const char *>(buf.data());
-    return data;
+    auto socket_ = std::make_shared<boost::asio::ip::tcp::socket>(this->io_context);
+    this->acceptor_.async_accept(*socket_, [this, socket_](const boost::system::error_code &error)
+                                 {
+            if (!error) {
+                start_read(socket_);
+            }
+            start_accept(); });
 }
 
-void TCP_Server::send_(boost::asio::ip::tcp::socket &socket, const std::string &message)
+void TCP_Server::start_read(std::shared_ptr<boost::asio::ip::tcp::socket> socket_)
 {
-    const std::string msg = message + "\n";
-    boost::asio::write(socket, boost::asio::buffer(message));
+    auto buf = std::make_shared<boost::asio::streambuf>();
+
+    boost::asio::async_read_until(*socket_, *buf, "\n", [socket_, buf](const boost::system::error_code &error, std::size_t)
+                                  {
+        if (!error) {
+            std::istream is(buf.get());
+            std::string message;
+            std::getline(is, message);
+
+            std::cout << "Received: " << message << std::endl;
+        } });
 }
 
 void TCP_Server::start_server()
 {
-    this->acceptor_.accept(socket_);
+    this->start_accept();
+    this->io_context.run();
+}
+
+void start_write(std::shared_ptr<boost::asio::ip::tcp::socket> socket_, const std::string &message)
+{
+    auto msg = std::make_shared<std::string>(message);
+
+    boost::asio::async_write(*socket_, boost::asio::buffer(*msg), [socket_, msg](const boost::system::error_code &error, std::size_t)
+                             {
+        if (!error) {
+            std::cout << "Sent: " << *msg << std::endl;
+        } });
 }
