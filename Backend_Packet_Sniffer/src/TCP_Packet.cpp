@@ -28,7 +28,7 @@ void TCP_Packet::parse()
     }
 }
 
-std::string TCP_Packet::print()
+json TCP_Packet::print()
 {
     std::string msg((char *)this->tcp_hdr, this->data_length);
     return msg;

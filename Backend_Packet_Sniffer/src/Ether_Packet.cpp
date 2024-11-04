@@ -1,6 +1,9 @@
 #include "../include/PacketClasses/Ether_Packet.hpp"
 #include "../include/PacketClasses/IP_Packet.hpp"
 #include "../include/PacketClasses/ARP_Packet.hpp"
+#include <sstream>
+
+using json = nlohmann::json;
 
 Ether_Packet::Ether_Packet(const u_char *data, size_t length, timeval time_stamp)
 {
@@ -44,29 +47,46 @@ void Ether_Packet::parse()
     }
 }
 
-std::string Ether_Packet::print()
+json Ether_Packet::print()
 {
-    std::string msg((char *)this->eth_hdr, this->data_length);
-    printf("ETHER NET MESSAGE SIZE %d and string size %d\n", this->data_length, msg.size());
-    return msg;
+    json eth_packet;
+    eth_packet["dest_mac"] = this->print_dest_mac();
+    eth_packet["src_mac"] = this->print_source_mac();
+    eth_packet["eth_type"] = this->print_type();
+    return eth_packet;
 }
 
-void Ether_Packet::print_dest_mac()
+std::string Ether_Packet::print_dest_mac()
 {
-    printf("Destination MAC: %02x:%02x:%02x:%02x:%02x:%02x\n",
-           eth_hdr->ether_dhost[0], eth_hdr->ether_dhost[1], eth_hdr->ether_dhost[2],
-           eth_hdr->ether_dhost[3], eth_hdr->ether_dhost[4], eth_hdr->ether_dhost[5]);
+    std::ostringstream oss;
+    oss << std::hex << std::setfill('0');
+    for (int i = 0; i < 6; i++)
+    {
+        oss << std::setw(2) << static_cast<int>(eth_hdr->ether_dhost[i]);
+        if (i != 5)
+            oss << ":";
+    }
+    oss << "\n";
+    return oss.str();
 }
 
-void Ether_Packet::print_source_mac()
+std::string Ether_Packet::print_source_mac()
 {
-    printf("Source MAC: %02x:%02x:%02x:%02x:%02x:%02x\n",
-           eth_hdr->ether_shost[0], eth_hdr->ether_shost[1], eth_hdr->ether_shost[2],
-           eth_hdr->ether_shost[3], eth_hdr->ether_shost[4], eth_hdr->ether_shost[5]);
+    std::ostringstream oss;
+    oss << std::hex << std::setfill('0');
+    for (int i = 0; i < 6; i++)
+    {
+        oss << std::setw(2) << static_cast<int>(eth_hdr->ether_shost[i]);
+        if (i != 5)
+            oss << ":";
+    }
+    oss << "\n";
+    return oss.str();
 }
 
-void Ether_Packet::print_type()
+std::string Ether_Packet::print_type()
 {
-    u_short ether_type = ntohs(eth_hdr->ether_type);
-    printf("EtherType: 0x%04x\n", ether_type);
+    std::ostringstream oss;
+    oss << "0x" << std::hex << std::setw(4) << std::setfill('0') << ntohs(eth_hdr->ether_type);
+    return oss.str();
 }

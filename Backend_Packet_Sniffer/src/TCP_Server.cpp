@@ -36,8 +36,8 @@ void TCP_Server::start_read()
             std::getline(is, message);
 
             std::cout << "Received: " << message << std::endl << "Now sending!" << std::endl;
-            std::string write_message = "TESTING!\n"; 
-            this->start_write(write_message);
+            // std::string write_message = "TESTING!\n"; 
+            // this->start_write(write_message);
         } });
 }
 

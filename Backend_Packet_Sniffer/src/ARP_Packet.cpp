@@ -18,7 +18,7 @@ void ARP_Packet::parse()
     return;
 }
 
-std::string ARP_Packet::print()
+json ARP_Packet::print()
 {
     std::string msg((char *)this->arp_hdr, this->data_length);
     return msg;

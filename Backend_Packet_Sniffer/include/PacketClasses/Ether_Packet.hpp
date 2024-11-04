@@ -1,5 +1,7 @@
 #include "./packet.hpp"
+#include "../json.hpp"
 
+using json = nlohmann::json;
 class Ether_Packet : public Packet, public std::enable_shared_from_this<Packet>
 {
 public:
@@ -10,8 +12,8 @@ public:
     // should parse its own protocol specific data within the parser class
     // make sure virtual functions are implemented in the concrete classes
     void parse() override;
-    std::string print() override;
-    void print_dest_mac();
-    void print_source_mac();
-    void print_type();
+    json print() override;
+    std::string print_dest_mac();
+    std::string print_source_mac();
+    std::string print_type();
 };

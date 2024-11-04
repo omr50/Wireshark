@@ -41,7 +41,7 @@ void IP_Packet::parse()
     }
 }
 
-std::string IP_Packet::print()
+json IP_Packet::print()
 {
     std::string msg((char *)this->ip_hdr, this->data_length);
     return msg;

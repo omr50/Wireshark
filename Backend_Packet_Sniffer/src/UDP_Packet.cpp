@@ -14,7 +14,7 @@ void UDP_Packet::parse()
     printf("Parsed UDP!\n");
 }
 
-std::string UDP_Packet::print()
+json UDP_Packet::print()
 {
     std::string msg((char *)this->udp_hdr, this->data_length);
     return msg;

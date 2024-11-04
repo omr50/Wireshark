@@ -11,5 +11,5 @@ public:
     // should parse its own protocol specific data within the parser class
     // make sure virtual functions are implemented in the concrete classes
     void parse() override;
-    std::string print() override;
+    json print() override;
 };
