@@ -5,6 +5,7 @@ ARP_Packet::ARP_Packet(const u_char *data, size_t length, std::weak_ptr<Packet> 
     this->arp_hdr = (ether_arp *)start_data;
     this->timestamp = time_stamp;
     this->parentPacket = parent;
+    this->data_length = length;
     // this will set the child node
     printf("ARP packet created!\n");
     this->parse();

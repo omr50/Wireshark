@@ -7,6 +7,7 @@ Ether_Packet::Ether_Packet(const u_char *data, size_t length, timeval time_stamp
     this->start_data = (u_char *)data;
     this->eth_hdr = (ether_header *)start_data;
     this->timestamp = time_stamp;
+    this->data_length = length;
     // not sure if there is a better way to make the
     // parent node set to null
     std::shared_ptr<Packet> null_packet = nullptr;
@@ -46,6 +47,7 @@ void Ether_Packet::parse()
 std::string Ether_Packet::print()
 {
     std::string msg((char *)this->eth_hdr, this->data_length);
+    printf("ETHER NET MESSAGE SIZE %d and string size %d\n", this->data_length, msg.size());
     return msg;
 }
 

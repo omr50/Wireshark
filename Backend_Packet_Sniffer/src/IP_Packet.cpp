@@ -5,6 +5,7 @@
 IP_Packet::IP_Packet(const u_char *data, size_t length, timeval time_stamp)
 {
     printf("IP Packet Created!\n");
+    this->start_data = (u_char *)data;
     this->ip_hdr = (iphdr *)data;
     this->data_length = length;
     this->timestamp = time_stamp;

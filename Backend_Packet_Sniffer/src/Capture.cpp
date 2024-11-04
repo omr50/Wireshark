@@ -10,7 +10,7 @@
 #include <arpa/inet.h>
 #include <pcap/pcap.h>
 
-Capture::Capture(std::string filter_exp, TCP_Server *server) : filter_exp(filter_exp), server(server)
+Capture::Capture(std::string filter_exp, std::shared_ptr<TCP_Server> server) : filter_exp(filter_exp), server(server)
 {
     printf("Capture begin!\n");
 }
@@ -143,7 +143,7 @@ void Capture::set_filter()
 void Capture::packet_handler(u_char *userData, const struct pcap_pkthdr *pkthdr, const u_char *packet)
 {
     printf("Going to send \n");
-    TCP_Server *server = (TCP_Server *)userData;
+    std::shared_ptr<TCP_Server> server = *((std::shared_ptr<TCP_Server> *)userData);
     std::shared_ptr<Packet> root_packet = Parser::Determine_Packet(pkthdr, packet);
     // after determining packet, we will inform the server of the data we want to send.
     // for now send the pure binary string
@@ -152,13 +152,27 @@ void Capture::packet_handler(u_char *userData, const struct pcap_pkthdr *pkthdr,
     // basically call post here, the server pointer has access to the io_context, and socket, and other things
     printf("Packet DATA: %d\n", packet_data.size());
     auto self = server->shared_from_this();
-    server->io_context.post([self, packet_data]()
-                            { self->start_write(packet_data); });
+    if (server->client_connected)
+    {
+        printf("Posted?\n");
+
+        server->io_context.post([self, packet_data]()
+                                { printf("Before write\n"); self->start_write(packet_data); printf("Posted to client?\n"); });
+        if (server->io_context.stopped())
+        {
+            std::cout << "io_context has been stopped." << std::endl;
+            // server->io_context.run();
+        }
+        else
+        {
+            std::cout << "io_context is running." << std::endl;
+        }
+    }
 }
 
 void Capture::start_loop()
 {
-    int res = pcap_loop(this->handle, 0, packet_handler, (u_char *)this->server);
+    int res = pcap_loop(this->handle, 0, packet_handler, (u_char *)(&(this->server)));
     if (res == -1)
     {
         fprintf(stderr, "Error occurred in pcap_loop: %s\n", pcap_geterr(handle));

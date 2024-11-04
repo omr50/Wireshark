@@ -16,6 +16,7 @@ std::shared_ptr<Packet> Parser::Determine_Packet(const struct pcap_pkthdr *heade
 
     // USE THE TIME STAMP AS WELL IN THE CLASS (not sure if only in base or all)
     timeval time_stamp = header->ts;
+    printf("HEADER LENGTH %d\n", header->len);
     u_char *data = Parser::copy_data(packet, header->len);
     // In the end we want to return the ether packet, but
     // we also want to build up the entire list( of packets ) before we

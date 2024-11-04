@@ -10,10 +10,9 @@
 
 int main()
 {
-    TCP_Server server(8000);
-    std::thread server_thread(TCP_Server::server_thread, &server);
-    Capture *packet_capture = new Capture("icmp || tcp || udp", &server);
+    std::shared_ptr<TCP_Server> server = std::make_shared<TCP_Server>(8000);
+    std::thread server_thread(TCP_Server::server_thread, server);
+    Capture *packet_capture = new Capture("icmp || tcp || udp", server);
     packet_capture->start();
-
     return 0;
 }
