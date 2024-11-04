@@ -142,12 +142,18 @@ void Capture::set_filter()
 
 void Capture::packet_handler(u_char *userData, const struct pcap_pkthdr *pkthdr, const u_char *packet)
 {
+    printf("Going to send \n");
     TCP_Server *server = (TCP_Server *)userData;
     std::shared_ptr<Packet> root_packet = Parser::Determine_Packet(pkthdr, packet);
     // after determining packet, we will inform the server of the data we want to send.
     // for now send the pure binary string
     std::string packet_data = root_packet->print();
     // queue up string data to be sent through tcp server.
+    // basically call post here, the server pointer has access to the io_context, and socket, and other things
+    printf("Packet DATA: %d\n", packet_data.size());
+    auto self = server->shared_from_this();
+    server->io_context.post([self, packet_data]()
+                            { self->start_write(packet_data); });
 }
 
 void Capture::start_loop()

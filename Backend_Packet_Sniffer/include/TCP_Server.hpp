@@ -1,9 +1,10 @@
+#pragma once
 #include <boost/asio.hpp>
 #include <iostream>
 #include <string>
 #include <string_view>
 
-class TCP_Server
+class TCP_Server : public std::enable_shared_from_this<TCP_Server>
 {
 public:
     int port;
@@ -16,5 +17,6 @@ public:
     void start_accept();
     void start_read();
     void start_write(const std::string &message);
-    static void server_thread(TCP_Server &server);
+    static void server_thread(TCP_Server *server);
+    void set_keepalive_options(boost::asio::ip::tcp::socket &socket);
 };

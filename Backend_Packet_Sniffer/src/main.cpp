@@ -8,8 +8,6 @@
 #include "../include/Capture.hpp"
 #include "../include/TCP_Server.hpp"
 
-void packet_handler(u_char *args, const struct pcap_pkthdr *header, const u_char *packet);
-
 int main()
 {
     TCP_Server server(8000);
