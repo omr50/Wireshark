@@ -1,5 +1,6 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path')
+require('./TLS_Server');
 
 const isDev = true; 
 
