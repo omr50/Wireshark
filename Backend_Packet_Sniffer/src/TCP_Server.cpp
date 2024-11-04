@@ -7,7 +7,7 @@ TCP_Server::TCP_Server(int port) : io_context(), acceptor_(io_context, boost::as
 void TCP_Server::start_accept()
 {
     this->client_socket = std::make_shared<boost::asio::ip::tcp::socket>(this->io_context);
-    this->acceptor_.async_accept([this](const boost::system::error_code &error)
+    this->acceptor_.async_accept(*this->client_socket, [this](const boost::system::error_code &error)
                                  {
                                      if (!error)
                                      {
@@ -49,4 +49,11 @@ void TCP_Server::start_write(const std::string &message)
         if (!error) {
             std::cout << "Sent: " << *msg << std::endl;
         } });
+}
+
+void TCP_Server::server_thread()
+{
+
+    TCP_Server server(8000);
+    server.start_server();
 }
