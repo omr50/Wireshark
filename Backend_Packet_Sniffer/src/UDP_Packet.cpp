@@ -13,7 +13,8 @@ void UDP_Packet::parse()
     printf("Parsed UDP!\n");
 }
 
-void UDP_Packet::print()
+std::string UDP_Packet::print()
 {
-    printf("UDP Packet print!\n");
+    std::string msg((char *)this->udp_hdr, this->data_length);
+    return msg;
 }

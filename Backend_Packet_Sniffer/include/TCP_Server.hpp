@@ -16,5 +16,5 @@ public:
     void start_accept();
     void start_read();
     void start_write(const std::string &message);
-    static void server_thread();
+    static void server_thread(TCP_Server &server);
 };

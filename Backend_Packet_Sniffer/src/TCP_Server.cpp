@@ -51,9 +51,8 @@ void TCP_Server::start_write(const std::string &message)
         } });
 }
 
-void TCP_Server::server_thread()
+void TCP_Server::server_thread(TCP_Server &server)
 {
 
-    TCP_Server server(8000);
     server.start_server();
 }

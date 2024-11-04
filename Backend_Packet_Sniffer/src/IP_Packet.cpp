@@ -40,7 +40,8 @@ void IP_Packet::parse()
     }
 }
 
-void IP_Packet::print()
+std::string IP_Packet::print()
 {
-    printf("IP Packet print!\n");
+    std::string msg((char *)this->ip_hdr, this->data_length);
+    return msg;
 }

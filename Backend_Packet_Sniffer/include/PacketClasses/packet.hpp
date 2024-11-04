@@ -7,6 +7,7 @@
 #include <netinet/ether.h>
 #include <arpa/inet.h>
 #include <pcap/pcap.h>
+#include <string>
 // #include <boost/asio.hpp>
 
 class Packet
@@ -28,7 +29,7 @@ public:
     // order instead of the network byte order so that we can use it more
     // effectively.
     virtual void parse() = 0;
-    virtual void print() = 0;
+    virtual std::string print() = 0;
     // we will create a function that should take the current packets structure
     // and prepare a partial json structure, and that too will be added to the
     // total json structure.

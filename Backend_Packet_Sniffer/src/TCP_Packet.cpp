@@ -27,7 +27,8 @@ void TCP_Packet::parse()
     }
 }
 
-void TCP_Packet::print()
+std::string TCP_Packet::print()
 {
-    printf("TCP Packet print!\n");
+    std::string msg((char *)this->tcp_hdr, this->data_length);
+    return msg;
 }

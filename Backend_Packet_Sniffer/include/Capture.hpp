@@ -2,6 +2,7 @@
 
 #include "parser.hpp"
 #include <string>
+#include "TCP_Server.hpp"
 
 class Capture
 {
@@ -16,8 +17,9 @@ public:
     std::string filter_exp;
     struct bpf_program fp;
     bpf_u_int32 net = 0, mask = 0;
+    TCP_Server *server = nullptr;
 
-    Capture(std::string filter_exp);
+    Capture(std::string filter_exp, TCP_Server *server);
     void start();
     void get_all_devs();
     void select_interface();

@@ -10,7 +10,7 @@ public:
     // should parse its own protocol specific data within the parser class
     // make sure virtual functions are implemented in the concrete classes
     void parse() override;
-    void print() override;
+    std::string print() override;
     void print_dest_mac();
     void print_source_mac();
     void print_type();

@@ -17,7 +17,8 @@ void ARP_Packet::parse()
     return;
 }
 
-void ARP_Packet::print()
+std::string ARP_Packet::print()
 {
-    printf("PRINT\n");
+    std::string msg((char *)this->arp_hdr, this->data_length);
+    return msg;
 }

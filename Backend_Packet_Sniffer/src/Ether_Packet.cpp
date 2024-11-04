@@ -43,9 +43,10 @@ void Ether_Packet::parse()
     }
 }
 
-void Ether_Packet::print()
+std::string Ether_Packet::print()
 {
-    printf("PRINT\n");
+    std::string msg((char *)this->eth_hdr, this->data_length);
+    return msg;
 }
 
 void Ether_Packet::print_dest_mac()

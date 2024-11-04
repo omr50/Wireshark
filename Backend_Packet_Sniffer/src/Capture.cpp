@@ -10,7 +10,7 @@
 #include <arpa/inet.h>
 #include <pcap/pcap.h>
 
-Capture::Capture(std::string filter_exp) : filter_exp(filter_exp)
+Capture::Capture(std::string filter_exp, TCP_Server *server) : filter_exp(filter_exp), server(server)
 {
     printf("Capture begin!\n");
 }
@@ -142,12 +142,17 @@ void Capture::set_filter()
 
 void Capture::packet_handler(u_char *userData, const struct pcap_pkthdr *pkthdr, const u_char *packet)
 {
-    Parser::Determine_Packet(pkthdr, packet);
+    TCP_Server *server = (TCP_Server *)userData;
+    std::shared_ptr<Packet> root_packet = Parser::Determine_Packet(pkthdr, packet);
+    // after determining packet, we will inform the server of the data we want to send.
+    // for now send the pure binary string
+    std::string packet_data = root_packet->print();
+    // queue up string data to be sent through tcp server.
 }
 
 void Capture::start_loop()
 {
-    int res = pcap_loop(this->handle, 0, packet_handler, NULL);
+    int res = pcap_loop(this->handle, 0, packet_handler, (u_char *)this->server);
     if (res == -1)
     {
         fprintf(stderr, "Error occurred in pcap_loop: %s\n", pcap_geterr(handle));
