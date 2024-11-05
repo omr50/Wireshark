@@ -1,4 +1,5 @@
-var net = require('net');
+const net = require('net');
+const { app, BrowserWindow, ipcMain } = require('electron');
 
 var client = new net.Socket();
 console.log("Working");
@@ -22,6 +23,8 @@ client.on('data', (chunk) => {
             // Parse JSON data
             const jsonData = JSON.parse(message);
             console.log('Received JSON:', jsonData);
+
+            // send it to the frontend through IPC communication.
         } catch (error) {
             console.error('Error parsing JSON:', error);
         }
