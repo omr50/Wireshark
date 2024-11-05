@@ -1,6 +1,7 @@
 #include "../include/PacketClasses/Ether_Packet.hpp"
 #include "../include/PacketClasses/IP_Packet.hpp"
 #include "../include/PacketClasses/ARP_Packet.hpp"
+#include "../include/utils.hpp"
 #include <sstream>
 
 using json = nlohmann::json;
@@ -50,11 +51,17 @@ void Ether_Packet::parse()
 
 json Ether_Packet::print()
 {
-    json eth_packet;
-    eth_packet["dest_mac"] = this->print_dest_mac();
-    eth_packet["src_mac"] = this->print_source_mac();
-    eth_packet["eth_type"] = this->print_type();
-    return eth_packet;
+    json full_packet;
+    json packet_info;
+
+    // timeval to seconds
+    packet_info["time"] = timeval_to_string(this->timestamp);
+    // packet_info["source"] =
+
+    full_packet["dest_mac"] = this->print_dest_mac();
+    full_packet["src_mac"] = this->print_source_mac();
+    full_packet["eth_type"] = this->print_type();
+    return full_packet;
 }
 
 std::string Ether_Packet::print_dest_mac()
