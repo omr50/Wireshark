@@ -51,7 +51,7 @@ json IP_Packet::print()
 
 std::string IP_Packet::print_source_addr()
 {
-    unsigned char *ip_byte = (unsigned char *)(ntohl(this->ip_hdr->saddr));
+    unsigned char *ip_byte = (unsigned char *)(&(this->ip_hdr->saddr));
     std::string saddr = "";
     for (int i = 0; i < 4; i++)
     {
@@ -67,7 +67,7 @@ std::string IP_Packet::print_source_addr()
 
 std::string IP_Packet::print_dest_addr()
 {
-    unsigned char *ip_byte = (unsigned char *)(ntohl(this->ip_hdr->daddr));
+    unsigned char *ip_byte = (unsigned char *)(&(this->ip_hdr->daddr));
     std::string daddr = "";
     for (int i = 0; i < 4; i++)
     {

@@ -56,10 +56,11 @@ json Ether_Packet::print()
     json packet_info;
 
     // timeval to seconds
-    packet_info["time"] = timeval_to_string(this->timestamp);
     std::pair<std::string, std::string> addresses = this->determine_source_dest_addr();
     std::string source = addresses.first;
     std::string destination = addresses.second;
+
+    packet_info["time"] = timeval_to_string(this->timestamp);
     packet_info["source"] = source;
     packet_info["destination"] = destination;
     packet_info["protocol"] = this->get_protocol();
