@@ -12,4 +12,6 @@ public:
     // make sure virtual functions are implemented in the concrete classes
     void parse() override;
     json print() override;
+    std::string print_source_addr();
+    std::string print_dest_addr();
 };

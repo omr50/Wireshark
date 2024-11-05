@@ -57,7 +57,11 @@ json Ether_Packet::print()
 
     // timeval to seconds
     packet_info["time"] = timeval_to_string(this->timestamp);
-    // packet_info["source"] =
+    std::pair<std::string, std::string> addresses = this->determine_source_dest_addr();
+    std::string source = addresses.first;
+    std::string destination = addresses.second;
+    packet_info["source"] = source;
+    packet_info["destination"] = destination;
 
     full_packet["dest_mac"] = this->print_dest_mac();
     full_packet["src_mac"] = this->print_source_mac();
@@ -98,4 +102,20 @@ std::string Ether_Packet::print_type()
     std::ostringstream oss;
     oss << "0x" << std::hex << std::setw(4) << std::setfill('0') << ntohs(eth_hdr->ether_type);
     return oss.str();
+}
+
+std::pair<std::string, std::string> Ether_Packet::determine_source_dest_addr()
+{
+    // loop until end, if layer 2 max, return MAC
+    // else return ip addr.
+    for (auto packet = this->encapsulatedPacket; packet != nullptr; packet = packet->encapsulatedPacket)
+    {
+        if (packet->layer == 3 && packet->packet_type == "IP")
+        {
+            std::shared_ptr<IP_Packet> ip_packet = std::static_pointer_cast<IP_Packet>(packet);
+            return {ip_packet->print_source_addr(), ip_packet->print_dest_addr()};
+        }
+
+        return {this->print_source_mac(), this->print_dest_mac()};
+    }
 }

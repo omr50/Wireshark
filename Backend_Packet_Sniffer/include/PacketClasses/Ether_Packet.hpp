@@ -16,4 +16,5 @@ public:
     std::string print_dest_mac();
     std::string print_source_mac();
     std::string print_type();
+    std::pair<std::string, std::string> determine_source_dest_addr();
 };

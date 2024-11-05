@@ -48,3 +48,35 @@ json IP_Packet::print()
     std::string msg((char *)this->ip_hdr, this->data_length);
     return msg;
 }
+
+std::string IP_Packet::print_source_addr()
+{
+    unsigned char *ip_byte = (unsigned char *)(ntohl(this->ip_hdr->saddr));
+    std::string saddr = "";
+    for (int i = 0; i < 4; i++)
+    {
+        saddr += std::to_string(ip_byte[i]);
+        if (i != 3)
+        {
+            saddr += ".";
+        }
+    }
+
+    return saddr;
+}
+
+std::string IP_Packet::print_dest_addr()
+{
+    unsigned char *ip_byte = (unsigned char *)(ntohl(this->ip_hdr->daddr));
+    std::string daddr = "";
+    for (int i = 0; i < 4; i++)
+    {
+        daddr += std::to_string(ip_byte[i]);
+        if (i != 3)
+        {
+            daddr += ".";
+        }
+    }
+
+    return daddr;
+}
