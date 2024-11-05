@@ -11,25 +11,23 @@ let buffer = ''; // Buffer to store incoming data
 
 client.on('data', (chunk) => {
     buffer += chunk.toString(); // Append chunk to buffer
-    console.log(buffer) 
-    try {
-        // Attempt to parse the JSON data
-        const jsonData = JSON.parse(buffer);
-        console.log('Received JSON:', jsonData);
-        
-        // Clear the buffer if parsing is successful
-        buffer = '';
-        
-    } catch (error) {
-        // If error is a SyntaxError, it likely means the JSON is incomplete
-        if (error instanceof SyntaxError) {
-            console.log('Incomplete JSON data, waiting for more...');
-        } else {
+
+    // Split buffer by newline to get complete JSON messages
+    let boundary;
+    while ((boundary = buffer.indexOf('\n')) !== -1) {
+        const message = buffer.slice(0, boundary); // Extract one complete message
+        buffer = buffer.slice(boundary + 1);       // Remove it from buffer
+
+        try {
+            // Parse JSON data
+            const jsonData = JSON.parse(message);
+            console.log('Received JSON:', jsonData);
+        } catch (error) {
             console.error('Error parsing JSON:', error);
-            buffer = ''; // Clear buffer on error to prevent repeated failures
         }
     }
 });
+
 
 client.on('close', function() {
   console.log('Connection closed');

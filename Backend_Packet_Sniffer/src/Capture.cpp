@@ -147,7 +147,7 @@ void Capture::packet_handler(u_char *userData, const struct pcap_pkthdr *pkthdr,
     std::shared_ptr<Packet> root_packet = Parser::Determine_Packet(pkthdr, packet);
     // after determining packet, we will inform the server of the data we want to send.
     // for now send the pure binary string
-    std::string packet_data = root_packet->print().dump();
+    std::string packet_data = root_packet->print().dump() + "\n";
     // queue up string data to be sent through tcp server.
     // basically call post here, the server pointer has access to the io_context, and socket, and other things
     printf("Packet DATA: %d\n", packet_data.size());
