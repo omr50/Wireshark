@@ -13,6 +13,7 @@ Ether_Packet::Ether_Packet(const u_char *data, size_t length, timeval time_stamp
     this->timestamp = time_stamp;
     this->data_length = length;
     this->packet_type = "ETH";
+    this->layer = 2;
     // not sure if there is a better way to make the
     // parent node set to null
     std::shared_ptr<Packet> null_packet = nullptr;
