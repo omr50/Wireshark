@@ -26,11 +26,11 @@ body {
 }
 
 .tcp {
-
+    background-color: #A0A0A0;
 }
 
 .tcp:hover {
-
+    background-color: #909EAA;
 }
 
 .packet-details {

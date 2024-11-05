@@ -120,9 +120,8 @@ std::pair<std::string, std::string> Ether_Packet::determine_source_dest_addr()
             std::shared_ptr<IP_Packet> ip_packet = std::static_pointer_cast<IP_Packet>(packet);
             return {ip_packet->print_source_addr(), ip_packet->print_dest_addr()};
         }
-
-        return {this->print_source_mac(), this->print_dest_mac()};
     }
+    return {this->print_source_mac(), this->print_dest_mac()};
 }
 
 std::string Ether_Packet::get_protocol()

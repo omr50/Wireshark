@@ -14,6 +14,7 @@ const { ipcRenderer } = require('electron');
 
 let packet_num = 1;
 const start_time = Date.now();
+console.log("CURRENT START TIME: ", start_time);
 function toggleSubItems(event, element) {
   event.stopPropagation();
 
@@ -65,11 +66,13 @@ function search(event, element) {
 // Listen for the tcp-data event from the main process
 ipcRenderer.on('tcp-data', (event, data) => {
   console.log("THE TCP DATA IS ", data);
-
   let packet_info = data['packet_info'];
-  let new_row = `<tr>
+  let color_class = packet_info.protocol.toLowerCase(); 
+  let exact_time = parseInt(packet_info.time) - start_time;
+  let seconds = exact_time / 1000;
+  let new_row = `<tr class="${color_class}">
                   <td>${packet_num}</td>
-                  <td>${start_time - parseInt(packet_info.time)}</td>
+                  <td>${seconds}</td>
                   <td>${packet_info.source}</td>
                   <td>${packet_info.destination}</td>
                   <td>${packet_info.protocol}</td>
