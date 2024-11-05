@@ -9,6 +9,30 @@ body {
     background-color: #E7E6FF;
 }
 
+.udp {
+    background-color: #DAEEFF;
+}
+
+.udp:hover {
+    background-color: #C4E4FF;
+}
+
+.icmp {
+    background-color: #FCE0FF;
+}
+
+.icmp:hover {
+    background-color: #E2D7FF;
+}
+
+.tcp {
+
+}
+
+.tcp:hover {
+
+}
+
 .packet-details {
     height: 44vh;
     display: flex;

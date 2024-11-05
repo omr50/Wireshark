@@ -13,7 +13,7 @@
         <textarea class="search-bar" placeholder="Apply a display filter..." onkeyup="search(event, this);"></textarea>
     </div>
     <div class="packets-overview">
-        <table style="width:100%; background-color: #E7E6FF;">
+        <table class="packet_table" style="width:100%; background-color: #E7E6FF;">
             <tr style="background-color: white;">
                 <th style="width:8%">No.</th>
                 <th style="width:15%">Time</th>
@@ -23,7 +23,18 @@
                 <th style="width:7%">Length</th>
                 <th>Info</th>
             </tr>
-            <tr>
+        </table>
+    </div>
+    <div class="packet-details">
+        <div class="left-protocol-info"></div>
+        <div class="right-hex-info"></div>
+    </div>
+
+  <script src="events.js"></script>
+</body>
+</html>
+
+            <!-- <tr>
                 <td>1</td>
                 <td>0.1054412</td>
                 <td>192.186.22.255</td>
@@ -51,15 +62,5 @@
                 <td>HTTP</td>
                 <td>2</td>
                 <td>Application Data</td>
-            </tr>
+            </tr> -->
 
-        </table>
-    </div>
-    <div class="packet-details">
-        <div class="left-protocol-info"></div>
-        <div class="right-hex-info"></div>
-    </div>
-
-  <script src="events.js"></script>
-</body>
-</html>

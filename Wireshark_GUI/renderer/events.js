@@ -12,6 +12,8 @@
 // }
 const { ipcRenderer } = require('electron');
 
+let packet_num = 1;
+const start_time = Date.now();
 function toggleSubItems(event, element) {
   event.stopPropagation();
 
@@ -63,6 +65,22 @@ function search(event, element) {
 // Listen for the tcp-data event from the main process
 ipcRenderer.on('tcp-data', (event, data) => {
   console.log("THE TCP DATA IS ", data);
+
+  let packet_info = data['packet_info'];
+  let new_row = `<tr>
+                  <td>${packet_num}</td>
+                  <td>${start_time - parseInt(packet_info.time)}</td>
+                  <td>${packet_info.source}</td>
+                  <td>${packet_info.destination}</td>
+                  <td>${packet_info.protocol}</td>
+                  <td>${packet_info.length}</td>
+                  <td>${packet_info.info}</td>
+                </tr>`
+  packet_num++;
+
+  let packet_table = document.querySelector(".packet_table");
+  packet_table.innerHTML += new_row;
+  search(null, document.querySelector(".search-bar"));
   // const tcpDataDiv = document.getElementById('tcp-data');
   // tcpDataDiv.textContent = data; // Update the content
 });
