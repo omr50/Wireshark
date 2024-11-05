@@ -62,10 +62,14 @@ json Ether_Packet::print()
     std::string destination = addresses.second;
     packet_info["source"] = source;
     packet_info["destination"] = destination;
+    packet_info["protocol"] = this->get_protocol();
+    packet_info["length"] = this->data_length;
+    packet_info["info"] = "Generic info for now";
 
     full_packet["dest_mac"] = this->print_dest_mac();
     full_packet["src_mac"] = this->print_source_mac();
     full_packet["eth_type"] = this->print_type();
+    full_packet["packet_info"] = packet_info;
     return full_packet;
 }
 
@@ -118,4 +122,14 @@ std::pair<std::string, std::string> Ether_Packet::determine_source_dest_addr()
 
         return {this->print_source_mac(), this->print_dest_mac()};
     }
+}
+
+std::string Ether_Packet::get_protocol()
+{
+    std::shared_ptr<Packet> prev(nullptr);
+    for (auto packet = this->encapsulatedPacket; packet != nullptr; packet = packet->encapsulatedPacket)
+    {
+        prev = packet;
+    }
+    return prev->packet_type;
 }
