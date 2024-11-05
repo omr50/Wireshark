@@ -9,6 +9,7 @@ IP_Packet::IP_Packet(const u_char *data, size_t length, timeval time_stamp)
     this->ip_hdr = (iphdr *)data;
     this->data_length = length;
     this->timestamp = time_stamp;
+    this->packet_type = "IP";
 }
 
 void IP_Packet::parse()

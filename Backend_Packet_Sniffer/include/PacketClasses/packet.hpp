@@ -17,6 +17,7 @@ public:
     std::shared_ptr<Packet> encapsulatedPacket;
     std::weak_ptr<Packet> parentPacket;
 
+    std::string packet_type;
     u_char *start_data;
     size_t data_length;
     timeval timestamp;

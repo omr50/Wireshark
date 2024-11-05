@@ -7,6 +7,7 @@ TCP_Packet::TCP_Packet(const u_char *data, size_t length, timeval time_stamp)
     this->tcp_hdr = (tcphdr *)data;
     this->data_length = length;
     this->timestamp = time_stamp;
+    this->packet_type = "TCP";
 }
 
 void TCP_Packet::parse()
