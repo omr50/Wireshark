@@ -21,6 +21,7 @@ public:
     u_char *start_data;
     size_t data_length;
     timeval timestamp;
+    int layer;
     //  boost::asio::io_service io_service;
 
     Packet() = default;
