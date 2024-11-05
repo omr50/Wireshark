@@ -10,6 +10,7 @@
 //         subItems.classList.add('expanded');
 //     }
 // }
+const { ipcRenderer } = require('electron');
 
 function toggleSubItems(event, element) {
   event.stopPropagation();
@@ -56,3 +57,12 @@ function search(event, element) {
        }
     };
 }
+
+
+
+// Listen for the tcp-data event from the main process
+ipcRenderer.on('tcp-data', (event, data) => {
+  console.log("THE TCP DATA IS ", data);
+  // const tcpDataDiv = document.getElementById('tcp-data');
+  // tcpDataDiv.textContent = data; // Update the content
+});

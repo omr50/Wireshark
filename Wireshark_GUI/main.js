@@ -1,16 +1,21 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path')
-require('./TLS_Server');
+const { createTCP_Server } = require('./TLS_Server');
 
 const isDev = true; 
 
+let mainWindow;
 function createMainWindow() {
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         'title': "Packet Analyzer",
         'width': (!isDev) ? 700 : 1200,
         'height': 1000,
         'minWidth': 600,
         'minHeight': 600,
+        'webPreferences': {
+            nodeIntegration: true,
+            contextIsolation: false,
+        }
     })
 
     mainWindow.loadFile(path.join(__dirname, './renderer/index.html'));
@@ -70,6 +75,7 @@ const menu = [
 
 app.whenReady().then(() => {
     createMainWindow();
+    createTCP_Server(mainWindow);
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
             createMainWindow();
