@@ -25,12 +25,12 @@ Ether_Packet::Ether_Packet(const u_char *data, size_t length, timeval time_stamp
 void Ether_Packet::parse()
 {
     printf("Reached parse\n");
-    this->print_type();
+    printf("TYPE %s\n", this->print_type().c_str());
 
     std::shared_ptr<Packet> shared = shared_from_this();
     // Create a weak_ptr from self
     std::weak_ptr<Packet> weak_self = shared;
-
+    printf("Reached here\n");
     if (ntohs(eth_hdr->ether_type) == 0x0800)
     {
         // THIS IS AN IP PACKET
@@ -43,8 +43,9 @@ void Ether_Packet::parse()
     }
     else if (ntohs(eth_hdr->ether_type) == 0x0806)
     {
-
+        printf("True?\n");
         std::shared_ptr<ARP_Packet> arp_packet = std::make_shared<ARP_Packet>((const u_char *)(eth_hdr + 1), this->data_length - sizeof(eth_hdr), weak_self, this->timestamp);
+        arp_packet->parse();
         this->encapsulatedPacket = arp_packet;
         arp_packet->parentPacket = weak_self;
     }

@@ -33,6 +33,14 @@ body {
     background-color: #909EAA;
 }
 
+.arp {
+    background-color: #FAEFDA;
+}
+
+.arp:hover {
+    background-color: #D3CCB8;
+}
+
 .packet-details {
     height: 44vh;
     display: flex;
