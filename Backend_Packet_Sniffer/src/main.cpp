@@ -12,7 +12,7 @@ int main()
 {
     std::shared_ptr<TCP_Server> server = std::make_shared<TCP_Server>(8000);
     std::thread server_thread(TCP_Server::server_thread, server);
-    Capture *packet_capture = new Capture("icmp || tcp || arp", server);
+    Capture *packet_capture = new Capture("arp", server);
     packet_capture->start();
     return 0;
 }
