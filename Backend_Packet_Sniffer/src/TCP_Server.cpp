@@ -49,7 +49,6 @@ void TCP_Server::start_server()
 
 void TCP_Server::start_write(const std::string &message)
 {
-    printf("Started WRITE TO CLIENT\n");
     auto msg = std::make_shared<std::string>(message);
 
     boost::asio::async_write(*this->client_socket, boost::asio::buffer(*msg), [msg](const boost::system::error_code &error, std::size_t)
