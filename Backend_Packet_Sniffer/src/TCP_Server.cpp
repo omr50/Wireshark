@@ -14,7 +14,6 @@ void TCP_Server::start_accept()
     set_keepalive_options(*client_socket);
     this->acceptor_.async_accept(*this->client_socket, [this](const boost::system::error_code &error)
                                  {
-                                     printf("Is it working here?\n");
                                      if (!error)
                                      {
                                          this->client_connected = true;
