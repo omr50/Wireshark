@@ -31,7 +31,8 @@ void Ether_Packet::parse()
     // Create a weak_ptr from self
     std::weak_ptr<Packet> weak_self = shared;
     printf("Reached here\n");
-    if (ntohs(eth_hdr->ether_type) == 0x0800)
+    uint16_t ethernet_type = ntohs(eth_hdr->ether_type);
+    if (ethernet_type == 0x0800)
     {
         // THIS IS AN IP PACKET
         // ip header pointer = eth hdr + eth hdr length
@@ -41,13 +42,17 @@ void Ether_Packet::parse()
         this->encapsulatedPacket = ip_packet;
         ip_packet->parentPacket = weak_self;
     }
-    else if (ntohs(eth_hdr->ether_type) == 0x0806)
+    else if (ethernet_type == 0x0806)
     {
         printf("True?\n");
         std::shared_ptr<ARP_Packet> arp_packet = std::make_shared<ARP_Packet>((const u_char *)(eth_hdr + 1), this->data_length - sizeof(eth_hdr), weak_self, this->timestamp);
         arp_packet->parse();
         this->encapsulatedPacket = arp_packet;
         arp_packet->parentPacket = weak_self;
+    }
+    else if (ethernet_type == 0x86dd)
+    {
+        printf("IPV6!!!!!!!!!!\n");
     }
 }
 
@@ -105,6 +110,7 @@ std::string Ether_Packet::print_source_mac()
 
 std::string Ether_Packet::print_type()
 {
+    printf("ETHER TYPE IS %x", ntohs(eth_hdr->ether_type));
     std::ostringstream oss;
     oss << "0x" << std::hex << std::setw(4) << std::setfill('0') << ntohs(eth_hdr->ether_type);
     return oss.str();
@@ -127,10 +133,13 @@ std::pair<std::string, std::string> Ether_Packet::determine_source_dest_addr()
 
 std::string Ether_Packet::get_protocol()
 {
-    std::shared_ptr<Packet> prev(nullptr);
-    for (auto packet = this->encapsulatedPacket; packet != nullptr; packet = packet->encapsulatedPacket)
+    std::shared_ptr<Packet> prev = this->encapsulatedPacket;
+    printf("Shared ptr prev is null? %d\n", prev.get());
+    while (prev->encapsulatedPacket.get() != nullptr)
     {
-        prev = packet;
+        prev = prev->encapsulatedPacket;
     }
+
+    printf("Is this packet null %d\n", prev.get());
     return prev->packet_type;
 }

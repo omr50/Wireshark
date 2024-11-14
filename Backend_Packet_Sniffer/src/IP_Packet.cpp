@@ -34,7 +34,7 @@ void IP_Packet::parse()
     }
     else if (this->ip_hdr->protocol == 0x11)
     {
-        printf("TCP PACKET!\n");
+        printf("UDP PACKET!\n");
         std::shared_ptr<UDP_Packet> udp_packet = std::make_shared<UDP_Packet>((u_char *)(this->ip_hdr + 1), this->data_length - sizeof(ip_hdr), this->timestamp);
         udp_packet->parse();
 
