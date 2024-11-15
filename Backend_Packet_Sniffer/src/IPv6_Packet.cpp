@@ -11,6 +11,10 @@ IPv6_Packet::IPv6_Packet(const u_char *data, size_t length, timeval time_stamp)
     this->timestamp = time_stamp;
     this->packet_type = "IP";
     this->layer = 3;
+    // ip6 struct contains:
+    // ctlun
+    // dst
+    // src
 }
 
 void IPv6_Packet::parse()
