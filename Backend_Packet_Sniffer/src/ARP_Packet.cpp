@@ -1,10 +1,10 @@
 #include "../include/PacketClasses/ARP_Packet.hpp"
 
-ARP_Packet::ARP_Packet(const u_char *data, size_t length, std::weak_ptr<Packet> parent, timeval time_stamp)
+ARP_Packet::ARP_Packet(const u_char *data, size_t length, timeval time_stamp)
+
 {
     this->arp_hdr = (ether_arp *)start_data;
     this->timestamp = time_stamp;
-    this->parentPacket = parent;
     this->data_length = length;
     this->packet_type = "ARP";
     this->layer = 2;

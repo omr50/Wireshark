@@ -46,7 +46,7 @@ void Ether_Packet::parse()
     else if (ethernet_type == 0x0806)
     {
         printf("True?\n");
-        std::shared_ptr<ARP_Packet> arp_packet = std::make_shared<ARP_Packet>((const u_char *)(eth_hdr + 1), this->data_length - sizeof(eth_hdr), weak_self, this->timestamp);
+        std::shared_ptr<ARP_Packet> arp_packet = std::make_shared<ARP_Packet>((const u_char *)(eth_hdr + 1), this->data_length - sizeof(eth_hdr), this->timestamp);
         arp_packet->parse();
         this->encapsulatedPacket = arp_packet;
         arp_packet->parentPacket = weak_self;
@@ -54,7 +54,7 @@ void Ether_Packet::parse()
     else if (ethernet_type == 0x86dd)
     {
         printf("IPV6!!!!!!!!!!\n");
-        std::shared_ptr<IPv6_Packet> ipv6_packet = std::make_shared<IPv6_Packet>((const u_char *)(eth_hdr + 1), this->data_length - sizeof(eth_hdr), weak_self, this->timestamp);
+        std::shared_ptr<IPv6_Packet> ipv6_packet = std::make_shared<IPv6_Packet>((const u_char *)(eth_hdr + 1), this->data_length - sizeof(eth_hdr), this->timestamp);
         ipv6_packet->parse();
         this->encapsulatedPacket = ipv6_packet;
         ipv6_packet->parentPacket = weak_self;

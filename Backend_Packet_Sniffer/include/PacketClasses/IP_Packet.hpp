@@ -1,6 +1,5 @@
 #include "./packet.hpp"
 #include <netinet/ip.h>
-#include <netinet/ip6.h>
 
 class IP_Packet : public Packet, public std::enable_shared_from_this<Packet>
 {
