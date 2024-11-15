@@ -1,5 +1,6 @@
 #include "../include/PacketClasses/Ether_Packet.hpp"
 #include "../include/PacketClasses/IP_Packet.hpp"
+#include "../include/PacketClasses/IPv6_Packet.hpp"
 #include "../include/PacketClasses/ARP_Packet.hpp"
 #include "../include/utils.hpp"
 #include <sstream>
@@ -53,6 +54,10 @@ void Ether_Packet::parse()
     else if (ethernet_type == 0x86dd)
     {
         printf("IPV6!!!!!!!!!!\n");
+        std::shared_ptr<IPv6_Packet> ipv6_packet = std::make_shared<IPv6_Packet>((const u_char *)(eth_hdr + 1), this->data_length - sizeof(eth_hdr), weak_self, this->timestamp);
+        ipv6_packet->parse();
+        this->encapsulatedPacket = ipv6_packet;
+        ipv6_packet->parentPacket = weak_self;
     }
 }
 
