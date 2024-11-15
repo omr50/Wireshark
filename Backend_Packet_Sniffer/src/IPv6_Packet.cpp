@@ -1,6 +1,7 @@
 #include "../include/PacketClasses/IPv6_Packet.hpp"
 #include "../include/PacketClasses/TCP_Packet.hpp"
 #include "../include/PacketClasses/UDP_Packet.hpp"
+#include <sstream>
 
 IPv6_Packet::IPv6_Packet(const u_char *data, size_t length, timeval time_stamp)
 {
@@ -57,33 +58,40 @@ json IPv6_Packet::print()
 // HANDLE THE PRINTING CORRECTLY LATER
 std::string IPv6_Packet::print_source_addr()
 {
-    unsigned char *ip_byte = (unsigned char *)(&(this->ipv6_hdr->ip6_src.__in6_u.__u6_addr32));
-    std::string saddr = "";
-    for (int i = 0; i < 4; i++)
-    {
-        saddr += std::to_string(ip_byte[i]);
-        if (i != 3)
-        {
-            saddr += ".";
-        }
-    }
 
-    return saddr;
+    std::ostringstream oss;
+    auto ipv6_array = this->ipv6_hdr->ip6_src.__in6_u.__u6_addr16;
+    oss << std::hex << std::setfill('0');
+    for (int i = 0; i < 8; i++)
+    {
+        auto curr_bytes = static_cast<int>(ntohs(ipv6_array[i]));
+        if (curr_bytes)
+        {
+            oss << std::setw(4) << curr_bytes;
+        }
+        if (i != 7)
+            oss << ":";
+    }
+    oss << "\n";
+    return oss.str();
 }
 
 // HANDLE THE PRINTING CORRECTLY LATER
 std::string IPv6_Packet::print_dest_addr()
 {
-    unsigned char *ip_byte = (unsigned char *)(&(this->ipv6_hdr->ip6_dst.__in6_u.__u6_addr16));
-    std::string daddr = "";
-    for (int i = 0; i < 4; i++)
+    std::ostringstream oss;
+    auto ipv6_array = this->ipv6_hdr->ip6_dst.__in6_u.__u6_addr16;
+    oss << std::hex << std::setfill('0');
+    for (int i = 0; i < 8; i++)
     {
-        daddr += std::to_string(ip_byte[i]);
-        if (i != 3)
+        auto curr_bytes = static_cast<int>(ntohs(ipv6_array[i]));
+        if (curr_bytes)
         {
-            daddr += ".";
+            oss << std::setw(5) << curr_bytes;
         }
+        if (i != 7)
+            oss << ":";
     }
-
-    return daddr;
+    oss << "\n";
+    return oss.str();
 }

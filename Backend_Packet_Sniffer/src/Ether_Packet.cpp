@@ -132,6 +132,11 @@ std::pair<std::string, std::string> Ether_Packet::determine_source_dest_addr()
             std::shared_ptr<IP_Packet> ip_packet = std::static_pointer_cast<IP_Packet>(packet);
             return {ip_packet->print_source_addr(), ip_packet->print_dest_addr()};
         }
+        else if (packet->layer == 3 && packet->packet_type == "IPv6")
+        {
+            std::shared_ptr<IPv6_Packet> ipv6_packet = std::static_pointer_cast<IPv6_Packet>(packet);
+            return {ipv6_packet->print_source_addr(), ipv6_packet->print_dest_addr()};
+        }
     }
     return {this->print_source_mac(), this->print_dest_mac()};
 }
