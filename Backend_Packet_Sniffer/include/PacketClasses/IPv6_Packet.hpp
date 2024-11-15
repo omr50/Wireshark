@@ -4,7 +4,7 @@
 class IPv6_Packet : public Packet, public std::enable_shared_from_this<Packet>
 {
 public:
-    ip6_hdr *ip_hdr;
+    ip6_hdr *ip6_hdr;
 
     IPv6_Packet(const u_char *data, size_t length, timeval time_stamp);
     ~IPv6_Packet() = default;
