@@ -18,9 +18,10 @@ std::vector<std::string> parse_line(std::string line)
         if (space_count == 2)
         {
             temp = line.substr(i);
+            all_strings.push_back(temp);
             break;
         }
-        if (line[i] == ' ')
+        if (line[i] == ' ' || line[i] == '\t' || line[i] == '\n')
         {
 
             all_strings.push_back(temp);
@@ -34,6 +35,6 @@ std::vector<std::string> parse_line(std::string line)
         temp += line[i];
     }
 
-    printf("%s %s %s\n", all_strings[0].c_str(), all_strings[1].c_str(), all_strings[2].c_str());
+    printf("%s %s %s www\n", all_strings[0].c_str(), all_strings[1].c_str(), all_strings[2].c_str());
     return all_strings;
 }
