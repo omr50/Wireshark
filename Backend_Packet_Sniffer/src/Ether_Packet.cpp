@@ -155,6 +155,8 @@ std::string Ether_Packet::get_protocol()
     printf("Is this packet null %d\n", prev.get());
     return prev->packet_type;
 }
+//
+std::unordered_map<std::string, std::string> Ether_Packet::manufacturer_info;
 
 void Ether_Packet::create_manufacturer_info_table()
 {
@@ -173,6 +175,6 @@ void Ether_Packet::create_manufacturer_info_table()
         auto hex = contents[0];
         auto manuf_name = contents[1];
         auto manuf_name_long = contents[2];
-        Ether_Packet::manufacturer_info.insert(hex, manuf_name);
+        Ether_Packet::manufacturer_info.insert(std::make_pair(hex, manuf_name));
     }
 }

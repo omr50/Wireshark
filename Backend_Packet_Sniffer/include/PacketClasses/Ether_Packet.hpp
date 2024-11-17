@@ -1,13 +1,15 @@
+#pragma once
 #include "./packet.hpp"
 #include "../json.hpp"
 #include <unordered_map>
 
-using json = nlohmann::json;
 class Ether_Packet : public Packet, public std::enable_shared_from_this<Packet>
 {
 public:
     ether_header *eth_hdr;
     // initialized in the capture function before we start
+
+    // define the variable because declaring it doesn't define it
     static std::unordered_map<std::string, std::string> manufacturer_info;
 
     Ether_Packet(const u_char *data, size_t length, timeval time_stamp);

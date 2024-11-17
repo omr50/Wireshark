@@ -20,6 +20,7 @@ void Capture::start()
 {
 
     // get manufacturer info
+    printf("create manufacturer info!\n");
     Ether_Packet::create_manufacturer_info_table();
     this->get_all_devs();
     this->present_dev_options();
