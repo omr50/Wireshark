@@ -84,6 +84,13 @@ json Ether_Packet::print()
     full_packet["src_mac"] = this->print_source_mac();
     full_packet["eth_type"] = this->print_type();
     full_packet["packet_info"] = packet_info;
+    // structure the detailed info as a series of encapsulated objects
+    std::vector<json> detailed_packet_info;
+    for (std::shared_ptr<Packet> packet = this->encapsulatedPacket; packet.get() != nullptr; packet = packet->encapsulatedPacket)
+    {
+        detailed_packet_info.push_back(packet->print());
+    }
+    full_packet["detailed_info"] = detailed_packet_info;
     return full_packet;
 }
 
@@ -177,4 +184,37 @@ void Ether_Packet::create_manufacturer_info_table()
         auto manuf_name_long = contents[2];
         Ether_Packet::manufacturer_info.insert(std::make_pair(hex, manuf_name));
     }
+}
+
+json Ether_Packet::detailed_protocol_info_print()
+{
+    json temp_msg;
+    std::string src_mac = this->print_source_mac();
+    std::string dest_mac = this->print_source_mac();
+    std::string src_first_half = src_mac.substr(0, 8);
+    std::string src_second_half = src_mac.substr(8);
+    std::string dest_first_half = dest_mac.substr(0, 8);
+    std::string dest_second_half = dest_mac.substr(8);
+    if (Ether_Packet::manufacturer_info.find(src_first_half) != Ether_Packet::manufacturer_info.end() && Ether_Packet::manufacturer_info.find(dest_first_half) != Ether_Packet::manufacturer_info.end())
+    {
+        std::string title = "Ethernet II, Src: ";
+        std::string src_manufacturer = Ether_Packet::manufacturer_info.find(src_first_half)->second;
+        std::string dest_manufacturer = Ether_Packet::manufacturer_info.find(dest_first_half)->second;
+        std::string src_manuf_combined = src_manufacturer + "_" + src_second_half + " (" + src_mac + "), Dst: ";
+        std::string dest_manuf_combined = dest_manufacturer + "_" + dest_second_half + " (" + dest_mac + ")";
+
+        title += src_manufacturer;
+        title += src_manuf_combined;
+        title += dest_manufacturer;
+        title += dest_manuf_combined;
+        temp_msg["title"] = title;
+        // json destination = ;
+        json source;
+    }
+    else
+    {
+        printf("CANT FIND MANUFACTURER!!!!!!!!!!!!!!!!!!!!!!\n");
+    }
+
+    return temp_msg;
 }

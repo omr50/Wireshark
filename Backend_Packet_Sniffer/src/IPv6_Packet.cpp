@@ -95,3 +95,10 @@ std::string IPv6_Packet::print_dest_addr()
     oss << "\n";
     return oss.str();
 }
+
+json IPv6_Packet::detailed_protocol_info_print()
+{
+    json temp_msg;
+    temp_msg["protocol"] = this->packet_type;
+    return temp_msg;
+}

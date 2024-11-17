@@ -14,4 +14,5 @@ public:
     json print() override;
     std::string print_source_addr();
     std::string print_dest_addr();
+    json detailed_protocol_info_print();
 };

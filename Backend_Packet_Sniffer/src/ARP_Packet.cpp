@@ -25,3 +25,10 @@ json ARP_Packet::print()
     std::string msg((char *)this->arp_hdr, this->data_length);
     return msg;
 }
+
+json ARP_Packet::detailed_protocol_info_print()
+{
+    json temp_msg;
+    temp_msg["protocol"] = this->packet_type;
+    return temp_msg;
+}

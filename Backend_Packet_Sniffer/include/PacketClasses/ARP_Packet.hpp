@@ -15,4 +15,5 @@ public:
     void print_sender_protocol();
     void print_target_protocol();
     void print_type();
+    json detailed_protocol_info_print();
 };

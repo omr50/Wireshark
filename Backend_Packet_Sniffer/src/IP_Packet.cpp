@@ -80,3 +80,10 @@ std::string IP_Packet::print_dest_addr()
 
     return daddr;
 }
+
+json IP_Packet::detailed_protocol_info_print()
+{
+    json temp_msg;
+    temp_msg["protocol"] = this->packet_type;
+    return temp_msg;
+}

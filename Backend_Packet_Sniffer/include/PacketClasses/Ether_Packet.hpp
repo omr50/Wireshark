@@ -24,4 +24,5 @@ public:
     std::pair<std::string, std::string> determine_source_dest_addr();
     std::string get_protocol();
     static void create_manufacturer_info_table();
+    json detailed_protocol_info_print();
 };
