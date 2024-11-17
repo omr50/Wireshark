@@ -4,6 +4,8 @@
 #include "../include/PacketClasses/ARP_Packet.hpp"
 #include "../include/utils.hpp"
 #include <sstream>
+#include <iostream>
+#include <fstream>
 
 using json = nlohmann::json;
 
@@ -152,4 +154,25 @@ std::string Ether_Packet::get_protocol()
 
     printf("Is this packet null %d\n", prev.get());
     return prev->packet_type;
+}
+
+void Ether_Packet::create_manufacturer_info_table()
+{
+    // open and parse the .gz file into the hash map.
+    std::ifstream file("../files/manuf"); // Open file
+    if (!file)
+    {
+        std::cerr << "Error opening file!" << std::endl;
+        printf("Error opening file!\n");
+        return;
+    }
+    std::string line;
+    while (std::getline(file, line))
+    {
+        auto contents = parse_line(line);
+        auto hex = contents[0];
+        auto manuf_name = contents[1];
+        auto manuf_name_long = contents[2];
+        Ether_Packet::manufacturer_info.insert(hex, manuf_name);
+    }
 }
