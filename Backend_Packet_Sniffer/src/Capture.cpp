@@ -3,6 +3,7 @@
     and then basically forward everything to the parser.
 */
 #include "../include/PacketClasses/packet.hpp"
+#include "../include/PacketClasses/Ether_Packet.hpp"
 #include "../include/Capture.hpp"
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,6 +18,9 @@ Capture::Capture(std::string filter_exp, std::shared_ptr<TCP_Server> server) : f
 
 void Capture::start()
 {
+
+    // get manufacturer info
+    Ether_Packet::create_manufacturer_info_table();
     this->get_all_devs();
     this->present_dev_options();
 
