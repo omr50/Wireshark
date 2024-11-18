@@ -90,7 +90,8 @@ json Ether_Packet::print()
     {
         detailed_packet_info.push_back(packet->print());
     }
-    full_packet["detailed_info"] = detailed_packet_info;
+    // full_packet["detailed_info"] = detailed_packet_info;
+    full_packet["detailed_info"] = this->detailed_protocol_info_print();
     return full_packet;
 }
 
@@ -234,16 +235,20 @@ json Ether_Packet::detailed_protocol_info_print()
         source["title"] = "Source: " + src_manuf_combined + " (" + src_mac + ")";
         source["Address"] = src_manuf_combined + " (" + src_mac + ")";
         source["LG"] = ".... .." + std::to_string(src_LG_bit) + ". .... .... .... .... " + src_lg_status;
-        source["IG"] = ".... .." + std::to_string(src_IG_bit) + ". .... .... .... .... " + src_ig_status;
+        source["IG"] = ".... ..." + std::to_string(src_IG_bit) + " .... .... .... .... " + src_ig_status;
 
         Ethernet_Frame["title"] = title;
         Ethernet_Frame["Destination"] = destination;
         Ethernet_Frame["source"] = source;
+        std::stringstream stream;
+        stream << std::hex << ntohs(this->eth_hdr->ether_type);
+        std::string type_hex_string = stream.str();
+        Ethernet_Frame["type"] = this->encapsulatedPacket->packet_type + " (" + type_hex_string + ")";
     }
     else
     {
         printf("CANT FIND MANUFACTURER!!!!!!!!!!!!!!!!!!!!!!\n");
     }
 
-    return temp_msg;
+    return Ethernet_Frame;
 }
