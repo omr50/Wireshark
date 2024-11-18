@@ -188,7 +188,7 @@ void Ether_Packet::create_manufacturer_info_table()
 
 json Ether_Packet::detailed_protocol_info_print()
 {
-    json temp_msg;
+    json Ethernet_Frame;
     std::string src_mac = this->print_source_mac();
     std::string dest_mac = this->print_source_mac();
     std::string src_first_half = src_mac.substr(0, 8);
@@ -207,9 +207,38 @@ json Ether_Packet::detailed_protocol_info_print()
         title += src_manuf_combined;
         title += dest_manufacturer;
         title += dest_manuf_combined;
-        temp_msg["title"] = title;
-        // json destination = ;
+
+        json destination;
         json source;
+        json type;
+
+        int dest_LG_bit = (this->eth_hdr->ether_dhost[0] & 1);
+        int dest_IG_bit = ((this->eth_hdr->ether_dhost[0] & 2) >> 1);
+        std::string dest_lg_status = (dest_LG_bit == 0) ? "Globally unique (factory default)" : "Adminstratively assigned";
+        std::string dest_LG_description = "LG bit: " + dest_lg_status;
+        std::string dest_ig_status = (dest_IG_bit == 0) ? "Individual address (unicast)" : "Broadcast address (multicast)";
+        std::string dest_IG_description = "IG bit: " + dest_ig_status;
+
+        destination["title"] = "Destination: " + dest_manuf_combined + " (" + dest_mac + ")";
+        destination["Address"] = dest_manuf_combined + " (" + dest_mac + ")";
+        destination["LG"] = ".... .." + std::to_string(dest_LG_bit) + ". .... .... .... .... " + dest_lg_status;
+        destination["IG"] = ".... .." + std::to_string(dest_IG_bit) + ". .... .... .... .... " + dest_ig_status;
+
+        int src_LG_bit = (this->eth_hdr->ether_shost[0] & 1);
+        int src_IG_bit = ((this->eth_hdr->ether_shost[0] & 2) >> 1);
+        std::string src_lg_status = (src_LG_bit == 0) ? "Globally unique (factory default)" : "Adminstratively assigned";
+        std::string src_LG_description = "LG bit: " + src_lg_status;
+        std::string src_ig_status = (src_IG_bit == 0) ? "Individual address (unicast)" : "Broadcast address (multicast)";
+        std::string src_IG_description = "IG bit: " + src_ig_status;
+
+        source["title"] = "Source: " + src_manuf_combined + " (" + src_mac + ")";
+        source["Address"] = src_manuf_combined + " (" + src_mac + ")";
+        source["LG"] = ".... .." + std::to_string(src_LG_bit) + ". .... .... .... .... " + src_lg_status;
+        source["IG"] = ".... .." + std::to_string(src_IG_bit) + ". .... .... .... .... " + src_ig_status;
+
+        Ethernet_Frame["title"] = title;
+        Ethernet_Frame["Destination"] = destination;
+        Ethernet_Frame["source"] = source;
     }
     else
     {
