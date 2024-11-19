@@ -259,7 +259,7 @@ json Ether_Packet::detailed_protocol_info_print()
     std::stringstream stream;
     stream << std::hex << ntohs(this->eth_hdr->ether_type);
     std::string type_hex_string = stream.str();
-    Ethernet_Frame["type"] = this->encapsulatedPacket->packet_type + " (0x" + type_hex_string + ")";
+    Ethernet_Frame["type"] = "type: " + this->encapsulatedPacket->packet_type + " (0x" + type_hex_string + ")";
 
     return Ethernet_Frame;
 }
