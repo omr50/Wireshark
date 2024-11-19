@@ -83,7 +83,17 @@ std::string IP_Packet::print_dest_addr()
 
 json IP_Packet::detailed_protocol_info_print()
 {
-    json temp_msg;
-    temp_msg["protocol"] = this->packet_type;
-    return temp_msg;
+    json IP_Packet;
+    json Differentiated_Services_Field;
+    json Flags;
+    IP_Packet["version"] = "0100 .... = Version: 4";
+    std::string byte_string;
+    int ihl = this->ip_hdr->ihl;
+    std::string ihl_string = std::to_string(ihl);
+    for (int i = 0; i < 4; i++)
+    {
+        byte_string += std::to_string((ihl & (1 << 3 - i)) >> (3 - i));
+    }
+    IP_Packet["header_length"] = ".... " + byte_string + " = Header Length: " + std::to_string((ihl * 32) / 8) + " bytes (" + ihl_string + ")";
+    IP_Packet["Differentiated_Services_Filed"]
 }

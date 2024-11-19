@@ -38,3 +38,24 @@ std::vector<std::string> parse_line(std::string line)
     printf("%s %s %s www\n", all_strings[0].c_str(), all_strings[1].c_str(), all_strings[2].c_str());
     return all_strings;
 }
+
+std::string to_binary_string(int val, int num_bytes, bool from_end)
+{
+    std::string byte_string;
+    if (from_end)
+    {
+        for (int i = 0; i < num_bytes; i++)
+        {
+            byte_string += std::to_string((val & (1 << num_bytes - 1 - i)) >> (num_bytes - 1 - i));
+        }
+    }
+    else
+    {
+        for (int i = 0; i < num_bytes; i++)
+        {
+            byte_string = std::to_string((val & (1 << i)) >> (i)) + byte_string;
+        }
+    }
+
+    return byte_string;
+}
