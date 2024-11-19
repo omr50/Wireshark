@@ -12,4 +12,5 @@ public:
     // make sure virtual functions are implemented in the concrete classes
     void parse() override;
     json print() override;
+    json detailed_protocol_info_print();
 };

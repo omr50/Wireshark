@@ -32,6 +32,7 @@ public:
     // order instead of the network byte order so that we can use it more
     // effectively.
     virtual void parse() = 0;
+    virtual json detailed_protocol_info_print() = 0;
     virtual json print() = 0;
     // we will create a function that should take the current packets structure
     // and prepare a partial json structure, and that too will be added to the

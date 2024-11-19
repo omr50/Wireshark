@@ -35,3 +35,10 @@ json TCP_Packet::print()
     std::string msg((char *)this->tcp_hdr, this->data_length);
     return msg;
 }
+
+json TCP_Packet::detailed_protocol_info_print()
+{
+    json temp_msg;
+    temp_msg["protocol"] = this->packet_type;
+    return temp_msg;
+}

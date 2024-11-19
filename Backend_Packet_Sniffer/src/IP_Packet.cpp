@@ -34,7 +34,7 @@ void IP_Packet::parse()
     }
     else if (this->ip_hdr->protocol == 0x11)
     {
-        printf("TCP PACKET!\n");
+        printf("UDP PACKET!\n");
         std::shared_ptr<UDP_Packet> udp_packet = std::make_shared<UDP_Packet>((u_char *)(this->ip_hdr + 1), this->data_length - sizeof(ip_hdr), this->timestamp);
         udp_packet->parse();
 
@@ -79,4 +79,11 @@ std::string IP_Packet::print_dest_addr()
     }
 
     return daddr;
+}
+
+json IP_Packet::detailed_protocol_info_print()
+{
+    json temp_msg;
+    temp_msg["protocol"] = this->packet_type;
+    return temp_msg;
 }
