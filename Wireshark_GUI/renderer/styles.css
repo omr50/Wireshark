@@ -51,12 +51,19 @@ body {
 .left-protocol-info {
     border: 1px solid black;
     flex: 1;
+    overflow-x: auto; 
+    display: flex;
+    white-space: nowrap; 
+    flex-direction: column;
+    position: relative; 
+    width: inherit;
 }
 
 .right-hex-info {
     border: 1px solid black;
-    flex: 1;
+    flex: 1; 
 }
+
 
 table, th, td {
   border: 1px solid black;
@@ -102,15 +109,18 @@ tr:hover {
 .item {
   cursor: pointer;
   height: fit-content;
+  width: 100vw;
 }
 
 .sub-items {
   overflow: hidden;
   display: none;
+  max-width: 100%;
+  width: auto; 
 }
 
 .sub-items.expanded {
-    display: block;
+    display:block;
     height: auto;
 }
 
