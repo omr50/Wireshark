@@ -6,6 +6,7 @@
 #include <sstream>
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 
 using json = nlohmann::json;
 
@@ -105,7 +106,6 @@ std::string Ether_Packet::print_dest_mac()
         if (i != 5)
             oss << ":";
     }
-    oss << "\n";
     return oss.str();
 }
 
@@ -119,7 +119,6 @@ std::string Ether_Packet::print_source_mac()
         if (i != 5)
             oss << ":";
     }
-    oss << "\n";
     return oss.str();
 }
 
@@ -191,64 +190,76 @@ json Ether_Packet::detailed_protocol_info_print()
 {
     json Ethernet_Frame;
     std::string src_mac = this->print_source_mac();
-    std::string dest_mac = this->print_source_mac();
+    std::string dest_mac = this->print_dest_mac();
     std::string src_first_half = src_mac.substr(0, 8);
+    std::transform(src_first_half.begin(), src_first_half.end(), src_first_half.begin(), ::toupper);
     std::string src_second_half = src_mac.substr(8);
     std::string dest_first_half = dest_mac.substr(0, 8);
     std::string dest_second_half = dest_mac.substr(8);
-    if (Ether_Packet::manufacturer_info.find(src_first_half) != Ether_Packet::manufacturer_info.end() && Ether_Packet::manufacturer_info.find(dest_first_half) != Ether_Packet::manufacturer_info.end())
+    std::string src_manufacturer;
+    std::string dest_manufacturer;
+    std::transform(dest_first_half.begin(), dest_first_half.end(), dest_first_half.begin(), ::toupper);
+    printf("Manuf info %s %s\n", src_first_half.c_str(), dest_first_half.c_str());
+    if (Ether_Packet::manufacturer_info.find(src_first_half) != Ether_Packet::manufacturer_info.end())
     {
-        std::string title = "Ethernet II, Src: ";
-        std::string src_manufacturer = Ether_Packet::manufacturer_info.find(src_first_half)->second;
-        std::string dest_manufacturer = Ether_Packet::manufacturer_info.find(dest_first_half)->second;
-        std::string src_manuf_combined = src_manufacturer + "_" + src_second_half + " (" + src_mac + "), Dst: ";
-        std::string dest_manuf_combined = dest_manufacturer + "_" + dest_second_half + " (" + dest_mac + ")";
-
-        title += src_manufacturer;
-        title += src_manuf_combined;
-        title += dest_manufacturer;
-        title += dest_manuf_combined;
-
-        json destination;
-        json source;
-        json type;
-
-        int dest_LG_bit = (this->eth_hdr->ether_dhost[0] & 1);
-        int dest_IG_bit = ((this->eth_hdr->ether_dhost[0] & 2) >> 1);
-        std::string dest_lg_status = (dest_LG_bit == 0) ? "Globally unique (factory default)" : "Adminstratively assigned";
-        std::string dest_LG_description = "LG bit: " + dest_lg_status;
-        std::string dest_ig_status = (dest_IG_bit == 0) ? "Individual address (unicast)" : "Broadcast address (multicast)";
-        std::string dest_IG_description = "IG bit: " + dest_ig_status;
-
-        destination["title"] = "Destination: " + dest_manuf_combined + " (" + dest_mac + ")";
-        destination["Address"] = dest_manuf_combined + " (" + dest_mac + ")";
-        destination["LG"] = ".... .." + std::to_string(dest_LG_bit) + ". .... .... .... .... " + dest_lg_status;
-        destination["IG"] = ".... .." + std::to_string(dest_IG_bit) + ". .... .... .... .... " + dest_ig_status;
-
-        int src_LG_bit = (this->eth_hdr->ether_shost[0] & 1);
-        int src_IG_bit = ((this->eth_hdr->ether_shost[0] & 2) >> 1);
-        std::string src_lg_status = (src_LG_bit == 0) ? "Globally unique (factory default)" : "Adminstratively assigned";
-        std::string src_LG_description = "LG bit: " + src_lg_status;
-        std::string src_ig_status = (src_IG_bit == 0) ? "Individual address (unicast)" : "Broadcast address (multicast)";
-        std::string src_IG_description = "IG bit: " + src_ig_status;
-
-        source["title"] = "Source: " + src_manuf_combined + " (" + src_mac + ")";
-        source["Address"] = src_manuf_combined + " (" + src_mac + ")";
-        source["LG"] = ".... .." + std::to_string(src_LG_bit) + ". .... .... .... .... " + src_lg_status;
-        source["IG"] = ".... ..." + std::to_string(src_IG_bit) + " .... .... .... .... " + src_ig_status;
-
-        Ethernet_Frame["title"] = title;
-        Ethernet_Frame["Destination"] = destination;
-        Ethernet_Frame["source"] = source;
-        std::stringstream stream;
-        stream << std::hex << ntohs(this->eth_hdr->ether_type);
-        std::string type_hex_string = stream.str();
-        Ethernet_Frame["type"] = this->encapsulatedPacket->packet_type + " (" + type_hex_string + ")";
+        src_manufacturer = Ether_Packet::manufacturer_info.find(src_first_half)->second;
     }
     else
     {
-        printf("CANT FIND MANUFACTURER!!!!!!!!!!!!!!!!!!!!!!\n");
+        src_manufacturer = "unknown manufacturer";
     }
+
+    if (Ether_Packet::manufacturer_info.find(dest_first_half) != Ether_Packet::manufacturer_info.end())
+    {
+        dest_manufacturer = Ether_Packet::manufacturer_info.find(dest_first_half)->second;
+    }
+    else
+    {
+        dest_manufacturer = "unknown manufacturer";
+    }
+    std::string title = "Ethernet II, Src: ";
+    std::string src_manuf_combined = src_manufacturer + "_" + src_second_half + " (" + src_mac + ")";
+    std::string dest_manuf_combined = dest_manufacturer + "_" + dest_second_half + " (" + dest_mac + ")";
+
+    title += src_manuf_combined;
+    title += ", Dst: ";
+    title += dest_manuf_combined;
+
+    json destination;
+    json source;
+    json type;
+
+    int dest_LG_bit = (this->eth_hdr->ether_dhost[0] & 1);
+    int dest_IG_bit = ((this->eth_hdr->ether_dhost[0] & 2) >> 1);
+    std::string dest_lg_status = (dest_LG_bit == 0) ? "Globally unique (factory default)" : "Adminstratively assigned";
+    std::string dest_LG_description = "LG bit: " + dest_lg_status;
+    std::string dest_ig_status = (dest_IG_bit == 0) ? "Individual address (unicast)" : "Broadcast address (multicast)";
+    std::string dest_IG_description = "IG bit: " + dest_ig_status;
+
+    destination["title"] = "Destination: " + dest_manuf_combined;
+    destination["Address"] = dest_manuf_combined;
+    destination["LG"] = ".... .." + std::to_string(dest_LG_bit) + ". .... .... .... .... " + dest_lg_status;
+    destination["IG"] = ".... ..." + std::to_string(dest_IG_bit) + " .... .... .... .... " + dest_ig_status;
+
+    int src_LG_bit = (this->eth_hdr->ether_shost[0] & 1);
+    int src_IG_bit = ((this->eth_hdr->ether_shost[0] & 2) >> 1);
+    std::string src_lg_status = (src_LG_bit == 0) ? "Globally unique (factory default)" : "Adminstratively assigned";
+    std::string src_LG_description = "LG bit: " + src_lg_status;
+    std::string src_ig_status = (src_IG_bit == 0) ? "Individual address (unicast)" : "Broadcast address (multicast)";
+    std::string src_IG_description = "IG bit: " + src_ig_status;
+
+    source["title"] = "Source: " + src_manuf_combined;
+    destination["Address"] = src_manuf_combined;
+    source["LG"] = ".... .." + std::to_string(src_LG_bit) + ". .... .... .... .... " + src_lg_status;
+    source["IG"] = ".... ..." + std::to_string(src_IG_bit) + " .... .... .... .... " + src_ig_status;
+
+    Ethernet_Frame["title"] = title;
+    Ethernet_Frame["Destination"] = destination;
+    Ethernet_Frame["source"] = source;
+    std::stringstream stream;
+    stream << std::hex << ntohs(this->eth_hdr->ether_type);
+    std::string type_hex_string = stream.str();
+    Ethernet_Frame["type"] = this->encapsulatedPacket->packet_type + " (0x" + type_hex_string + ")";
 
     return Ethernet_Frame;
 }

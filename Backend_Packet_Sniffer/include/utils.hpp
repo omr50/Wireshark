@@ -27,7 +27,7 @@ std::vector<std::string> parse_line(std::string line)
             all_strings.push_back(temp);
             space_count++;
             temp = "";
-            while (line[i] == ' ')
+            while (line[i] == ' ' || line[i] == '\t' || line[i] == '\n')
             {
                 i++;
             }
