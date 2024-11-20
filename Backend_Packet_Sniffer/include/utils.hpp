@@ -59,3 +59,26 @@ std::string to_binary_string(int val, int num_bytes, bool from_end)
 
     return byte_string;
 }
+
+std::string to_hex(int val)
+{
+    std::ostringstream oss;
+    oss << std::hex << std::setfill('0');
+    oss << "0x";
+    oss << std::setw(2) << val;
+    return oss.str();
+}
+
+uint8_t binary_to_int(uint8_t value, uint8_t start_bit, uint8_t end_bit)
+{
+    uint8_t int_val = 0;
+    uint8_t scale = 1;
+    for (int i = start_bit; i <= end_bit; i++)
+    {
+        // bit val either 1 or 0
+        uint8_t bit_val = ((1 << i) & (value) >> i);
+        int_val += (bit_val * scale);
+        scale *= 2;
+    }
+    return int_val;
+}

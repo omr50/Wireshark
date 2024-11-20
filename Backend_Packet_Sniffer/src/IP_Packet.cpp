@@ -87,15 +87,29 @@ json IP_Packet::detailed_protocol_info_print()
     json IP_Packet;
     json Differentiated_Services_Field;
     json Flags;
-    IP_Packet["version"] = "0100 .... = Version: 4";
     int ihl = this->ip_hdr->ihl;
     std::string ihl_string = std::to_string(ihl);
 
     std::string byte_string = to_binary_string(ihl, 4, true);
+    IP_Packet["version"] = "0100 .... = Version: 4";
     IP_Packet["header_length"] = ".... " + byte_string + " = Header Length: " + std::to_string((ihl * 32) / 8) + " bytes (" + ihl_string + ")";
     // Map to the actual valeus on the wikipedia page https://en.wikipedia.org/wiki/Differentiated_services
-    Differentiated_Services_Field["diff_services_codepoint"] = to_binary_string(this->ip_hdr->tos, 6, true);
+    Differentiated_Services_Field["title"] = "Differentiated Services Field: " + to_hex(this->ip_hdr->tos);
+    std::string tos_string = to_binary_string(this->ip_hdr->tos, 6, true);
+
+    Differentiated_Services_Field["diff_services_codepoint"] = tos_string.substr(0, 4) + " " + tos_string.substr(4, 6) + ".. = Differentiated Services Codepoint: (" + std::to_string(binary_to_int(this->ip_hdr->tos, 2, 7)) + ")";
     // Map to the actual valeus on the https://en.wikipedia.org/wiki/Explicit_Congestion_Notification
-    Differentiated_Services_Field["explicit_congestion_notification"] = to_binary_string(this->ip_hdr->tos, 2, false);
+    Differentiated_Services_Field["explicit_congestion_notification"] = ".... .." + tos_string.substr(6) + " = Explicit Congestion Notification: (" + std::to_string(binary_to_int(this->ip_hdr->tos, 0, 1)) + ")";
     IP_Packet["total_length"] = "Total Length: " + ntohs(this->ip_hdr->tot_len);
+    IP_Packet["identification"] = to_hex(ntohs(this->ip_hdr->id)) + " (" + std::to_string(ntohs(this->ip_hdr->id)) + ")";
+    uint8_t highest_byte = *(((uint8_t *)&(this->ip_hdr->frag_off)) + 1);
+    // this should cut off the value to just the lowest byte
+    uint8_t lowest_byte = this->ip_hdr->frag_off;
+    uint8_t flags = binary_to_int(highest_byte, 5, 7);
+    std::string flags_string = to_binary_string(flags, 3, false);
+    Flags["title"] = flags_string + ". .... = Flags: " + to_hex(flags) + ", (place holder)";
+    Flags["reserved_bit"] = flags_string[0] + "... .... = Reserved bit: (place holder)";
+    Flags["dont_fragment"] = +"." + std::to_string(flags_string[1]) + ".. .... = Don't fragment : (place holder)";
+    Flags["more_fragments"] = +".." + std::to_string(flags_string[2]) + ". .... = More Fragments: (place holder)";
+    Flags["fragment_offset"] = +"..." +
 }
