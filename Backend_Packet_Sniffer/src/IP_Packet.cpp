@@ -1,6 +1,7 @@
 #include "../include/PacketClasses/IP_Packet.hpp"
 #include "../include/PacketClasses/TCP_Packet.hpp"
 #include "../include/PacketClasses/UDP_Packet.hpp"
+#include "../include/utils.hpp"
 
 IP_Packet::IP_Packet(const u_char *data, size_t length, timeval time_stamp)
 {
@@ -87,13 +88,14 @@ json IP_Packet::detailed_protocol_info_print()
     json Differentiated_Services_Field;
     json Flags;
     IP_Packet["version"] = "0100 .... = Version: 4";
-    std::string byte_string;
     int ihl = this->ip_hdr->ihl;
     std::string ihl_string = std::to_string(ihl);
-    for (int i = 0; i < 4; i++)
-    {
-        byte_string += std::to_string((ihl & (1 << 3 - i)) >> (3 - i));
-    }
+
+    std::string byte_string = to_binary_string(ihl, 4, true);
     IP_Packet["header_length"] = ".... " + byte_string + " = Header Length: " + std::to_string((ihl * 32) / 8) + " bytes (" + ihl_string + ")";
-    IP_Packet["Differentiated_Services_Filed"]
+    // Map to the actual valeus on the wikipedia page https://en.wikipedia.org/wiki/Differentiated_services
+    Differentiated_Services_Field["diff_services_codepoint"] = to_binary_string(this->ip_hdr->tos, 6, true);
+    // Map to the actual valeus on the https://en.wikipedia.org/wiki/Explicit_Congestion_Notification
+    Differentiated_Services_Field["explicit_congestion_notification"] = to_binary_string(this->ip_hdr->tos, 2, false);
+    IP_Packet["total_length"] = "Total Length: " + ntohs(this->ip_hdr->tot_len);
 }
