@@ -116,4 +116,7 @@ json IP_Packet::detailed_protocol_info_print()
     Flags["fragment_offset"] = +"..." + fragment_offset_string.substr(0, 1) + " " + fragment_offset_string.substr(1, 5) + " " + fragment_offset_string.substr(5, 9) + " " + fragment_offset_string.substr(9, 13) + " = Fragment Offset: " + std::to_string(fragment_offset);
     Flags["time_to_live"] = "Time to Live: " + std::to_string(this->ip_hdr->ttl);
     Flags["protocol"] = "Protocol: " + this->encapsulatedPacket->packet_type + " " + to_hex(this->ip_hdr->protocol);
+    Flags["header_checksum"] = "Header Checksum: " + to_hex(ntohs(this->ip_hdr->check));
+    Flags["source_ip"] = "Source Address: " + this->print_source_addr();
+    Flags["dest_ip"] = "Destination Address: " + this->print_dest_addr();
 }
