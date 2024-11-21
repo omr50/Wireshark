@@ -91,6 +91,7 @@ json IP_Packet::detailed_protocol_info_print()
     std::string ihl_string = std::to_string(ihl);
 
     std::string byte_string = to_binary_string(ihl, 4, true);
+    IP_Packet["title"] = "Internet Protocol Version 5, Src: " + this->print_source_addr() + ", Dst: " + this->print_dest_addr();
     IP_Packet["version"] = "0100 .... = Version: 4";
     IP_Packet["header_length"] = ".... " + byte_string + " = Header Length: " + std::to_string((ihl * 32) / 8) + " bytes (" + ihl_string + ")";
     // Map to the actual valeus on the wikipedia page https://en.wikipedia.org/wiki/Differentiated_services
