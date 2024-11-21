@@ -111,6 +111,7 @@ function renderDetailedInfo(packet_num, element) {
 // Listen for the tcp-data event from the main process
 ipcRenderer.on('tcp-data', (event, data) => {
   console.log("THE TCP DATA IS ", data);
+  // test
   let packet_info = data['packet_info'];
   packets_info.push(data)
   let color_class = packet_info.protocol.toLowerCase(); 
