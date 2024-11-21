@@ -46,8 +46,7 @@ void IP_Packet::parse()
 
 json IP_Packet::print()
 {
-    std::string msg((char *)this->ip_hdr, this->data_length);
-    return msg;
+    return this->detailed_protocol_info_print();
 }
 
 std::string IP_Packet::print_source_addr()
@@ -96,12 +95,12 @@ json IP_Packet::detailed_protocol_info_print()
     IP_Packet["header_length"] = ".... " + byte_string + " = Header Length: " + std::to_string((ihl * 32) / 8) + " bytes (" + ihl_string + ")";
     // Map to the actual valeus on the wikipedia page https://en.wikipedia.org/wiki/Differentiated_services
     Differentiated_Services_Field["title"] = "Differentiated Services Field: " + to_hex(this->ip_hdr->tos);
-    std::string tos_string = to_binary_string(this->ip_hdr->tos, 6, true);
+    std::string tos_string = to_binary_string(this->ip_hdr->tos, 8, true);
 
     Differentiated_Services_Field["diff_services_codepoint"] = tos_string.substr(0, 4) + " " + tos_string.substr(4, 6) + ".. = Differentiated Services Codepoint: (" + std::to_string(binary_to_int(this->ip_hdr->tos, 2, 7)) + ")";
     // Map to the actual valeus on the https://en.wikipedia.org/wiki/Explicit_Congestion_Notification
-    Differentiated_Services_Field["explicit_congestion_notification"] = ".... .." + tos_string.substr(6) + " = Explicit Congestion Notification: (" + std::to_string(binary_to_int(this->ip_hdr->tos, 0, 1)) + ")";
-    IP_Packet["total_length"] = "Total Length: " + ntohs(this->ip_hdr->tot_len);
+    Differentiated_Services_Field["explicit_congestion_notification"] = ".... .." + tos_string.substr(6, 8) + " = Explicit Congestion Notification: (" + std::to_string(binary_to_int(this->ip_hdr->tos, 0, 1)) + ")";
+    IP_Packet["total_length"] = "Total Length: " + std::to_string(ntohs(this->ip_hdr->tot_len));
     IP_Packet["identification"] = to_hex(ntohs(this->ip_hdr->id)) + " (" + std::to_string(ntohs(this->ip_hdr->id)) + ")";
     uint8_t highest_byte = *(((uint8_t *)&(this->ip_hdr->frag_off)) + 1);
     // this should cut off the value to just the lowest byte
@@ -120,4 +119,7 @@ json IP_Packet::detailed_protocol_info_print()
     Flags["header_checksum"] = "Header Checksum: " + to_hex(ntohs(this->ip_hdr->check));
     Flags["source_ip"] = "Source Address: " + this->print_source_addr();
     Flags["dest_ip"] = "Destination Address: " + this->print_dest_addr();
+    IP_Packet["differentiated_services_field"] = Differentiated_Services_Field;
+    IP_Packet["flags"] = Flags;
+    return IP_Packet;
 }

@@ -55,8 +55,8 @@ function search(event, element) {
 
 
 function renderDetailedInfo(packet_num, element) {
-  console.log(packets_info)
-  let detailedPacket = packets_info[packet_num]["detailed_info"];
+  console.log(packets_info) 
+  let detailedPacket = packets_info[packet_num]["detailed_info"][0];
   // find the element where we can render the detailed packet info
   let detailedProtocolElement = document.querySelector(".left-protocol-info");
   // for every object set up a drop down.

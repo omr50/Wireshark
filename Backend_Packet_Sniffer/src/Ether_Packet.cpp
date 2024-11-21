@@ -87,12 +87,15 @@ json Ether_Packet::print()
     full_packet["packet_info"] = packet_info;
     // structure the detailed info as a series of encapsulated objects
     std::vector<json> detailed_packet_info;
+    detailed_packet_info.push_back(this->detailed_protocol_info_print());
     for (std::shared_ptr<Packet> packet = this->encapsulatedPacket; packet.get() != nullptr; packet = packet->encapsulatedPacket)
     {
-        detailed_packet_info.push_back(packet->print());
+        if (packet->packet_type == "IP")
+            detailed_packet_info.push_back(packet->print());
+        break;
     }
     // full_packet["detailed_info"] = detailed_packet_info;
-    full_packet["detailed_info"] = this->detailed_protocol_info_print();
+    full_packet["detailed_info"] = detailed_packet_info;
     return full_packet;
 }
 
