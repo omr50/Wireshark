@@ -107,9 +107,13 @@ json IP_Packet::detailed_protocol_info_print()
     uint8_t lowest_byte = this->ip_hdr->frag_off;
     uint8_t flags = binary_to_int(highest_byte, 5, 7);
     std::string flags_string = to_binary_string(flags, 3, false);
+    uint16_t fragment_offset = this->ip_hdr->frag_off << 3 >> 3;
+    std::string fragment_offset_string = to_binary_string(highest_byte, 5, false) + to_binary_string(lowest_byte, 8, false);
     Flags["title"] = flags_string + ". .... = Flags: " + to_hex(flags) + ", (place holder)";
     Flags["reserved_bit"] = flags_string[0] + "... .... = Reserved bit: (place holder)";
     Flags["dont_fragment"] = +"." + std::to_string(flags_string[1]) + ".. .... = Don't fragment : (place holder)";
     Flags["more_fragments"] = +".." + std::to_string(flags_string[2]) + ". .... = More Fragments: (place holder)";
-    Flags["fragment_offset"] = +"..." +
+    Flags["fragment_offset"] = +"..." + fragment_offset_string.substr(0, 1) + " " + fragment_offset_string.substr(1, 5) + " " + fragment_offset_string.substr(5, 9) + " " + fragment_offset_string.substr(9, 13) + " = Fragment Offset: " + std::to_string(fragment_offset);
+    Flags["time_to_live"] = "Time to Live: " + std::to_string(this->ip_hdr->ttl);
+    Flags["protocol"] = "Protocol: " + this->encapsulatedPacket->packet_type + " " + to_hex(this->ip_hdr->protocol);
 }
