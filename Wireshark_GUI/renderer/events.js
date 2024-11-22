@@ -4,6 +4,8 @@ let packet_num = 1;
 let packets_info = [];
 
 const start_time = Date.now();
+let small_padding = "&emsp;&emsp;&emsp;";
+let padding = "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;";
 console.log("CURRENT START TIME: ", start_time);
 
 function toggleSubItems(event, element) {
@@ -53,10 +55,132 @@ function search(event, element) {
     };
 }
 
+function createEthIIDetailedInfo(detailedPacket) {
+    let eth_detailed_packet_info = `
+    <div class="item" onclick="toggleSubItems(event, this)">
+        <div class="title"><img class="dropdown" src="./dropdown.png" width="14px" height="14px">
+        ${detailedPacket["title"]} </div> 
+        <div class="sub-items">
+            <div class="item" onclick="toggleSubItems(event, this)">
+                ${small_padding}<img class="dropdown" src="./dropdown.png" width="14px" height="14px">
+                ${detailedPacket["source"]["title"]} 
+                <div class="sub-items">
+                    <div class="item">
+                        ${padding}${detailedPacket["source"]["LG"]} 
+                    </div>
+                    <div class="item">
+                        ${padding}${detailedPacket["source"]["IG"]} 
+                    </div>
+                </div>
+            </div>
+
+            <div class="item" onclick="toggleSubItems(event, this)">
+                ${small_padding}<img class="dropdown" src="./dropdown.png" width="14px" height="14px">
+                ${detailedPacket["Destination"]["title"]} 
+                <div class="sub-items">
+                    <div>
+                        ${padding}${detailedPacket["Destination"]["LG"]} 
+                    </div>
+                    <div>
+                        ${padding}${detailedPacket["Destination"]["IG"]} 
+                    </div>
+                </div>
+            </div>
+
+            <div class="item" onclick="toggleSubItems(event, this)">
+                ${small_padding}${detailedPacket["type"]} 
+            </div>
+        </div>
+    </div> `
+    return eth_detailed_packet_info;
+}
+
+function createIPDetailedInfo(detailedPacket) {
+      let ip_detailed_packet_info = `
+  <div class="packet_details_container">
+      <div class="item" onclick="toggleSubItems(event, this)">
+        <div class="title"><img class="dropdown" src="./dropdown.png" width="14px" height="14px">
+        ${detailedPacket["title"]}</div> 
+        <div class="sub-items">
+            <div class="item" onclick="toggleSubItems(event, this)">
+                ${small_padding}${detailedPacket["version"]} 
+            </div>
+            <div class="item" onclick="toggleSubItems(event, this)">
+                ${small_padding}<img class="dropdown" src="./dropdown.png" width="14px" height="14px">
+                ${detailedPacket["differentiated_services_field"]["title"]} 
+                <div class="sub-items">
+                    <div class="item">
+                        ${padding}${detailedPacket["differentiated_services_field"]["diff_services_codepoint"]} 
+                    </div>
+                    <div class="item">
+                        ${padding}${detailedPacket["differentiated_services_field"]["explicit_congestion_notification"]} 
+                    </div>
+                </div>
+            </div>
+
+            <div class="item"> 
+                ${small_padding}${detailedPacket["total_length"]} 
+            </div>
+
+            <div class="item"> 
+                ${small_padding}${detailedPacket["identification"]} 
+            </div>
+
+            <div class="item" onclick="toggleSubItems(event, this)"> 
+                ${small_padding}<img class="dropdown" src="./dropdown.png" width="14px" height="14px">
+                ${detailedPacket["flags"]["title"]} 
+                <div class="sub-items">
+                    <div class="item">
+                        ${padding}${detailedPacket["flags"]["reserved_bit"]} 
+                    </div>
+
+                    <div class="item">
+                        ${padding}${detailedPacket["flags"]["dont_fragment"]} 
+                    </div>
+
+                    <div class="item">
+                        ${padding}${detailedPacket["flags"]["more_fragments"]} 
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                ${small_padding}${detailedPacket["fragment_offset"]} 
+            </div>
+
+
+            <div class="item">
+                ${small_padding}${detailedPacket["time_to_live"]} 
+            </div>
+
+            <div class="item">
+                ${small_padding}${detailedPacket["protocol"]} 
+            </div>
+
+            <div class="item">
+                ${small_padding}${detailedPacket["header_checksum"]} 
+            </div>
+
+            <div class="item">
+                ${small_padding}${detailedPacket["source_ip"]} 
+            </div>
+
+            <div class="item">
+                \t${small_padding}${detailedPacket["dest_ip"]} 
+            </div>
+
+        </div>
+    </div> 
+  </div>
+  `
+  return ip_detailed_packet_info;
+}
+
 
 function renderDetailedInfo(packet_num, element) {
   console.log(packets_info) 
-  let detailedPacket = packets_info[packet_num]["detailed_info"][0];
+  let detailedPackets = packets_info[packet_num]["detailed_info"];
   // find the element where we can render the detailed packet info
   let detailedProtocolElement = document.querySelector(".left-protocol-info");
   // for every object set up a drop down.
@@ -65,41 +189,8 @@ function renderDetailedInfo(packet_num, element) {
   // each object containing the layer
   let list = `
   <div class="packet_details_container">
-      <div class="item" onclick="toggleSubItems(event, this)">
-        <img class="dropdown" src="./dropdown.png" width="14px" height="14px">
-        ${detailedPacket["title"]} 
-        <div class="sub-items">
-            <div class="item" onclick="toggleSubItems(event, this)">
-                &emsp;&emsp;&emsp;<img class="dropdown" src="./dropdown.png" width="14px" height="14px">
-                ${detailedPacket["source"]["title"]} 
-                <div class="sub-items">
-                    <div>
-                        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;${detailedPacket["source"]["LG"]} 
-                    </div>
-                    <div>
-                        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;${detailedPacket["source"]["IG"]} 
-                    </div>
-                </div>
-            </div>
-
-            <div class="item" onclick="toggleSubItems(event, this)">
-                &emsp;&emsp;&emsp;<img class="dropdown" src="./dropdown.png" width="14px" height="14px">
-                ${detailedPacket["Destination"]["title"]} 
-                <div class="sub-items">
-                    <div>
-                        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;${detailedPacket["Destination"]["LG"]} 
-                    </div>
-                    <div>
-                        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;${detailedPacket["Destination"]["IG"]} 
-                    </div>
-                </div>
-            </div>
-
-            <div class="item" onclick="toggleSubItems(event, this)">
-                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;${detailedPacket["type"]} 
-            </div>
-        </div>
-    </div> 
+      ${createEthIIDetailedInfo(detailedPackets[0])}
+      ${(detailedPackets.length > 1) ? createIPDetailedInfo(detailedPackets[1]) : ""}
   </div>
   `
   detailedProtocolElement.innerHTML = "";

@@ -41,6 +41,16 @@ body {
     background-color: #D3CCB8;
 }
 
+.title {
+    max-width: inherit;
+    width: 3000px;
+    background-color: #F0F0F0;
+}
+
+.title:hover {
+    background-color: #D8E6F2;
+}
+
 .packet-details {
     height: 44vh;
     display: flex;
@@ -66,16 +76,22 @@ body {
 
 
 table, th, td {
-  border: 1px solid black;
+  border: none;
   border-collapse: collapse;
   font-weight: 500;
 }
 
+th, td {
+    text-align: left;
+}
+
 table {
     min-width: 600px;
+  border: none;
 }
 
 tr {
+    border: none;
     cursor: pointer;
 }
 
