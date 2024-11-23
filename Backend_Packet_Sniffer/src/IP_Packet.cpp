@@ -86,7 +86,6 @@ std::string IP_Packet::print_dest_addr()
 // might want to split this into multiple functions in the future
 // not that they will be re-used but just to make it more readable
 // althought it is more transparent this way but more messy.
-
 // but then ip class will just have too many functions with single
 // use so it might be best to just leave it all here.
 json IP_Packet::detailed_protocol_info_print()
