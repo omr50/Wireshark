@@ -14,7 +14,6 @@ IP_Packet::IP_Packet(const u_char *data, size_t length, timeval time_stamp)
     this->layer = 3;
 }
 
-// main parsing func for ip
 void IP_Packet::parse()
 {
     std::shared_ptr<Packet> shared = shared_from_this();
@@ -45,6 +44,7 @@ void IP_Packet::parse()
     }
 }
 
+// should be separate from print detailed?
 json IP_Packet::print()
 {
     return this->detailed_protocol_info_print();
