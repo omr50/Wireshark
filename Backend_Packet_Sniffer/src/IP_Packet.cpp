@@ -45,6 +45,7 @@ void IP_Packet::parse()
 }
 
 // should be separate from print detailed?
+// seems redundant.
 json IP_Packet::print()
 {
     return this->detailed_protocol_info_print();
