@@ -83,6 +83,9 @@ std::string IP_Packet::print_dest_addr()
     return daddr;
 }
 
+// might want to split this into multiple functions in the future
+// not that they will be re-used but just to make it more readable
+// althought it is more transparent this way but more messy.
 json IP_Packet::detailed_protocol_info_print()
 {
     json IP_Packet;
