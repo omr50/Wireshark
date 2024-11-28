@@ -16,4 +16,6 @@ public:
     void print_target_protocol();
     void print_type();
     json detailed_protocol_info_print();
+    std::string print_hardware_address(uint8_t addr_arr[6]);
+    std::string print_protocol_address(uint8_t addr_arr[4]);
 };

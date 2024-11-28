@@ -104,7 +104,7 @@ json IP_Packet::detailed_protocol_info_print()
     Differentiated_Services_Field["title"] = "Differentiated Services Field: " + to_hex(this->ip_hdr->tos);
     std::string tos_string = to_binary_string(this->ip_hdr->tos, 8, true);
 
-    Differentiated_Services_Field["diff_services_codepoint"] = tos_string.substr(0, 4) + " " + tos_string.substr(4, 4) + ".. = Differentiated Services Codepoint: (" + std::to_string(binary_to_int(this->ip_hdr->tos, 2, 7)) + ")";
+    Differentiated_Services_Field["diff_services_codepoint"] = tos_string.substr(0, 4) + " " + tos_string.substr(4, 2) + ".. = Differentiated Services Codepoint: (" + std::to_string(binary_to_int(this->ip_hdr->tos, 2, 7)) + ")";
     // Map to the actual valeus on the https://en.wikipedia.org/wiki/Explicit_Congestion_Notification
     Differentiated_Services_Field["explicit_congestion_notification"] = ".... .." + tos_string.substr(6, 2) + " = Explicit Congestion Notification: (" + std::to_string(binary_to_int(this->ip_hdr->tos, 0, 1)) + ")";
     IP_Packet["total_length"] = "Total Length: " + std::to_string(ntohs(this->ip_hdr->tot_len));

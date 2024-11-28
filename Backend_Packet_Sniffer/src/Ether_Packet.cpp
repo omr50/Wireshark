@@ -92,6 +92,8 @@ json Ether_Packet::print()
     {
         if (packet->packet_type == "IP")
             detailed_packet_info.push_back(packet->print());
+        if (packet->packet_type == "ARP")
+            detailed_packet_info.push_back(packet->print());
         break;
     }
     // full_packet["detailed_info"] = detailed_packet_info;
@@ -150,7 +152,19 @@ std::pair<std::string, std::string> Ether_Packet::determine_source_dest_addr()
             return {ipv6_packet->print_source_addr(), ipv6_packet->print_dest_addr()};
         }
     }
-    return {this->print_source_mac(), this->print_dest_mac()};
+    std::string src_mac;
+    std::string dest_mac;
+    if ((src_mac = this->print_source_mac()) == "00:00:00:00:00:00")
+    {
+        src_mac = "Broadcast";
+    }
+
+    if ((dest_mac = this->print_dest_mac()) == "00:00:00:00:00:00")
+    {
+        dest_mac = "Broadcast";
+    }
+
+    return {src_mac, dest_mac};
 }
 
 std::string Ether_Packet::get_protocol()
