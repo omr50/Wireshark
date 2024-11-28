@@ -55,6 +55,49 @@ function search(event, element) {
     };
 }
 
+function createARPDetailedInfo(detailedPacket) {
+    let arp_detailed_packet_info = `
+    <div class="item" onclick="toggleSubItems(event, this)">
+        <div class="title"><img class="dropdown" src="./dropdown.png" width="14px" height="14px">
+        ${detailedPacket["title"]} </div> 
+        <div class="sub-items">
+            <div class="item">
+                ${small_padding}${detailedPacket["hardware_type"]} 
+            </div>
+            <div class="item">
+                ${small_padding}${detailedPacket["protocol_type"]} 
+            </div>
+
+            <div class="item">
+                ${small_padding}${detailedPacket["hardware_size"]} 
+            </div>
+
+            <div class="item">
+                ${small_padding}${detailedPacket["target_size"]} 
+            </div>
+            <div class="item">
+                ${small_padding}${detailedPacket["opcode"]} 
+            </div>
+
+            <div class="item">
+                ${small_padding}${detailedPacket["sender_mac"]} 
+            </div>
+
+            <div class="item">
+                ${small_padding}${detailedPacket["sender_ip"]} 
+            </div>
+            <div class="item">
+                ${small_padding}${detailedPacket["target_mac"]} 
+            </div>
+
+            <div class="item">
+                ${small_padding}${detailedPacket["target_ip"]} 
+            </div>
+        </div>
+    </div> `
+    return arp_detailed_packet_info;
+}
+
 function createEthIIDetailedInfo(detailedPacket) {
     let eth_detailed_packet_info = `
     <div class="item" onclick="toggleSubItems(event, this)">
@@ -190,7 +233,8 @@ function renderDetailedInfo(packet_num, element) {
   let list = `
   <div class="packet_details_container">
       ${createEthIIDetailedInfo(detailedPackets[0])}
-      ${(detailedPackets.length > 1) ? createIPDetailedInfo(detailedPackets[1]) : ""}
+      ${(detailedPackets.length > 1 && detailedPackets[1]["title"].includes("Internet Protocol Version 4")) ? createIPDetailedInfo(detailedPackets[1]) : ""}
+      ${(detailedPackets.length > 1 && detailedPackets[1]["title"].includes("Address Resolution Protocol")) ? createARPDetailedInfo(detailedPackets[1]) : ""}
   </div>
   `
   detailedProtocolElement.innerHTML = "";

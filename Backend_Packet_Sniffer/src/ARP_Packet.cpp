@@ -33,7 +33,7 @@ json ARP_Packet::detailed_protocol_info_print()
     int hardware_type = ntohs(this->arp_hdr->ea_hdr.ar_hrd);
     std::string hardware_type_string = ((hardware_type == 1) ? "Ethernet (1)" : "Unknown Hardware Type");
     int protocol = ntohs(this->arp_hdr->ea_hdr.ar_pro);
-    std::string protocol_string = ((protocol == 0x0800) ? "IPv4 (0x0800)" : "Unknown Target Protocol");
+    std::string protocol_type_string = ((protocol == 0x0800) ? "IPv4 (0x0800)" : "Unknown Target Protocol");
 
     int hardware_protocol_size = this->arp_hdr->ea_hdr.ar_hln;
     int target_protocol_size = this->arp_hdr->ea_hdr.ar_pln;
@@ -54,6 +54,7 @@ json ARP_Packet::detailed_protocol_info_print()
 
     ARP_Packet["title"] = "Address Resolution Protocol (" + opcode_string + ")";
     ARP_Packet["hardware_type"] = "Hardware type: " + hardware_type_string;
+    ARP_Packet["protocol_type"] = "Protocol type: " + protocol_type_string;
     ARP_Packet["hardware_size"] = "Hardware size: " + std::to_string(hardware_protocol_size);
     ARP_Packet["target_size"] = "Protocol size: " + std::to_string(target_protocol_size);
     ARP_Packet["opcode"] = opcode_string + " (" + std::to_string(opcode) + ")";
