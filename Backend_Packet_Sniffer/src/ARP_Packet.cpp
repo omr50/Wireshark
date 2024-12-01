@@ -1,4 +1,6 @@
 #include "../include/PacketClasses/ARP_Packet.hpp"
+#include <iostream>
+#include <fstream>
 
 ARP_Packet::ARP_Packet(const u_char *data, size_t length, timeval time_stamp)
 
@@ -31,6 +33,11 @@ json ARP_Packet::detailed_protocol_info_print()
     int opcode = ntohs(this->arp_hdr->ea_hdr.ar_op);
     std::string opcode_string = ((opcode == 1) ? "request" : "response");
     int hardware_type = ntohs(this->arp_hdr->ea_hdr.ar_hrd);
+    std::ofstream arp_binary_file("arp_binary_file.bin", std::ios::out | std::ios::binary);
+    arp_binary_file.write((char *)this->arp_hdr, sizeof(struct ether_arp));
+
+    std::cout << "ar_hrd (raw, network byte order): 0x" << std::hex << ntohs(this->arp_hdr->ea_hdr.ar_hrd) << std::endl;
+
     std::string hardware_type_string = ((hardware_type == 1) ? "Ethernet (1)" : "Unknown Hardware Type");
     int protocol = ntohs(this->arp_hdr->ea_hdr.ar_pro);
     std::string protocol_type_string = ((protocol == 0x0800) ? "IPv4 (0x0800)" : "Unknown Target Protocol");
