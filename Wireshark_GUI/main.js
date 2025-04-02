@@ -75,7 +75,7 @@ const menu = [
 
 app.whenReady().then(() => {
     createMainWindow();
-    createTCP_Server(mainWindow);
+    createTCP_Server(mainWindow, 8000);
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
             createMainWindow();
