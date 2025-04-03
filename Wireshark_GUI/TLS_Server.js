@@ -68,6 +68,7 @@ function createTCP_Server(mainWindow, port) {
 
         client.on('error', function(err) {
             console.error('Error: ' + err);
+            console.log("THE ERRROR" + err.message);
         });
 
     } catch (e) {

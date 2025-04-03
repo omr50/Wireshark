@@ -240,6 +240,42 @@ function createUDPDetailedInfo(detailedPacket) {
             <div class="item">
                 ${small_padding}${detailedPacket["Checksum"]} 
             </div>
+
+            <div class="item">
+                ${small_padding}${detailedPacket["Checksum_status"]} 
+            </div>
+
+            <div class="item">
+                ${small_padding}${detailedPacket["Stream_Index"]} 
+            </div>
+
+            <div class="item">
+                ${small_padding}${detailedPacket[""]} 
+            </div>
+
+            <div class="item">
+                ${small_padding}${detailedPacket["Checksum_status"]} 
+            </div>
+
+            <div class="item">
+                ${small_padding}${detailedPacket["Stream_Index"]} 
+            </div>
+
+            <div class="item" onclick="toggleSubItems(event, this)">
+                <div class="title"><img class="dropdown" src="./dropdown.png" width="14px" height="14px">
+                    ${detailedPacket["Timestamps"]["title"]} 
+                </div> 
+
+                <div class="item">
+                    ${small_padding}${detailedPacket["Timestamps"]["first_frame"]} 
+                </div>
+
+                <div class="item">
+                    ${small_padding}${detailedPacket["Timestamps"]["prev_frame"]} 
+                </div>
+            </div>
+
+
             
         </div>
     </div> `
@@ -266,6 +302,7 @@ function renderDetailedInfo(packet_num, element) {
   detailedProtocolElement.innerHTML = "";
   detailedProtocolElement.innerHTML += list;
 }
+
 
 
 

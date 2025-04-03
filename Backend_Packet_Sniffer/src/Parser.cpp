@@ -1,4 +1,5 @@
 #include "../include/parser.hpp"
+#include "../include/PacketClasses/Ether_Packet.hpp"
 
 Parser::Parser()
 {

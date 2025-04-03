@@ -51,8 +51,9 @@ json UDP_Packet::detailed_protocol_info_print()
     of these statistics.
 
     */
+    time["title"] = "[Timestamps]";
     time["first_frame"] = "[Time since first Frame: 123456789(change later) seconds]";
-    time["first_frame"] = "[Time since previous Frame: 123456789(change later) seconds]";
+    time["prev_frame"] = "[Time since previous Frame: 123456789(change later) seconds]";
     UDP_Packet["Timestamps"] = time;
     UDP_Packet["UDP_Payload"] = "UDP payload (" + std::to_string(ntohs(udp_hdr->len) - sizeof(udp_hdr)) + ")";
 
