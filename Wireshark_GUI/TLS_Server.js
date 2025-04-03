@@ -32,7 +32,6 @@ function persistentConnect(mainWindow, port) {
 
 function createTCP_Server(mainWindow, port) {
     try {
-        console.log("DID IT GET HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         let buffer = ''; // Buffer to store incoming data
 
         let client = new net.Socket();
