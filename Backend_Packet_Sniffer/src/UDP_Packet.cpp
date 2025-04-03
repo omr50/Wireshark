@@ -18,13 +18,43 @@ void UDP_Packet::parse()
 
 json UDP_Packet::print()
 {
-    std::string msg((char *)this->udp_hdr, this->data_length);
-    return msg;
+    return detailed_protocol_info_print();
 }
 
 json UDP_Packet::detailed_protocol_info_print()
 {
-    json temp_msg;
-    temp_msg["protocol"] = this->packet_type;
-    return temp_msg;
+
+    json UDP_Packet;
+    json time;
+    uint16_t src_port = ntohs(udp_hdr->source);
+    uint16_t dest_port = ntohs(udp_hdr->dest);
+    uint16_t length = ntohs(udp_hdr->len);
+    uint16_t checksum = ntohs(udp_hdr->check);
+
+    std::string src_string = std::to_string(src_port);
+    std::string dest_string = std::to_string(dest_port);
+    std::string length_string = std::to_string(length);
+    std::string checksum_string = std::to_string(checksum);
+
+    UDP_Packet["title"] = "User Datagram Protocol, Src Port: " + src_string + ", Dst Port: " + dest_string;
+    UDP_Packet["Source_Port"] = "Source Port: " + src_string;
+    UDP_Packet["Destination_Port"] = "Destination Port: " + dest_string;
+    UDP_Packet["Length"] = "Length: " + length_string;
+    UDP_Packet["Checksum"] = "Checksum: " + checksum_string + " [unverified]";
+    UDP_Packet["Checksum_status"] = "[Checksum Status: Unverified]";
+    UDP_Packet["Stream_Index"] = "[Stream index: 0 (change later)]";
+    /*
+    For the time stats basically just keep an in memory
+    log of the times of each frame, and basically each
+    (src ip, src port), (dest ip, dest port) mapping will
+    have its own log and basically you can easily keep track
+    of these statistics.
+
+    */
+    time["first_frame"] = "[Time since first Frame: 123456789(change later) seconds]";
+    time["first_frame"] = "[Time since previous Frame: 123456789(change later) seconds]";
+    UDP_Packet["Timestamps"] = time;
+    UDP_Packet["UDP_Payload"] = "UDP payload (" + std::to_string(ntohs(udp_hdr->len) - sizeof(udp_hdr)) + ")";
+
+    return UDP_Packet;
 }

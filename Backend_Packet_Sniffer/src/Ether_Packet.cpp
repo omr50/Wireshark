@@ -87,17 +87,12 @@ json Ether_Packet::print()
     full_packet["packet_info"] = packet_info;
     // structure the detailed info as a series of encapsulated objects
     std::vector<json> detailed_packet_info;
-    detailed_packet_info.push_back(this->detailed_protocol_info_print());
     for (std::shared_ptr<Packet> packet = this->encapsulatedPacket; packet.get() != nullptr; packet = packet->encapsulatedPacket)
     {
-        if (packet->packet_type == "IP")
-            detailed_packet_info.push_back(packet->print());
-        if (packet->packet_type == "ARP")
-            detailed_packet_info.push_back(packet->print());
-        break;
+        detailed_packet_info.push_back(packet->print());
     }
     // full_packet["detailed_info"] = detailed_packet_info;
-    full_packet["detailed_info"] = detailed_packet_info;
+    full_packet["detailed_info"] = this->detailed_protocol_info_print();
     return full_packet;
 }
 
@@ -152,19 +147,7 @@ std::pair<std::string, std::string> Ether_Packet::determine_source_dest_addr()
             return {ipv6_packet->print_source_addr(), ipv6_packet->print_dest_addr()};
         }
     }
-    std::string src_mac;
-    std::string dest_mac;
-    if ((src_mac = this->print_source_mac()) == "00:00:00:00:00:00")
-    {
-        src_mac = "Broadcast";
-    }
-
-    if ((dest_mac = this->print_dest_mac()) == "00:00:00:00:00:00")
-    {
-        dest_mac = "Broadcast";
-    }
-
-    return {src_mac, dest_mac};
+    return {this->print_source_mac(), this->print_dest_mac()};
 }
 
 std::string Ether_Packet::get_protocol()
