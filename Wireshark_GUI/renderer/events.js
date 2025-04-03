@@ -8,6 +8,25 @@ let small_padding = "&emsp;&emsp;&emsp;";
 let padding = "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;";
 console.log("CURRENT START TIME: ", start_time);
 
+const table = document.querySelector('.packet_table');
+
+
+function set_highlight(column_num) {
+    // loop through all rows for the specific column
+    let rows = table.rows;    
+    for (let i = 0; i < rows.length; i++) {
+        rows[i].cells[column_num].classList.add('highlight');
+    }
+}
+
+function remove_highlight(column_num) {
+    // loop through all rows for the specific column
+    let rows = table.rows;    
+    for (let i = 0; i < rows.length; i++) {
+        rows[i].cells[column_num].classList.remove('highlight');
+    }
+}
+
 function toggleSubItems(event, element) {
   event.stopPropagation();
 
@@ -34,20 +53,16 @@ function search(event, element) {
             element.style.backgroundColor = "#FFFFFF";
         else
             element.style.backgroundColor = "#AFFFAF";
-        console.log("True")
     } else {
         element.style.backgroundColor = "#FFAFAF";
-        console.log("False")
         return;
     }
 
-    console.log(searchQuery)
+    // console.log(searchQuery)
     // filter through every tr, if it contains search query get it
     const elements = document.getElementsByTagName('tr');
     for (element of elements) {
-        console.log("CHecking element");
        if (!element.innerText.toLowerCase().includes(searchQuery)) {
-            console.log("Diddn't work")
             element.style.display = 'none';
        } else {
         element.style.display = 'table-row';
@@ -261,17 +276,21 @@ function createUDPDetailedInfo(detailedPacket) {
                 ${small_padding}${detailedPacket["Stream_Index"]} 
             </div>
 
+
+
+
             <div class="item" onclick="toggleSubItems(event, this)">
-                <div class="title"><img class="dropdown" src="./dropdown.png" width="14px" height="14px">
+                ${small_padding}<img class="dropdown" src="./dropdown.png" width="14px" height="14px">
                     ${detailedPacket["Timestamps"]["title"]} 
-                </div> 
+                <div class="sub-items">
 
-                <div class="item">
-                    ${small_padding}${detailedPacket["Timestamps"]["first_frame"]} 
-                </div>
+                    <div class="item">
+                        ${padding}${detailedPacket["Timestamps"]["first_frame"]} 
+                    </div>
 
-                <div class="item">
-                    ${small_padding}${detailedPacket["Timestamps"]["prev_frame"]} 
+                    <div class="item">
+                        ${padding}${detailedPacket["Timestamps"]["prev_frame"]} 
+                    </div>
                 </div>
             </div>
 
@@ -283,7 +302,7 @@ function createUDPDetailedInfo(detailedPacket) {
 }
 
 function renderDetailedInfo(packet_num, element) {
-  console.log(packets_info) 
+//   console.log(packets_info) 
   let detailedPackets = packets_info[packet_num]["detailed_info"];
   // find the element where we can render the detailed packet info
   let detailedProtocolElement = document.querySelector(".left-protocol-info");
@@ -296,7 +315,7 @@ function renderDetailedInfo(packet_num, element) {
       ${createEthIIDetailedInfo(detailedPackets[0])}
       ${(detailedPackets.length > 1 && detailedPackets[1]["title"].includes("Internet Protocol Version 4")) ? createIPDetailedInfo(detailedPackets[1]) : ""}
       ${(detailedPackets.length > 1 && detailedPackets[1]["title"].includes("Address Resolution Protocol")) ? createARPDetailedInfo(detailedPackets[1]) : ""}
-      ${(detailedPackets.length > 1 && detailedPackets[2]["title"].includes("User Datagram Protocol")) ? createUDPDetailedInfo(detailedPackets[2]) : ""}
+      ${(detailedPackets.length > 2 && detailedPackets[2]["title"].includes("User Datagram Protocol")) ? createUDPDetailedInfo(detailedPackets[2]) : ""}
   </div>
   `
   detailedProtocolElement.innerHTML = "";
@@ -308,21 +327,22 @@ function renderDetailedInfo(packet_num, element) {
 
 // Listen for the tcp-data event from the main process
 ipcRenderer.on('tcp-data', (event, data) => {
-  console.log("THE TCP DATA IS ", data);
+//   console.log("THE TCP DATA IS ", data);
   // test
   let packet_info = data['packet_info'];
   packets_info.push(data)
   let color_class = packet_info.protocol.toLowerCase(); 
   let exact_time = parseInt(packet_info.time) - start_time;
   let seconds = exact_time / 1000;
-  let new_row = `<tr class="${color_class}" onclick="renderDetailedInfo(${packet_num-1}, this)">
-                  <td>${packet_num}</td>
-                  <td>${seconds}</td>
-                  <td>${packet_info.source}</td>
-                  <td>${packet_info.destination}</td>
-                  <td>${packet_info.protocol}</td>
-                  <td>${packet_info.length}</td>
-                  <td>${packet_info.info}</td>
+  let new_row = `<tr class="${color_class}" 
+                onclick="renderDetailedInfo(${packet_num-1}, this)">
+                  <td onmouseenter="set_highlight(0)" onmouseleave="remove_highlight(0)">${packet_num}</td>
+                  <td onmouseenter="set_highlight(1)" onmouseleave="remove_highlight(1)">${seconds}</td>
+                  <td onmouseenter="set_highlight(2)" onmouseleave="remove_highlight(2)">${packet_info.source}</td>
+                  <td onmouseenter="set_highlight(3)" onmouseleave="remove_highlight(3)">${packet_info.destination}</td>
+                  <td onmouseenter="set_highlight(4)" onmouseleave="remove_highlight(4)">${packet_info.protocol}</td>
+                  <td onmouseenter="set_highlight(5)" onmouseleave="remove_highlight(5)">${packet_info.length}</td>
+                  <td onmouseenter="set_highlight(6)" onmouseleave="remove_highlight(6)">${packet_info.info}</td>
                 </tr>`
   packet_num++;
 
