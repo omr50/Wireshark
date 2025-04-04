@@ -264,18 +264,6 @@ function createUDPDetailedInfo(detailedPacket) {
                 ${small_padding}${detailedPacket["Stream_Index"]} 
             </div>
 
-            <div class="item">
-                ${small_padding}${detailedPacket[""]} 
-            </div>
-
-            <div class="item">
-                ${small_padding}${detailedPacket["Checksum_status"]} 
-            </div>
-
-            <div class="item">
-                ${small_padding}${detailedPacket["Stream_Index"]} 
-            </div>
-
 
 
 

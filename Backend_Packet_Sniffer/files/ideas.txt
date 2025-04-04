@@ -1,0 +1,18 @@
+Creating UDP Timestamps field:
+    - basically UDP conversation is defined by a 4 tuple (src ip, src port, dest ip, dest port)
+    - since that is unique, use that as a key for a hash table
+    - after receiving a UDP datagram check if the tuple exists
+        - if not, then create a new entry with the timestamp of the datagram as the first one
+        - if it already exist, replace the "prev" timestamp with the current one
+
+
+Following a UDP Stream:
+    - Again the 4 tuple can be used to keep track of the Stream
+    - Following a UDP stream doesn't gather all like a TCP stream 
+    - simply gathers all of them and displays in order of arrival
+    - Conversation table (hash map) that can map 4 tuple to list of payloads 
+    - get all datagrams for the 4 tuple, and display in chronological order
+    - client->server and server->client messages may be displayed in different colors  
+    - may not be coherent since UDP doesn't guarantee delivery or order  
+    - Also if you follow UDP stream, filter the main view as well to only show packets of this stream 
+    - These ideas can be extended to TCP when it comes time for that, but TCP stream would be more coherent
