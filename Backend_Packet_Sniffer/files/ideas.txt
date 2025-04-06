@@ -16,3 +16,6 @@ Following a UDP Stream:
     - may not be coherent since UDP doesn't guarantee delivery or order  
     - Also if you follow UDP stream, filter the main view as well to only show packets of this stream 
     - These ideas can be extended to TCP when it comes time for that, but TCP stream would be more coherent
+    - Have an id field on backend and when sending to frontend, keep track of that so that you can follow the
+      stream better and when clicking on packets in the stream window, you can find the related packet in the 
+      window easily by its id.

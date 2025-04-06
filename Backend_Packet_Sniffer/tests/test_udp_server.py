@@ -28,7 +28,3 @@ while (True):
     bytesToSend = str.encode(serverMsg)
 
     UDP_Server_Socket.sendto(bytesToSend, address)
-
-
-
-

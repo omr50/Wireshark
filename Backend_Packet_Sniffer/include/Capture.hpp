@@ -3,6 +3,56 @@
 #include "parser.hpp"
 #include <string>
 #include "TCP_Server.hpp"
+#include <unordered_map>
+
+struct FourTuple
+{
+
+    uint32_t srcIP;
+    uint32_t dstIP;
+    uint16_t srcPort;
+    uint16_t dstPort;
+
+    // equality operator
+    bool operator==(const FourTuple &other) const
+    {
+        return (srcIP == other.srcIP &&
+                dstIP == other.dstIP &&
+                srcPort == other.srcPort &&
+                dstPort == other.dstPort);
+    }
+};
+
+struct FourTupleHash
+{
+    std::size_t operator()(const FourTuple &key) const
+    {
+        // hash each field
+        // then combine each one
+        // into a unique hash
+
+        std::size_t h1 = std::hash<uint32_t>()(key.srcIP);
+        std::size_t h2 = std::hash<uint32_t>()(key.dstIP);
+        std::size_t h3 = std::hash<uint32_t>()(key.srcPort);
+        std::size_t h4 = std::hash<uint32_t>()(key.dstPort);
+
+        // combining function
+
+        auto combine = [](std::size_t seed, std::size_t value)
+        {
+            const std::size_t magic = 0x7e3879bc7f3a7d13ULL;
+            seed ^= (value + magic + (seed << 6) + (seed >> 2));
+            return seed;
+        };
+
+        std::size_t result = h1;
+        result = combine(result, h2);
+        result = combine(result, h3);
+        result = combine(result, h4);
+
+        return result;
+    }
+};
 
 class Capture
 {
@@ -18,6 +68,8 @@ public:
     struct bpf_program fp;
     bpf_u_int32 net = 0, mask = 0;
     std::shared_ptr<TCP_Server> server;
+    // collection of all udp streams and their packets
+    std::unordered_map<FourTuple, std::vector<std::shared_ptr<Packet>>, FourTupleHash> UDP_Packet_Stream;
 
     Capture(std::string filter_exp, std::shared_ptr<TCP_Server> server);
     void start();

@@ -150,11 +150,13 @@ void Capture::packet_handler(u_char *userData, const struct pcap_pkthdr *pkthdr,
     printf("Going to send \n");
     std::shared_ptr<TCP_Server> server = *((std::shared_ptr<TCP_Server> *)userData);
     std::shared_ptr<Packet> root_packet = Parser::Determine_Packet(pkthdr, packet);
-    // after determining packet, we will inform the server of the data we want to send.
-    // for now send the pure binary string
     std::string packet_data = root_packet->print().dump() + "\n";
-    // queue up string data to be sent through tcp server.
-    // basically call post here, the server pointer has access to the io_context, and socket, and other things
+
+    if (root_packet->packet_type == "UDP")
+    {
+        // save to hashmap
+    }
+
     printf("Packet DATA: %d\n", packet_data.size());
     auto self = server->shared_from_this();
     if (server->client_connected)
