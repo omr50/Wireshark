@@ -24,7 +24,7 @@ UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 packetNum = 1 
 while (True):
     # Send to server using created UDP socket
-    msgFromClient = f'Hello: {packetNum}'
+    msgFromClient = f'Fake Client msg #{packetNum}'
     packetNum += 1
     bytesToSend = str.encode(msgFromClient)
     UDPClientSocket.sendto(bytesToSend, serverAddressPort)

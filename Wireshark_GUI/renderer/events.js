@@ -281,11 +281,39 @@ function createUDPDetailedInfo(detailedPacket) {
                 </div>
             </div>
 
+            <div class="item">
+                ${small_padding}${detailedPacket["UDP_Payload"]} 
+            </div>
+
+
 
             
         </div>
     </div> `
     return udp_detailed_packet_info;
+}
+
+function createUDPPayload(detailedPacket) {
+    let udp_payload_info = `
+    <div class="item" onclick="toggleSubItems(event, this)">
+        <div class="title"><img class="dropdown" src="./dropdown.png" width="14px" height="14px">
+        Data (${detailedPacket["Length"]}) </div> 
+        <div class="sub-items">
+
+            <div class="item">
+                ${small_padding}Data: ${detailedPacket["data"]} 
+            </div>
+
+            <div class="item">
+                ${small_padding}[Length: ${detailedPacket["Length"]}] 
+            </div>
+
+
+
+            
+        </div>
+    </div> ` 
+    return udp_payload_info;
 }
 
 function renderDetailedInfo(packet_num, element) {
@@ -303,6 +331,7 @@ function renderDetailedInfo(packet_num, element) {
       ${(detailedPackets.length > 1 && detailedPackets[1]["title"].includes("Internet Protocol Version 4")) ? createIPDetailedInfo(detailedPackets[1]) : ""}
       ${(detailedPackets.length > 1 && detailedPackets[1]["title"].includes("Address Resolution Protocol")) ? createARPDetailedInfo(detailedPackets[1]) : ""}
       ${(detailedPackets.length > 2 && detailedPackets[2]["title"].includes("User Datagram Protocol")) ? createUDPDetailedInfo(detailedPackets[2]) : ""}
+      ${(detailedPackets.length === 3 && detailedPackets[2]["title"].includes("User Datagram Protocol")) ? createUDPPayload(detailedPackets[2]) : ""}
   </div>
   `
   detailedProtocolElement.innerHTML = "";

@@ -59,6 +59,7 @@ json UDP_Packet::detailed_protocol_info_print()
     UDP_Packet["Timestamps"] = time;
     UDP_Packet["UDP_Payload"] = "UDP payload (" + std::to_string(payload_size) + ")";
     UDP_Packet["data"] = payload;
+    UDP_Packet["Length"] = payload_size;
 
     return UDP_Packet;
 }

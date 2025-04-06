@@ -23,7 +23,7 @@ while (True):
     print(clientMsg)
     print(clientIP_Port)
 
-    serverMsg = f'Packet num: {packetNum}\n'
+    serverMsg = f'Fake server msg #{packetNum}\n'
     packetNum += 1
     bytesToSend = str.encode(serverMsg)
 

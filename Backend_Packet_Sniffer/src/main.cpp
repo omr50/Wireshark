@@ -5,13 +5,14 @@
 #include <pcap/pcap.h>
 #include <err.h>
 #include <thread>
+#include "../include/PacketClasses/packet.hpp"
 #include "../include/Capture.hpp"
 #include "../include/TCP_Server.hpp"
 
+int Packet::packet_id = 0;
+
 int main(int argc, char *argv[])
 {
-
-    Packet::packet_id = 0;
     std::shared_ptr<TCP_Server> server = std::make_shared<TCP_Server>(8000);
     std::thread server_thread(TCP_Server::server_thread, server);
     // don't start the packet capture from here, rather from client is better
