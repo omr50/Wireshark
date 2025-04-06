@@ -7,7 +7,6 @@ const start_time = Date.now();
 let small_padding = "&emsp;&emsp;&emsp;";
 let padding = "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;";
 console.log("CURRENT START TIME: ", start_time);
-
 const table = document.querySelector('.packet_table');
 
 

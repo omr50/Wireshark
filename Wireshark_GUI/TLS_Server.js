@@ -3,6 +3,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const { connect } = require('http2');
 
 let reconnectFunctionID = null;
+let main_client = null;
 
 function connectToServer(client, port) {
     client.connect(port, 'localhost', function() {
@@ -70,7 +71,7 @@ function createTCP_Server(mainWindow, port) {
             console.error('Error: ' + err);
             console.log("THE ERRROR" + err.message);
         });
-
+        main_client = client;
     } catch (e) {
         console.log(e + ": error connecting to server!");
         persistentConnect(mainWindow, port);
@@ -78,4 +79,4 @@ function createTCP_Server(mainWindow, port) {
     
 }
 
-module.exports = { createTCP_Server };
+module.exports = { createTCP_Server, main_client };

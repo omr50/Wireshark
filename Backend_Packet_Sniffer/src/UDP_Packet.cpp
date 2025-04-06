@@ -30,11 +30,13 @@ json UDP_Packet::detailed_protocol_info_print()
     uint16_t dest_port = ntohs(udp_hdr->dest);
     uint16_t length = ntohs(udp_hdr->len);
     uint16_t checksum = ntohs(udp_hdr->check);
+    uint16_t payload_size = ntohs(udp_hdr->len) - sizeof(udp_hdr);
 
     std::string src_string = std::to_string(src_port);
     std::string dest_string = std::to_string(dest_port);
     std::string length_string = std::to_string(length);
     std::string checksum_string = std::to_string(checksum);
+    std::string payload((char *)this->udp_hdr + sizeof(udp_hdr), payload_size);
 
     UDP_Packet["title"] = "User Datagram Protocol, Src Port: " + src_string + ", Dst Port: " + dest_string;
     UDP_Packet["Source_Port"] = "Source Port: " + src_string;
@@ -55,7 +57,8 @@ json UDP_Packet::detailed_protocol_info_print()
     time["first_frame"] = "[Time since first Frame: 123456789(change later) seconds]";
     time["prev_frame"] = "[Time since previous Frame: 123456789(change later) seconds]";
     UDP_Packet["Timestamps"] = time;
-    UDP_Packet["UDP_Payload"] = "UDP payload (" + std::to_string(ntohs(udp_hdr->len) - sizeof(udp_hdr)) + ")";
+    UDP_Packet["UDP_Payload"] = "UDP payload (" + std::to_string(payload_size) + ")";
+    UDP_Packet["data"] = payload;
 
     return UDP_Packet;
 }
