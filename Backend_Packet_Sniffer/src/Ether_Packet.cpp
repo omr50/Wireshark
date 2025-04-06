@@ -80,6 +80,7 @@ json Ether_Packet::print()
     packet_info["protocol"] = this->get_protocol();
     packet_info["length"] = this->data_length;
     packet_info["info"] = "Generic info for now";
+    packet_info["packet_id"] = Packet::packet_id++;
 
     full_packet["dest_mac"] = this->print_dest_mac();
     full_packet["src_mac"] = this->print_source_mac();
