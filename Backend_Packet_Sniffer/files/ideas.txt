@@ -19,3 +19,13 @@ Following a UDP Stream:
     - Have an id field on backend and when sending to frontend, keep track of that so that you can follow the
       stream better and when clicking on packets in the stream window, you can find the related packet in the 
       window easily by its id.
+
+    - How to send?
+    - we have an id, but as we follow the stream, more packets may come, so we need to 
+      update frequently, but we don't want to send the entire stream everytime, or make
+      a more complex algorithm for only sending the latest one that wasn't sent before,
+    - the client should request the stream (maybe on a timer) as long as the screen showing
+      the stream is open. So maybe every 5 seconds it can update by sending a request to the
+      server for the ids of the packets that are in the stream, and then we can easily use that
+      info to retrieve the total info on the front end and then display it, instead of sending all 
+      that data again every time.

@@ -22,6 +22,7 @@ public:
     size_t data_length;
     timeval timestamp;
     int layer;
+    static int packet_id;
     //  boost::asio::io_service io_service;
 
     Packet() = default;

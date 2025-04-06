@@ -317,7 +317,10 @@ function renderDetailedInfo(packet_num, element) {
 ipcRenderer.on('tcp-data', (event, data) => {
 //   console.log("THE TCP DATA IS ", data);
   // test
+  let entire_packet = data;
   let packet_info = data['packet_info'];
+  let detailed_info = data['detailed_info'];
+  console.log("Entire Packet: ", entire_packet);
   packets_info.push(data)
   let color_class = packet_info.protocol.toLowerCase(); 
   let exact_time = parseInt(packet_info.time) - start_time;
