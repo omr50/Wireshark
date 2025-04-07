@@ -71,6 +71,17 @@ std::string to_hex(int val)
     return oss.str();
 }
 
+std::string toHex(const uint8_t *data, size_t length)
+{
+    std::ostringstream oss;
+    oss << std::hex << std::setfill('0');
+    for (size_t i = 0; i < length; i++)
+    {
+        oss << std::setw(2) << static_cast<int>(data[i]);
+    }
+    return oss.str();
+}
+
 uint8_t binary_to_int(uint8_t value, uint8_t start_bit, uint8_t end_bit)
 {
     uint8_t int_val = 0;

@@ -293,7 +293,23 @@ function createUDPDetailedInfo(detailedPacket) {
     return udp_detailed_packet_info;
 }
 
+function stringToHex(str) {
+  let result = "";
+  for (let i = 0; i < str.length; i++) {
+    // Get char code, convert to hex, zero-pad to 2 chars
+    const hexValue = str.charCodeAt(i).toString(16).padStart(2, '0');
+    result += hexValue + " ";
+  }
+  return result.trim();
+}
+
 function createUDPPayload(detailedPacket) {
+    let data = detailedPacket["data"];
+    // clip data to certain size
+    if (data.length >= 50) {
+        data = data.slice(0, 50);
+        data += "...";
+    }
     let udp_payload_info = `
     <div class="item" onclick="toggleSubItems(event, this)">
         <div class="title"><img class="dropdown" src="./dropdown.png" width="14px" height="14px">
@@ -301,7 +317,7 @@ function createUDPPayload(detailedPacket) {
         <div class="sub-items">
 
             <div class="item">
-                ${small_padding}Data: ${detailedPacket["data"]} 
+                ${small_padding}Data: ${data} 
             </div>
 
             <div class="item">
@@ -338,6 +354,30 @@ function renderDetailedInfo(packet_num, element) {
   detailedProtocolElement.innerHTML += list;
 }
 
+function renderInfo(packet_num, element) {
+    renderDetailedInfo(packet_num, element);
+    renderHexInfo(packet_num, element);
+}
+
+function renderHexInfo(packet_num, element) {
+
+  let detailedPackets = packets_info[packet_num]["detailed_info"];
+  let hexElement = document.querySelector(".right-hex-info");
+
+  let list = 
+  `<div class="hex-info-container">
+      ${(detailedPackets.length === 3 && detailedPackets[2]["title"].includes("User Datagram Protocol")) ? createHexData(detailedPackets[2]["all_data"]) : ""}
+  </div>
+  `
+  hexElement.innerHTML = "";
+  hexElement.innerHTML += list;
+}
+
+function createHexData(hexData) {
+    // change later to be more complex
+    return hexData;
+}
+
 
 
 
@@ -354,7 +394,7 @@ ipcRenderer.on('tcp-data', (event, data) => {
   let exact_time = parseInt(packet_info.time) - start_time;
   let seconds = exact_time / 1000;
   let new_row = `<tr class="${color_class}" 
-                onclick="renderDetailedInfo(${packet_num-1}, this)">
+                onclick="renderInfo(${packet_num-1}, this)">
                   <td onmouseenter="set_highlight(0)" onmouseleave="remove_highlight(0)">${packet_num}</td>
                   <td onmouseenter="set_highlight(1)" onmouseleave="remove_highlight(1)">${seconds}</td>
                   <td onmouseenter="set_highlight(2)" onmouseleave="remove_highlight(2)">${packet_info.source}</td>

@@ -58,6 +58,7 @@ body {
 .packet-details {
     height: 44vh;
     display: flex;
+    flex-direction: row;
     padding: 0px;
     margin: 0px;
 }
@@ -76,6 +77,12 @@ body {
 .right-hex-info {
     border: 1px solid black;
     flex: 1; 
+    overflow-x: auto; 
+    display: flex;
+    white-space: nowrap; 
+    flex-direction: column;
+    position: relative; 
+    width: inherit;
 }
 
 
