@@ -366,16 +366,36 @@ function renderHexInfo(packet_num, element) {
 
   let list = 
   `<div class="hex-info-container">
-      ${(detailedPackets.length === 3 && detailedPackets[2]["title"].includes("User Datagram Protocol")) ? createHexData(detailedPackets[2]["all_data"]) : ""}
+      ${(detailedPackets.length === 3 && detailedPackets[2]["title"].includes("User Datagram Protocol")) ? createHexData(detailedPackets[2]["all_data"], "UDP") : ""}
   </div>
   `
   hexElement.innerHTML = "";
   hexElement.innerHTML += list;
 }
 
-function createHexData(hexData) {
+function createHexData(hexData, packet_type) {
     // change later to be more complex
-    return hexData;
+    // each 32 bytes in a row
+    let str = "";
+    let row_str = "<div>";
+    let full_html = "";
+    let items_per_row = 16;
+    for (let i = 0; i < hexData.length; i+=2) {
+        str = hexData[i] + hexData[i+1];
+        row_str +=  (" " + str);
+        
+        // size of items per row + <div> (length 5)
+        if (row_str.length === (items_per_row * 3 + 5)) {
+            row_str += "</div>"
+            full_html += row_str;
+            row_str = "<div>";
+        }
+    }
+    if (row_str.length) {
+        row_str += "</div>";
+        full_html += row_str;
+    }
+    return full_html;
 }
 
 
