@@ -38,7 +38,9 @@ json UDP_Packet::detailed_protocol_info_print()
     std::string length_string = std::to_string(length);
     std::string checksum_string = std::to_string(checksum);
     std::string payload = toHex(reinterpret_cast<uint8_t *>(this->udp_hdr + 1), payload_size);
-    std::string payloadHex = toHex(reinterpret_cast<uint8_t *>(this->udp_hdr), ntohs(udp_hdr->len));
+    size_t packet_size = sizeof(ether_header) + sizeof(iphdr) + sizeof(udp_hdr) + payload_size;
+    // get the entire packet in hexadecimal.
+    std::string entirePacketHex = toHex(reinterpret_cast<uint8_t *>((void *)this->udp_hdr + ntohs(udp_hdr->len) - packet_size), packet_size);
 
     UDP_Packet["title"] = "User Datagram Protocol, Src Port: " + src_string + ", Dst Port: " + dest_string;
     UDP_Packet["Source_Port"] = "Source Port: " + src_string;
@@ -61,7 +63,7 @@ json UDP_Packet::detailed_protocol_info_print()
     UDP_Packet["Timestamps"] = time;
     UDP_Packet["UDP_Payload"] = "UDP payload (" + std::to_string(payload_size) + ")";
     UDP_Packet["data"] = payload;
-    UDP_Packet["all_data"] = payloadHex;
+    UDP_Packet["all_data"] = entirePacketHex;
 
     return UDP_Packet;
 }

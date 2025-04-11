@@ -163,6 +163,9 @@ function createIPDetailedInfo(detailedPacket) {
                 ${small_padding}${detailedPacket["version"]} 
             </div>
             <div class="item" onclick="toggleSubItems(event, this)">
+                ${small_padding}${detailedPacket["header_length"]} 
+            </div>
+            <div class="item" onclick="toggleSubItems(event, this)">
                 ${small_padding}<img class="dropdown" src="./dropdown.png" width="14px" height="14px">
                 ${detailedPacket["differentiated_services_field"]["title"]} 
                 <div class="sub-items">
@@ -373,31 +376,72 @@ function renderHexInfo(packet_num, element) {
   hexElement.innerHTML += list;
 }
 
-function createHexData(hexData, packet_type) {
-    // change later to be more complex
-    // each 32 bytes in a row
-    let str = "";
-    let row_str = "<div>";
-    let full_html = "";
-    let items_per_row = 16;
-    for (let i = 0; i < hexData.length; i+=2) {
-        str = hexData[i] + hexData[i+1];
-        row_str +=  (" " + str);
-        
-        // size of items per row + <div> (length 5)
-        if (row_str.length === (items_per_row * 3 + 5)) {
-            row_str += "</div>"
-            full_html += row_str;
-            row_str = "<div>";
-        }
-    }
-    if (row_str.length) {
-        row_str += "</div>";
-        full_html += row_str;
-    }
-    return full_html;
+function createEtherHexData(hexData) {
+    return `
+        <span class="destination_address"><span class="lg_ig_bit">${get_bytes_spaced(hexData, 0, 2)}</span>${get_bytes_spaced(hexData, 3, 5)}</span>
+        <span class="source_address"><span class="lg_ig_bit">${get_bytes_spaced(hexData, 6, 8)}</span>${get_bytes_spaced(hexData, 9, 11)}</span>
+        <span class="type">${get_bytes_spaced(hexData, 12, 13)}</span>
+        `
 }
 
+function createIPHexData(hexData) {
+    return `
+        <span class="version header_length">${get_bytes_spaced(hexData, 14, 14)}</span>
+        <span class="diff_services codepoint congestion">${get_bytes_spaced(hexData, 15, 15)}</span>
+        <span class="total_length">${get_bytes_spaced(hexData, 16, 17)}</span>
+        <span class="identification">${get_bytes_spaced(hexData, 18, 19)}</span>
+        <span class="frag_offset"><span class="flags reserved dont_frag more_frag">${get_bytes_spaced(hexData, 20, 20)}</span>${get_bytes_spaced(hexData, 21, 21)}</span>
+        <span class="ttl">${get_bytes_spaced(hexData, 22, 22)}</span>
+        <span class="protocol">${get_bytes_spaced(hexData, 23, 23)}</span>
+        <span class="ip_checksum">${get_bytes_spaced(hexData, 24, 25)}</span>
+        <span class="source_addr">${get_bytes_spaced(hexData, 26, 29)}</span>
+        <span class="dest_addr">${get_bytes_spaced(hexData, 30, 33)}</span>
+        `
+}
+
+function createUDPHexData(hexData) {
+    return `
+        <span class="src_port">${get_bytes_spaced(hexData, 34, 35)}</span>
+        <span class="src_port">${get_bytes_spaced(hexData, 36, 37)}</span>
+        <span class="length">${get_bytes_spaced(hexData, 38, 39)}</span>
+        <span class="checksum">${get_bytes_spaced(hexData, 40, 41)}</span>
+        <span class="payload">${get_bytes_spaced(hexData, 42, "end")}</span>
+        `
+}
+
+function createHexData(hexData, packet_type) {
+    if (packet_type == "UDP") {
+        const hex_data = `
+        <div>
+            ${createEtherHexData(hexData)}        
+            ${createIPHexData(hexData)}        
+            ${createUDPHexData(hexData)}        
+        </div>
+        `
+        return hex_data;
+    }
+}
+
+function get_bytes_spaced(data, start, end) {
+    // end is inclusive
+    console.log("length:", data.length);
+    console.log(`(${start}, ${end})`);
+    let out = "";
+    start *= 2;
+    if (end == "end") {
+        end = data.length - 1;
+    } else {
+        end *= 2;
+    }
+    for (let i = start; i <= end; i+=2) {
+        out += (data[i] + data[i+1]);
+        out += " ";
+    }
+    if (start == 6) 
+        console.log("WHYYYY", out);
+    console.log("result", out)
+    return out;
+}
 
 
 
