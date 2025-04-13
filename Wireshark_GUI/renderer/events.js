@@ -246,6 +246,7 @@ function createUDPDetailedInfo(detailedPacket) {
             <div class="item">
                 ${small_padding}${detailedPacket["Source_Port"]} 
             </div>
+
             <div class="item">
                 ${small_padding}${detailedPacket["Destination_Port"]} 
             </div>
@@ -266,9 +267,6 @@ function createUDPDetailedInfo(detailedPacket) {
                 ${small_padding}${detailedPacket["Stream_Index"]} 
             </div>
 
-
-
-
             <div class="item" onclick="toggleSubItems(event, this)">
                 ${small_padding}<img class="dropdown" src="./dropdown.png" width="14px" height="14px">
                     ${detailedPacket["Timestamps"]["title"]} 
@@ -287,12 +285,9 @@ function createUDPDetailedInfo(detailedPacket) {
             <div class="item">
                 ${small_padding}${detailedPacket["UDP_Payload"]} 
             </div>
-
-
-
             
         </div>
-    </div> `
+    </div>`
     return udp_detailed_packet_info;
 }
 
@@ -386,8 +381,10 @@ function createEtherHexData(hexData) {
 
 function createIPHexData(hexData) {
     return `
+
         <span class="version header_length">${get_bytes_spaced(hexData, 14, 14)}</span>
         <span class="diff_services codepoint congestion">${get_bytes_spaced(hexData, 15, 15)}</span>
+        <div></div>
         <span class="total_length">${get_bytes_spaced(hexData, 16, 17)}</span>
         <span class="identification">${get_bytes_spaced(hexData, 18, 19)}</span>
         <span class="frag_offset"><span class="flags reserved dont_frag more_frag">${get_bytes_spaced(hexData, 20, 20)}</span>${get_bytes_spaced(hexData, 21, 21)}</span>
@@ -395,7 +392,9 @@ function createIPHexData(hexData) {
         <span class="protocol">${get_bytes_spaced(hexData, 23, 23)}</span>
         <span class="ip_checksum">${get_bytes_spaced(hexData, 24, 25)}</span>
         <span class="source_addr">${get_bytes_spaced(hexData, 26, 29)}</span>
-        <span class="dest_addr">${get_bytes_spaced(hexData, 30, 33)}</span>
+        <span class="dest_addr">${get_bytes_spaced(hexData, 30, 31)}</span>
+        <div></div>
+        <span class="dest_addr">${get_bytes_spaced(hexData, 32, 33)}</span>
         `
 }
 
@@ -405,7 +404,9 @@ function createUDPHexData(hexData) {
         <span class="src_port">${get_bytes_spaced(hexData, 36, 37)}</span>
         <span class="length">${get_bytes_spaced(hexData, 38, 39)}</span>
         <span class="checksum">${get_bytes_spaced(hexData, 40, 41)}</span>
-        <span class="payload">${get_bytes_spaced(hexData, 42, "end")}</span>
+        <span class="payload">${get_bytes_spaced(hexData, 42, 47)}</span>
+        <div></div>
+        <span class="payload">${get_bytes_spaced(hexData, 48, "end")}</span>
         `
 }
 
@@ -419,6 +420,7 @@ function createHexData(hexData, packet_type) {
                 ${createIPHexData(hexData)}        
                 ${createUDPHexData(hexData)}        
             </div>
+            ${getByteTranslation(hexData)};
         </div>
         `
         return hex_data;
@@ -465,6 +467,30 @@ function get_bytes_spaced(data, start, end) {
         console.log("WHYYYY", out);
     console.log("result", out)
     return out;
+}
+
+function getByteTranslation(data) {
+    let output = `<div class="byte_translation"><div>`;
+    let counter = 0;
+    let char = "";
+    for (let i = 0; i < data.length; i+=2) {
+        let hexStr = data[i] + data[i+1];
+
+        let decimal = parseInt(hexStr, 16);
+        if (decimal >= 32 && decimal <= 126) {
+            char = String.fromCharCode(decimal);
+        } else {
+            char = '.'; // Non-printable → like Wireshark
+        }
+        if (counter == 16) {
+            counter = 0;
+            output += "</div><div>";
+        }
+        output += char;
+        counter++;
+    }
+    output += "</div>"
+    return output;
 }
 
 
