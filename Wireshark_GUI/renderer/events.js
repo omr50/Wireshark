@@ -420,7 +420,7 @@ function createHexData(hexData, packet_type) {
                 ${createIPHexData(hexData)}        
                 ${createUDPHexData(hexData)}        
             </div>
-            ${getByteTranslation(hexData)};
+            ${getByteTranslation(hexData)}
         </div>
         `
         return hex_data;
@@ -480,7 +480,7 @@ function getByteTranslation(data) {
         if (decimal >= 32 && decimal <= 126) {
             char = String.fromCharCode(decimal);
         } else {
-            char = '.'; // Non-printable → like Wireshark
+            char = '.'; // Non-printable
         }
         if (counter == 16) {
             counter = 0;
@@ -488,8 +488,13 @@ function getByteTranslation(data) {
         }
         output += char;
         counter++;
+        console.log("The char!", char);
     }
-    output += "</div>"
+    // if greater than one then we never closed the div.
+    if (counter > 1) {
+        output += "</div>"
+    }
+    output += "</div>";
     return output;
 }
 
