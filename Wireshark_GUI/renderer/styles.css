@@ -85,6 +85,25 @@ body {
     width: inherit;
 }
 
+.hex-data-container {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+}
+
+.byte_nums {
+    flex: 1;
+    flex-direction: column;
+    flex: 0 0 auto; 
+    background-color: #F0F0F0;
+    color: #96A0AF;
+    padding: 0px 10px;
+}
+
+.hex_bytes {
+    flex: 1;
+    flex-direction: column;
+}
 
 table, th, td {
   border: none;

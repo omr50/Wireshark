@@ -412,14 +412,38 @@ function createUDPHexData(hexData) {
 function createHexData(hexData, packet_type) {
     if (packet_type == "UDP") {
         const hex_data = `
-        <div>
-            ${createEtherHexData(hexData)}        
-            ${createIPHexData(hexData)}        
-            ${createUDPHexData(hexData)}        
+        <div class="hex-data-container">
+            ${getByteCounter(hexData)}
+            <div class="hex_bytes">
+                ${createEtherHexData(hexData)}        
+                ${createIPHexData(hexData)}        
+                ${createUDPHexData(hexData)}        
+            </div>
         </div>
         `
         return hex_data;
     }
+}
+
+function getByteCounter(data) {
+    // for each 16 bytes generate a row, use ceiling
+    let numBytes = getBytes(data);
+    let rows =  Math.ceil(numBytes / 16);
+
+    let divs = `<div class="byte_nums">`;
+    let val = 0;
+    for (let i = 0; i < rows; i++) {
+        divs += `<div>${val.toString(16).toUpperCase().padStart(4, '0')}</div>`;
+        val += 16;
+    }
+    divs += "</div>";
+
+    return divs;
+}
+
+function getBytes(data) {
+    // each 2 chars is a byte
+    return data.length / 2;
 }
 
 function get_bytes_spaced(data, start, end) {
