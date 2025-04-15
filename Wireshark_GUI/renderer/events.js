@@ -404,10 +404,23 @@ function createUDPHexData(hexData) {
         <span class="src_port">${get_bytes_spaced(hexData, 36, 37)}</span>
         <span class="length">${get_bytes_spaced(hexData, 38, 39)}</span>
         <span class="checksum">${get_bytes_spaced(hexData, 40, 41)}</span>
-        <span class="payload">${get_bytes_spaced(hexData, 42, 47)}</span>
-        <div></div>
-        <span class="payload">${get_bytes_spaced(hexData, 48, "end")}</span>
+        <span class="payload">${getPayload(hexData)}</span>
         `
+        // <span class="payload">${get_bytes_spaced(hexData, 42, 47)}</span>
+        // <div></div>
+        // <span class="payload">${get_bytes_spaced(hexData, 48, "end")}</span>
+}
+
+
+function getPayload(hexData) {
+    let total = "";
+    for (let i = 42; i < hexData.length / 2; i++) {
+        if (i % 16 == 0) {
+            total += "<div></div>";
+        }
+        total += get_bytes_spaced(hexData, i, i);
+    }
+    return total;
 }
 
 function createHexData(hexData, packet_type) {
