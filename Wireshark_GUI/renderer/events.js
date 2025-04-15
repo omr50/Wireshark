@@ -44,6 +44,20 @@ function toggleSubItems(event, element) {
   }
 }
 
+function toggleFieldHighlight(field) {
+    let allHighlightable = document.querySelectorAll(".highlightable");
+    let fieldElems = document.querySelectorAll(`.${field}`);
+
+    for (const elem of allHighlightable) {
+        elem.style.backgroundColor = "transparent";
+    }
+
+    for (const elem of fieldElems) {
+        elem.style.backgroundColor = "blue";
+    }
+
+}
+
 function search(event, element) {
     let searchTerms = ['http', 'tcp', 'udp', 'ip', 'eth', 'icmp', 'arp', '']
     const searchQuery = element.value.toLowerCase();
