@@ -170,7 +170,7 @@ function createEthIIDetailedInfo(detailedPacket) {
 
 function createIPDetailedInfo(detailedPacket) {
       let ip_detailed_packet_info = `
-  <div class="packet_details_container highlightable">
+  <div class="packet_details_container">
       <div class="item" onclick="toggleSubItems(event, this)">
         <div class="title"><img class="dropdown" src="./dropdown.png" width="14px" height="14px">
         ${detailedPacket["title"]}</div> 
@@ -194,55 +194,55 @@ function createIPDetailedInfo(detailedPacket) {
                 </div>
             </div>
 
-            <div class="item total_length highlightable"> 
+            <div class="item total_length highlightable" onclick="toggleFieldHighlight('total_length');"> 
                 ${small_padding}${detailedPacket["total_length"]} 
             </div>
 
-            <div class="item identification highlightable"> 
+            <div class="item identification highlightable" onclick="toggleFieldHighlight('total_length');"> 
                 ${small_padding}${detailedPacket["identification"]} 
             </div>
 
-            <div class="item flags highlightable" onclick="toggleSubItems(event, this)"> 
+            <div class="item flags highlightable" onclick="toggleSubItems(event, this); toggleFieldHighlight('flags');"> 
                 ${small_padding}<img class="dropdown" src="./dropdown.png" width="14px" height="14px">
                 ${detailedPacket["flags"]["title"]} 
                 <div class="sub-items">
-                    <div class="item reserved highlightable">
+                    <div class="item reserved highlightable" onclick="toggleFieldHighlight('reserved');">
                         ${padding}${detailedPacket["flags"]["reserved_bit"]} 
                     </div>
 
-                    <div class="item dont_frag highlightable">
+                    <div class="item dont_frag highlightable" onclick="toggleFieldHighlight('dont_frag');">
                         ${padding}${detailedPacket["flags"]["dont_fragment"]} 
                     </div>
 
-                    <div class="item more_frag highlightable">
+                    <div class="item more_frag highlightable" onclick="toggleFieldHighlight('more_frag');">
                         ${padding}${detailedPacket["flags"]["more_fragments"]} 
                     </div>
                     
                 </div>
             </div>
             
-            <div class="item frag_offset highlightable">
+            <div class="item frag_offset highlightable" onclick="toggleFieldHighlight('frag_offset');">
                 ${small_padding}${detailedPacket["fragment_offset"]} 
             </div>
 
 
-            <div class="item ttl highlightable">
+            <div class="item ttl highlightable"  onclick="toggleFieldHighlight('ttl');>
                 ${small_padding}${detailedPacket["time_to_live"]} 
             </div>
 
-            <div class="item protocol highlightable">
+            <div class="item protocol highlightable" onclick="toggleFieldHighlight('protocol');>
                 ${small_padding}${detailedPacket["protocol"]} 
             </div>
 
-            <div class="item ip_checksum highlightable">
+            <div class="item ip_checksum highlightable" onclick="toggleFieldHighlight('ip_checksum');>
                 ${small_padding}${detailedPacket["header_checksum"]} 
             </div>
 
-            <div class="item source_addr highlightable">
+            <div class="item source_addr highlightable" onclick="toggleFieldHighlight('source_addr');>
                 ${small_padding}${detailedPacket["source_ip"]} 
             </div>
 
-            <div class="item dest_addr highlightable">
+            <div class="item dest_addr highlightable" onclick="toggleFieldHighlight('dest_addr');>
                 \t${small_padding}${detailedPacket["dest_ip"]} 
             </div>
 
