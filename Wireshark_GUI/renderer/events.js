@@ -44,16 +44,18 @@ function toggleSubItems(event, element) {
   }
 }
 
-function toggleFieldHighlight(field) {
+function toggleFieldHighlight(field_name) {
+    console.log("WORKING FIELD TOGGLE!");
     let allHighlightable = document.querySelectorAll(".highlightable");
-    let fieldElems = document.querySelectorAll(`.${field}`);
+    let allElements = document.querySelectorAll(`.${field_name}`);
 
     for (const elem of allHighlightable) {
-        elem.style.backgroundColor = "transparent";
+        elem.style.backgroundColor = "";
     }
 
-    for (const elem of fieldElems) {
+    for (const elem of allElements) {
         elem.style.backgroundColor = "blue";
+ 
     }
 
 }
@@ -128,37 +130,37 @@ function createARPDetailedInfo(detailedPacket) {
 
 function createEthIIDetailedInfo(detailedPacket) {
     let eth_detailed_packet_info = `
-    <div class="item" onclick="toggleSubItems(event, this)">
+    <div class="item eth_packet highlightable" onclick="toggleSubItems(event, this); toggleFieldHighlight('eth_packet');">
         <div class="title"><img class="dropdown" src="./dropdown.png" width="14px" height="14px">
         ${detailedPacket["title"]} </div> 
         <div class="sub-items">
-            <div class="item" onclick="toggleSubItems(event, this)">
+            <div class="item source_address highlightable" onclick="toggleSubItems(event, this); toggleFieldHighlight('source_address');">
                 ${small_padding}<img class="dropdown" src="./dropdown.png" width="14px" height="14px">
                 ${detailedPacket["source"]["title"]} 
                 <div class="sub-items">
-                    <div class="item">
+                    <div class="item lg_ig_bit_s highlightable" onclick="toggleFieldHighlight('lg_ig_bit_s');">
                         ${padding}${detailedPacket["source"]["LG"]} 
                     </div>
-                    <div class="item">
+                    <div class="item lg_ig_bit_s highlightable" onclick="toggleFieldHighlight('lg_ig_bit_s');">
                         ${padding}${detailedPacket["source"]["IG"]} 
                     </div>
                 </div>
             </div>
 
-            <div class="item" onclick="toggleSubItems(event, this)">
+            <div class="item destination_address highlightable" onclick="toggleSubItems(event, this); toggleFieldHighlight('destination_address');">
                 ${small_padding}<img class="dropdown" src="./dropdown.png" width="14px" height="14px">
                 ${detailedPacket["Destination"]["title"]} 
                 <div class="sub-items">
-                    <div>
+                    <div class="lg_ig_bit_d highlightable" onclick="toggleFieldHighlight('lg_ig_bit_d');">
                         ${padding}${detailedPacket["Destination"]["LG"]} 
                     </div>
-                    <div>
+                    <div class="lg_ig_bit_d highlightable" onclick="toggleFieldHighlight('lg_ig_bit_d');">
                         ${padding}${detailedPacket["Destination"]["IG"]} 
                     </div>
                 </div>
             </div>
 
-            <div class="item" onclick="toggleSubItems(event, this)">
+            <div class="item type highlightable" onclick="toggleSubItems(event, this); toggleFieldHighlight('type');">
                 ${small_padding}${detailedPacket["type"]} 
             </div>
         </div>
@@ -168,79 +170,79 @@ function createEthIIDetailedInfo(detailedPacket) {
 
 function createIPDetailedInfo(detailedPacket) {
       let ip_detailed_packet_info = `
-  <div class="packet_details_container">
+  <div class="packet_details_container highlightable">
       <div class="item" onclick="toggleSubItems(event, this)">
         <div class="title"><img class="dropdown" src="./dropdown.png" width="14px" height="14px">
         ${detailedPacket["title"]}</div> 
         <div class="sub-items">
-            <div class="item" onclick="toggleSubItems(event, this)">
+            <div class="item version highlightable" onclick="toggleSubItems(event, this); toggleFieldHighlight('version');">
                 ${small_padding}${detailedPacket["version"]} 
             </div>
-            <div class="item" onclick="toggleSubItems(event, this)">
+            <div class="item header_length highlightable" onclick="toggleSubItems(event, this); toggleFieldHighlight('header_length')">
                 ${small_padding}${detailedPacket["header_length"]} 
             </div>
-            <div class="item" onclick="toggleSubItems(event, this)">
+            <div class="item diff_services highlightable" onclick="toggleSubItems(event, this); toggleFieldHighlight('diff_services')">
                 ${small_padding}<img class="dropdown" src="./dropdown.png" width="14px" height="14px">
                 ${detailedPacket["differentiated_services_field"]["title"]} 
                 <div class="sub-items">
-                    <div class="item">
+                    <div class="item codepoint highlightable" onclick="toggleFieldHighlight('codepoint');">
                         ${padding}${detailedPacket["differentiated_services_field"]["diff_services_codepoint"]} 
                     </div>
-                    <div class="item">
+                    <div class="item congestion highlightable" onlick="toggleFieldHighlight('congestion');">
                         ${padding}${detailedPacket["differentiated_services_field"]["explicit_congestion_notification"]} 
                     </div>
                 </div>
             </div>
 
-            <div class="item"> 
+            <div class="item total_length highlightable"> 
                 ${small_padding}${detailedPacket["total_length"]} 
             </div>
 
-            <div class="item"> 
+            <div class="item identification highlightable"> 
                 ${small_padding}${detailedPacket["identification"]} 
             </div>
 
-            <div class="item" onclick="toggleSubItems(event, this)"> 
+            <div class="item flags highlightable" onclick="toggleSubItems(event, this)"> 
                 ${small_padding}<img class="dropdown" src="./dropdown.png" width="14px" height="14px">
                 ${detailedPacket["flags"]["title"]} 
                 <div class="sub-items">
-                    <div class="item">
+                    <div class="item reserved highlightable">
                         ${padding}${detailedPacket["flags"]["reserved_bit"]} 
                     </div>
 
-                    <div class="item">
+                    <div class="item dont_frag highlightable">
                         ${padding}${detailedPacket["flags"]["dont_fragment"]} 
                     </div>
 
-                    <div class="item">
+                    <div class="item more_frag highlightable">
                         ${padding}${detailedPacket["flags"]["more_fragments"]} 
                     </div>
                     
                 </div>
             </div>
             
-            <div class="item">
+            <div class="item frag_offset highlightable">
                 ${small_padding}${detailedPacket["fragment_offset"]} 
             </div>
 
 
-            <div class="item">
+            <div class="item ttl highlightable">
                 ${small_padding}${detailedPacket["time_to_live"]} 
             </div>
 
-            <div class="item">
+            <div class="item protocol highlightable">
                 ${small_padding}${detailedPacket["protocol"]} 
             </div>
 
-            <div class="item">
+            <div class="item ip_checksum highlightable">
                 ${small_padding}${detailedPacket["header_checksum"]} 
             </div>
 
-            <div class="item">
+            <div class="item source_addr highlightable">
                 ${small_padding}${detailedPacket["source_ip"]} 
             </div>
 
-            <div class="item">
+            <div class="item dest_addr highlightable">
                 \t${small_padding}${detailedPacket["dest_ip"]} 
             </div>
 
@@ -253,27 +255,27 @@ function createIPDetailedInfo(detailedPacket) {
 
 function createUDPDetailedInfo(detailedPacket) {
     let udp_detailed_packet_info = `
-    <div class="item" onclick="toggleSubItems(event, this)">
+    <div class="item highlightable" onclick="toggleSubItems(event, this)">
         <div class="title"><img class="dropdown" src="./dropdown.png" width="14px" height="14px">
         ${detailedPacket["title"]} </div> 
         <div class="sub-items">
-            <div class="item">
+            <div class="item src_port">
                 ${small_padding}${detailedPacket["Source_Port"]} 
             </div>
 
-            <div class="item">
+            <div class="item dest_port">
                 ${small_padding}${detailedPacket["Destination_Port"]} 
             </div>
 
-            <div class="item">
+            <div class="item length">
                 ${small_padding}${detailedPacket["Length"]} 
             </div>
 
-            <div class="item">
+            <div class="item checksum">
                 ${small_padding}${detailedPacket["Checksum"]} 
             </div>
 
-            <div class="item">
+            <div class="item payload">
                 ${small_padding}${detailedPacket["Checksum_status"]} 
             </div>
 
@@ -415,7 +417,7 @@ function createIPHexData(hexData) {
 function createUDPHexData(hexData) {
     return `
         <span class="src_port">${get_bytes_spaced(hexData, 34, 35)}</span>
-        <span class="src_port">${get_bytes_spaced(hexData, 36, 37)}</span>
+        <span class="dest_port">${get_bytes_spaced(hexData, 36, 37)}</span>
         <span class="length">${get_bytes_spaced(hexData, 38, 39)}</span>
         <span class="checksum">${get_bytes_spaced(hexData, 40, 41)}</span>
         <span class="payload">${getPayload(hexData)}</span>
