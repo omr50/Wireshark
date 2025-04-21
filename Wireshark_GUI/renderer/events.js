@@ -170,7 +170,7 @@ function createEthIIDetailedInfo(detailedPacket) {
 
 function createIPDetailedInfo(detailedPacket) {
       let ip_detailed_packet_info = `
-  <div class="packet_details_container">
+  <div class="packet_details_container ip_packet highlightable" onclick="toggleFieldHighlight('ip_packet')">
       <div class="item" onclick="toggleSubItems(event, this)">
         <div class="title"><img class="dropdown" src="./dropdown.png" width="14px" height="14px">
         ${detailedPacket["title"]}</div> 
@@ -255,27 +255,27 @@ function createIPDetailedInfo(detailedPacket) {
 
 function createUDPDetailedInfo(detailedPacket) {
     let udp_detailed_packet_info = `
-    <div class="item highlightable" onclick="toggleSubItems(event, this)">
+    <div class="item highlightable udp_packet" onclick="toggleSubItems(event, this); toggleFieldHighlight('udp_packet');">
         <div class="title"><img class="dropdown" src="./dropdown.png" width="14px" height="14px">
         ${detailedPacket["title"]} </div> 
         <div class="sub-items">
-            <div class="item src_port">
+            <div class="item src_port highlightable" onclick="toggleFieldHighlight('src_port');" >
                 ${small_padding}${detailedPacket["Source_Port"]} 
             </div>
 
-            <div class="item dest_port">
+            <div class="item dest_port highlightable" onclick="toggleFieldHighlight('dest_port');">
                 ${small_padding}${detailedPacket["Destination_Port"]} 
             </div>
 
-            <div class="item length">
+            <div class="item length highlightable" onclick="toggleFieldHighlight('length');">
                 ${small_padding}${detailedPacket["Length"]} 
             </div>
 
-            <div class="item checksum">
+            <div class="item checksum highlight" onclick="toggleFieldHighlight('checksum');">
                 ${small_padding}${detailedPacket["Checksum"]} 
             </div>
 
-            <div class="item payload">
+            <div class="item payload highlight" onclick="toggleFieldHighlight('payload');">
                 ${small_padding}${detailedPacket["Checksum_status"]} 
             </div>
 
@@ -298,7 +298,7 @@ function createUDPDetailedInfo(detailedPacket) {
                 </div>
             </div>
 
-            <div class="item">
+            <div class="item payload" onclick="toggleFieldHighlight('payload');">
                 ${small_padding}${detailedPacket["UDP_Payload"]} 
             </div>
             
