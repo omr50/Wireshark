@@ -108,7 +108,7 @@ json IP_Packet::detailed_protocol_info_print()
     // Map to the actual valeus on the https://en.wikipedia.org/wiki/Explicit_Congestion_Notification
     Differentiated_Services_Field["explicit_congestion_notification"] = ".... .." + tos_string.substr(6, 2) + " = Explicit Congestion Notification: (" + std::to_string(binary_to_int(this->ip_hdr->tos, 0, 1)) + ")";
     IP_Packet["total_length"] = "Total Length: " + std::to_string(ntohs(this->ip_hdr->tot_len));
-    IP_Packet["identification"] = to_hex(ntohs(this->ip_hdr->id)) + " (" + std::to_string(ntohs(this->ip_hdr->id)) + ")";
+    IP_Packet["identification"] = "Identification: " + to_hex(ntohs(this->ip_hdr->id)) + " (" + std::to_string(ntohs(this->ip_hdr->id)) + ")";
     uint8_t highest_byte = *(((uint8_t *)&(this->ip_hdr->frag_off)) + 1);
     // this should cut off the value to just the lowest byte
     uint8_t lowest_byte = this->ip_hdr->frag_off;

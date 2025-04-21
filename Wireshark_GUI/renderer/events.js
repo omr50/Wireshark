@@ -389,38 +389,38 @@ function renderHexInfo(packet_num, element) {
 
 function createEtherHexData(hexData) {
     return `
-        <span class="destination_address"><span class="lg_ig_bit">${get_bytes_spaced(hexData, 0, 2)}</span>${get_bytes_spaced(hexData, 3, 5)}</span>
-        <span class="source_address"><span class="lg_ig_bit">${get_bytes_spaced(hexData, 6, 8)}</span>${get_bytes_spaced(hexData, 9, 11)}</span>
-        <span class="type">${get_bytes_spaced(hexData, 12, 13)}</span>
+        <span class="destination_address highlightable"><span class="lg_ig_bit highlightable">${get_bytes_spaced(hexData, 0, 2)}</span>${get_bytes_spaced(hexData, 3, 5)}</span>
+        <span class="source_address highlightable"><span class="lg_ig_bit highlightable">${get_bytes_spaced(hexData, 6, 8)}</span>${get_bytes_spaced(hexData, 9, 11)}</span>
+        <span class="type highlightable">${get_bytes_spaced(hexData, 12, 13)}</span>
         `
 }
 
 function createIPHexData(hexData) {
     return `
 
-        <span class="version header_length">${get_bytes_spaced(hexData, 14, 14)}</span>
-        <span class="diff_services codepoint congestion">${get_bytes_spaced(hexData, 15, 15)}</span>
+        <span class="version header_length highlightable">${get_bytes_spaced(hexData, 14, 14)}</span>
+        <span class="diff_services codepoint congestion highlightable">${get_bytes_spaced(hexData, 15, 15)}</span>
         <div></div>
-        <span class="total_length">${get_bytes_spaced(hexData, 16, 17)}</span>
-        <span class="identification">${get_bytes_spaced(hexData, 18, 19)}</span>
-        <span class="frag_offset"><span class="flags reserved dont_frag more_frag">${get_bytes_spaced(hexData, 20, 20)}</span>${get_bytes_spaced(hexData, 21, 21)}</span>
-        <span class="ttl">${get_bytes_spaced(hexData, 22, 22)}</span>
-        <span class="protocol">${get_bytes_spaced(hexData, 23, 23)}</span>
-        <span class="ip_checksum">${get_bytes_spaced(hexData, 24, 25)}</span>
-        <span class="source_addr">${get_bytes_spaced(hexData, 26, 29)}</span>
-        <span class="dest_addr">${get_bytes_spaced(hexData, 30, 31)}</span>
+        <span class="total_length highlightable">${get_bytes_spaced(hexData, 16, 17)}</span>
+        <span class="identification highlightable">${get_bytes_spaced(hexData, 18, 19)}</span>
+        <span class="frag_offset highlightable"><span class="flags reserved dont_frag more_frag highlightable">${get_bytes_spaced(hexData, 20, 20)}</span>${get_bytes_spaced(hexData, 21, 21)}</span>
+        <span class="ttl highlightable">${get_bytes_spaced(hexData, 22, 22)}</span>
+        <span class="protocol highlightable">${get_bytes_spaced(hexData, 23, 23)}</span>
+        <span class="ip_checksum highlightable">${get_bytes_spaced(hexData, 24, 25)}</span>
+        <span class="source_addr highlightable">${get_bytes_spaced(hexData, 26, 29)}</span>
+        <span class="dest_addr highlightable">${get_bytes_spaced(hexData, 30, 31)}</span>
         <div></div>
-        <span class="dest_addr">${get_bytes_spaced(hexData, 32, 33)}</span>
+        <span class="dest_addr highlightable">${get_bytes_spaced(hexData, 32, 33)}</span>
         `
 }
 
 function createUDPHexData(hexData) {
     return `
-        <span class="src_port">${get_bytes_spaced(hexData, 34, 35)}</span>
-        <span class="dest_port">${get_bytes_spaced(hexData, 36, 37)}</span>
-        <span class="length">${get_bytes_spaced(hexData, 38, 39)}</span>
-        <span class="checksum">${get_bytes_spaced(hexData, 40, 41)}</span>
-        <span class="payload">${getPayload(hexData)}</span>
+        <span class="src_port highlightable">${get_bytes_spaced(hexData, 34, 35)}</span>
+        <span class="dest_port highlightable">${get_bytes_spaced(hexData, 36, 37)}</span>
+        <span class="length highlightable">${get_bytes_spaced(hexData, 38, 39)}</span>
+        <span class="checksum highlightable">${get_bytes_spaced(hexData, 40, 41)}</span>
+        <span class="payload highlightable">${getPayload(hexData)}</span>
         `
         // <span class="payload">${get_bytes_spaced(hexData, 42, 47)}</span>
         // <div></div>
