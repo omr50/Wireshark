@@ -489,6 +489,7 @@ function getBytes(data) {
     return data.length / 2;
 }
 
+// returns bytes for the hex view
 function get_bytes_spaced(data, start, end) {
     // end is inclusive
     console.log("length:", data.length);
