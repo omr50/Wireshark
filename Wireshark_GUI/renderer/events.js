@@ -505,9 +505,6 @@ function get_bytes_spaced(data, start, end) {
         out += (data[i] + data[i+1]);
         out += " ";
     }
-    if (start == 6) 
-        console.log("WHYYYY", out);
-    console.log("result", out)
     return out;
 }
 
