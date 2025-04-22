@@ -379,6 +379,7 @@ function renderDetailedInfo(packet_num, element) {
   detailedProtocolElement.innerHTML += list;
 }
 
+// renders all the packet info
 function renderInfo(packet_num, element) {
     renderDetailedInfo(packet_num, element);
     renderHexInfo(packet_num, element);
