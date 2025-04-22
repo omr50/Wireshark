@@ -508,6 +508,7 @@ function get_bytes_spaced(data, start, end) {
     return out;
 }
 
+// translates byte to ascii
 function getByteTranslation(data) {
     let output = `<div class="byte_translation"><div>`;
     let counter = 0;
