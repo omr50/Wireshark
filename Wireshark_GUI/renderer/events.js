@@ -468,8 +468,9 @@ function createHexData(hexData, packet_type) {
     }
 }
 
+// Function displays the byte values for each row
+// for each 16 bytes generate a row, use ceiling
 function getByteCounter(data) {
-    // for each 16 bytes generate a row, use ceiling
     let numBytes = getBytes(data);
     let rows =  Math.ceil(numBytes / 16);
 
