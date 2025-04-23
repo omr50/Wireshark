@@ -28,7 +28,6 @@ function remove_highlight(column_num) {
 
 function toggleSubItems(event, element) {
   event.stopPropagation();
-
   const subItems = element.querySelector('.sub-items');
   const container = document.querySelector('.packet_details_container');
   const image = element.querySelector('.dropdown');
@@ -46,7 +45,8 @@ function toggleSubItems(event, element) {
 
 function toggleFieldHighlight(field_name, event) {
     event.stopPropagation();
-    
+    if (field_name == 'stop_prop')
+        return; 
     console.log("WORKING FIELD TOGGLE!");
     let allHighlightable = document.querySelectorAll(".highlightable");
     let allElements = document.querySelectorAll(`.${field_name}`);
@@ -59,8 +59,6 @@ function toggleFieldHighlight(field_name, event) {
     for (const elem of allElements) {
         elem.style.backgroundColor = "#0078D7";
         elem.style.color = "white";
-
- 
     }
 
 }
@@ -286,15 +284,15 @@ function createUDPDetailedInfo(detailedPacket) {
                 ${small_padding}${detailedPacket["Checksum"]} 
             </div>
 
-            <div class="item">
+            <div class="item" onclick="toggleFieldHighlight('stop_prop', event);">
                 ${small_padding}${detailedPacket["Checksum_status"]} 
             </div>
 
-            <div class="item">
+            <div class="item" onclick="toggleFieldHighlight('stop_prop', event);">
                 ${small_padding}${detailedPacket["Stream_Index"]} 
             </div>
 
-            <div class="item" onclick="toggleSubItems(event, this)">
+            <div class="item" onclick="toggleSubItems(event, this); toggleFieldHighlight('stop_prop', event);">
                 ${small_padding}<img class="dropdown" src="./dropdown.png" width="14px" height="14px">
                     ${detailedPacket["Timestamps"]["title"]} 
                 <div class="sub-items">
@@ -309,7 +307,7 @@ function createUDPDetailedInfo(detailedPacket) {
                 </div>
             </div>
 
-            <div class="item payload" onclick="toggleFieldHighlight('payload', event);">
+            <div class="item payload highlightable" onclick="toggleFieldHighlight('payload', event);">
                 ${small_padding}${detailedPacket["UDP_Payload"]} 
             </div>
             
