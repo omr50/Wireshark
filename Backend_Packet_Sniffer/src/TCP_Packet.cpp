@@ -40,5 +40,30 @@ json TCP_Packet::detailed_protocol_info_print()
 {
     json temp_msg;
     temp_msg["protocol"] = this->packet_type;
+
+    // Fields
+    /*
+    - src port
+    - dest port
+    - sequence num
+    - ack num
+    - data offset
+    - reserved
+    - flags
+        - cwr
+        - ece
+        - urg
+        - ack
+        - psh
+        - rst
+        - syn
+        - fin
+    - window
+    - checksum
+    - urgent pointer
+    - options
+    - data
+
+    */
     return temp_msg;
 }
