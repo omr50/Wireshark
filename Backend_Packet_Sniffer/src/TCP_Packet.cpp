@@ -38,9 +38,6 @@ json TCP_Packet::print()
 
 json TCP_Packet::detailed_protocol_info_print()
 {
-    json temp_msg;
-    temp_msg["protocol"] = this->packet_type;
-
     // Fields
     /*
     - src port
@@ -65,5 +62,48 @@ json TCP_Packet::detailed_protocol_info_print()
     - data
 
     */
-    return temp_msg;
+
+    json UDP_Packet;
+    json time;
+    uint16_t src_port = ntohs(tcp_hdr->source);
+    uint16_t dest_port = ntohs(tcp_hdr->dest);
+    uint32_t seq_num = ntohl(tcp_hdr->seq);
+    uint32_t ack_num = ntohl(tcp_hdr->ack_seq);
+    uint8_t data_offset = tcp_hdr->doff;
+    uint8_t reserved = tcp_hdr->res1;
+
+    std::string src_string = std::to_string(src_port);
+    std::string dest_string = std::to_string(dest_port);
+    std::string seq_string = std::to_string(seq_num);
+    std::string ack_string = std::to_string(ack_num);
+    std::string data_offset_string = std::to_string(data_offset);
+
+    size_t packet_size = sizeof(ether_header) + sizeof(iphdr) + sizeof(udp_hdr) + payload_size;
+    // get the entire packet in hexadecimal.
+    std::string entirePacketHex = toHex(reinterpret_cast<uint8_t *>((void *)this->udp_hdr + ntohs(udp_hdr->len) - packet_size), packet_size);
+
+    UDP_Packet["title"] = "User Datagram Protocol, Src Port: " + src_string + ", Dst Port: " + dest_string;
+    UDP_Packet["Source_Port"] = "Source Port: " + src_string;
+    UDP_Packet["Destination_Port"] = "Destination Port: " + dest_string;
+    UDP_Packet["Length"] = "Length: " + length_string;
+    UDP_Packet["Checksum"] = "Checksum: " + checksum_string + " [unverified]";
+    UDP_Packet["Checksum_status"] = "[Checksum Status: Unverified]";
+    UDP_Packet["Stream_Index"] = "[Stream index: 0 (change later)]";
+    /*
+    For the time stats basically just keep an in memory
+    log of the times of each frame, and basically each
+    (src ip, src port), (dest ip, dest port) mapping will
+    have its own log and basically you can easily keep track
+    of these statistics.
+
+    */
+    time["title"] = "[Timestamps]";
+    time["first_frame"] = "[Time since first Frame: 123456789(change later) seconds]";
+    time["prev_frame"] = "[Time since previous Frame: 123456789(change later) seconds]";
+    UDP_Packet["Timestamps"] = time;
+    UDP_Packet["UDP_Payload"] = "UDP payload (" + std::to_string(payload_size) + ")";
+    UDP_Packet["data"] = payload;
+    UDP_Packet["all_data"] = entirePacketHex;
+
+    return UDP_Packet;
 }
