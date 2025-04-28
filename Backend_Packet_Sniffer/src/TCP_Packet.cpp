@@ -69,6 +69,10 @@ json TCP_Packet::detailed_protocol_info_print()
     uint16_t dest_port = ntohs(tcp_hdr->dest);
     uint32_t seq_num = ntohl(tcp_hdr->seq);
     uint32_t ack_num = ntohl(tcp_hdr->ack_seq);
+    // doff and res1 need to first be extracted
+    // from the converted little endian short
+    // The highest bit will contain reserved and
+    // doff while the lowest byte contains the flags.
     uint8_t data_offset = tcp_hdr->doff;
     uint8_t reserved = tcp_hdr->res1;
 
