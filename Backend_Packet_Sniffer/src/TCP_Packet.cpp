@@ -73,8 +73,18 @@ json TCP_Packet::detailed_protocol_info_print()
     // from the converted little endian short
     // The highest bit will contain reserved and
     // doff while the lowest byte contains the flags.
-    uint8_t data_offset = tcp_hdr->doff;
-    uint8_t reserved = tcp_hdr->res1;
+    uint16_t flags = ntohs(*(uint16_t *)((void *)tcp_hdr + 12));
+    uint8_t data_offset = flags >> 12;
+    uint8_t reserved = flags >> 8 & 0xff;
+
+    // 1 bit flags
+    uint8_t fin = flags & 1;
+    uint8_t fin = flags & 1;
+    uint8_t fin = flags & 1;
+    uint8_t fin = flags & 1;
+    uint8_t fin = flags & 1;
+    uint8_t fin = flags & 1;
+    uint8_t fin = flags & 1;
 
     std::string src_string = std::to_string(src_port);
     std::string dest_string = std::to_string(dest_port);
