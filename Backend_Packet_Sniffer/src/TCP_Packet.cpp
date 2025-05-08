@@ -79,12 +79,12 @@ json TCP_Packet::detailed_protocol_info_print()
 
     // 1 bit flags
     uint8_t fin = flags & 1;
-    uint8_t fin = flags & 1;
-    uint8_t fin = flags & 1;
-    uint8_t fin = flags & 1;
-    uint8_t fin = flags & 1;
-    uint8_t fin = flags & 1;
-    uint8_t fin = flags & 1;
+    uint8_t syn = flags >> 1 & 1;
+    uint8_t rst = flags >> 2 & 1;
+    uint8_t psh = flags >> 3 & 1;
+    uint8_t ack = flags >> 4 & 1;
+    uint8_t urg = flags >> 5 & 1;
+    uint8_t res2 = flags >> 6 & 1;
 
     std::string src_string = std::to_string(src_port);
     std::string dest_string = std::to_string(dest_port);
