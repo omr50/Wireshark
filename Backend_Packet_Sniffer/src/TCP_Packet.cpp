@@ -1,4 +1,5 @@
 #include "../include/PacketClasses/TCP_Packet.hpp"
+#include "../include/utils.hpp"
 
 TCP_Packet::TCP_Packet(const u_char *data, size_t length, timeval time_stamp)
 {
@@ -75,7 +76,7 @@ json TCP_Packet::detailed_protocol_info_print()
     // doff while the lowest byte contains the flags.
     uint16_t flags = ntohs(*(uint16_t *)((void *)tcp_hdr + 12));
     uint8_t data_offset = flags >> 12;
-    uint8_t reserved = flags >> 8 & 0xff;
+    uint8_t reserved = flags >> 8 & 0xf;
 
     // 1 bit flags
     uint8_t fin = flags & 1;
@@ -86,11 +87,16 @@ json TCP_Packet::detailed_protocol_info_print()
     uint8_t urg = flags >> 5 & 1;
     uint8_t res2 = flags >> 6 & 1;
 
+    uint16_t window = ntohs(tcp_hdr->window);
+    uint16_t check = ntohs(tcp_hdr->check);
+    uint16_t urg_ptr = ntohs(tcp_hdr->urg_ptr);
+
     std::string src_string = std::to_string(src_port);
     std::string dest_string = std::to_string(dest_port);
     std::string seq_string = std::to_string(seq_num);
     std::string ack_string = std::to_string(ack_num);
-    std::string data_offset_string = std::to_string(data_offset);
+    std::string data_offset_string = to_hex(flags);
+    std::string reserved_string = to_binary_string(reserved, 3, false);
 
     size_t packet_size = sizeof(ether_header) + sizeof(iphdr) + sizeof(udp_hdr) + payload_size;
     // get the entire packet in hexadecimal.
