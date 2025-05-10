@@ -64,7 +64,7 @@ json TCP_Packet::detailed_protocol_info_print()
 
     */
 
-    json UDP_Packet;
+    json TCP_Packet;
     json time;
     uint16_t src_port = ntohs(tcp_hdr->source);
     uint16_t dest_port = ntohs(tcp_hdr->dest);
@@ -76,8 +76,10 @@ json TCP_Packet::detailed_protocol_info_print()
     // doff while the lowest byte contains the flags.
     uint16_t flags = ntohs(*(uint16_t *)((void *)tcp_hdr + 12));
     uint8_t data_offset = flags >> 12;
-    uint8_t reserved = flags >> 8 & 0xf;
+    uint8_t reserved = (flags >> 8 & 0xf) >> 1;
+    uint8_t ecn = (flags >> 8 & 0x1);
 
+    uint16_t flag_big_endian = (flags & 0xff) | (reserved << 8);
     // 1 bit flags
     uint8_t fin = flags & 1;
     uint8_t syn = flags >> 1 & 1;
@@ -85,7 +87,8 @@ json TCP_Packet::detailed_protocol_info_print()
     uint8_t psh = flags >> 3 & 1;
     uint8_t ack = flags >> 4 & 1;
     uint8_t urg = flags >> 5 & 1;
-    uint8_t res2 = flags >> 6 & 1;
+    uint8_t ece = flags >> 6 & 1;
+    uint8_t cwr = flags >> 7 & 1;
 
     uint16_t window = ntohs(tcp_hdr->window);
     uint16_t check = ntohs(tcp_hdr->check);
@@ -95,35 +98,47 @@ json TCP_Packet::detailed_protocol_info_print()
     std::string dest_string = std::to_string(dest_port);
     std::string seq_string = std::to_string(seq_num);
     std::string ack_string = std::to_string(ack_num);
-    std::string data_offset_string = to_hex(flags);
+    std::string data_offset_hex_string = to_hex(flags);
+    std::string data_offset_binary_string = to_binary_string(data_offset, 4, false);
     std::string reserved_string = to_binary_string(reserved, 3, false);
+    std::string flags_big_endian_string = to_hex(flag_big_endian);
+    std::string window_string = std::to_string(window);
+    std::string checksum_string = std::to_string(check);
+    std::string urgent_pointer_string = std::to_string(urg_ptr);
 
-    size_t packet_size = sizeof(ether_header) + sizeof(iphdr) + sizeof(udp_hdr) + payload_size;
-    // get the entire packet in hexadecimal.
-    std::string entirePacketHex = toHex(reinterpret_cast<uint8_t *>((void *)this->udp_hdr + ntohs(udp_hdr->len) - packet_size), packet_size);
+    TCP_Packet["title"] = "Transmission Control Protocol, Src Port: " + src_string + ", Dst Port: " + dest_string + ", Seq: " + seq_string + ", Ack: " + ack_string;
+    TCP_Packet["Source_Port"] = "Source Port: " + src_string;
+    TCP_Packet["Destination_Port"] = "Destination Port: " + dest_string;
+    TCP_Packet["Sequence_Number"] = "Sequence Number (raw): " + seq_string;
+    TCP_Packet["Acknolwedgement_Number"] = "Acknowledgement Number (raw): " + ack_string;
+    TCP_Packet["Header_Length"] = data_offset_binary_string + " .... = Header Length: " + std::to_string(4 * data_offset) + " bytes (" + std::to_string(data_offset) + ")";
 
-    UDP_Packet["title"] = "User Datagram Protocol, Src Port: " + src_string + ", Dst Port: " + dest_string;
-    UDP_Packet["Source_Port"] = "Source Port: " + src_string;
-    UDP_Packet["Destination_Port"] = "Destination Port: " + dest_string;
-    UDP_Packet["Length"] = "Length: " + length_string;
-    UDP_Packet["Checksum"] = "Checksum: " + checksum_string + " [unverified]";
-    UDP_Packet["Checksum_status"] = "[Checksum Status: Unverified]";
-    UDP_Packet["Stream_Index"] = "[Stream index: 0 (change later)]";
+    json Flags;
+    Flags["Title"] = "Flags: " + flags_big_endian_string;
+    Flags["Reserved"] = reserved_string + ". .... .... = Reserved: " + set_not_set(reserved);
+    Flags["ECN"] = std::to_string(ecn) + ". .... .... = Accurate ECN: " + set_not_set(ecn);
+    Flags["Congestion_Window"] = std::to_string(cwr) + ". .... .... = Congestion Window Reduction: " + set_not_set(cwr);
+    Flags["ECN-Echo"] = std::to_string(ece) + ". .... .... = ECN-Echo: " + set_not_set(ece);
+    Flags["Urgent"] = std::to_string(urg) + ". .... .... = Urgent: " + set_not_set(urg);
+    Flags["Acknowledgement"] = std::to_string(ack) + ". .... .... = Acknowledgement: " + set_not_set(ack);
+    Flags["Push"] = std::to_string(psh) + ". .... .... = Push: " + set_not_set(psh);
+    Flags["Reset"] = std::to_string(rst) + ". .... .... = Reset: " + set_not_set(rst);
+    Flags["Syn"] = std::to_string(syn) + ". .... .... = Syn: " + set_not_set(syn);
+    Flags["Fin"] = std::to_string(fin) + ". .... .... = Fin: " + set_not_set(fin);
+
+    TCP_Packet["Flags"] = Flags;
+
+    TCP_Packet["Window"] = window_string;
+    TCP_Packet["Checksum"] = checksum_string;
+    TCP_Packet["Urgent_Pointer"] = urgent_pointer_string;
     /*
-    For the time stats basically just keep an in memory
-    log of the times of each frame, and basically each
-    (src ip, src port), (dest ip, dest port) mapping will
-    have its own log and basically you can easily keep track
-    of these statistics.
+        For the time stats basically just keep an in memory
+        log of the times of each frame, and basically each
+        (src ip, src port), (dest ip, dest port) mapping will
+        have its own log and basically you can easily keep track
+        of these statistics.
 
-    */
-    time["title"] = "[Timestamps]";
-    time["first_frame"] = "[Time since first Frame: 123456789(change later) seconds]";
-    time["prev_frame"] = "[Time since previous Frame: 123456789(change later) seconds]";
-    UDP_Packet["Timestamps"] = time;
-    UDP_Packet["UDP_Payload"] = "UDP payload (" + std::to_string(payload_size) + ")";
-    UDP_Packet["data"] = payload;
-    UDP_Packet["all_data"] = entirePacketHex;
+        */
 
-    return UDP_Packet;
+    return TCP_Packet;
 }

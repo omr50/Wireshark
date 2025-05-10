@@ -96,3 +96,10 @@ uint8_t binary_to_int(uint8_t value, uint8_t start_bit, uint8_t end_bit)
     }
     return int_val;
 }
+
+std::string set_not_set(uint8_t bit)
+{
+    if (bit)
+        return "Set";
+    return "Not Set";
+}
