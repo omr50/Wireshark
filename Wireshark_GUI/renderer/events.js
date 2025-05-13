@@ -317,6 +317,101 @@ function createUDPDetailedInfo(detailedPacket) {
     return udp_detailed_packet_info;
 }
 
+function createTCPDetailedInfo(detailedPacket) {
+    let tcp_detailed_packet_info = `
+    
+  <div class="packet_details_container tcp_packet highlightable" onclick="toggleFieldHighlight('tcp_packet', event)">
+    <div class="item highlightable" onclick="toggleSubItems(event, this);">
+        <div class="title"><img class="dropdown" src="./dropdown.png" width="14px" height="14px">
+        ${detailedPacket["title"]} </div> 
+        <div class="sub-items">
+            <div class="item src_port highlightable" onclick="toggleFieldHighlight('src_port', event);" >
+                ${small_padding}${detailedPacket["Source_Port"]} 
+            </div>
+
+            <div class="item dest_port highlightable" onclick="toggleFieldHighlight('dest_port', event);">
+                ${small_padding}${detailedPacket["Destination_Port"]} 
+            </div>
+
+            <div class="item length highlightable" onclick="toggleFieldHighlight('length', event);">
+                ${small_padding}${detailedPacket["Sequence_Number"]} 
+            </div>
+
+            <div class="item checksum highlightable" onclick="toggleFieldHighlight('checksum', event);">
+                ${small_padding}${detailedPacket["Acknowledgement_Number"]} 
+            </div>
+
+            <div class="item" onclick="toggleFieldHighlight('stop_prop', event);">
+                ${small_padding}${detailedPacket["Header_Length"]} 
+            </div>
+
+            <div class="item" onclick="toggleSubItems(event, this); toggleFieldHighlight('stop_prop', event);">
+                ${small_padding}<img class="dropdown" src="./dropdown.png" width="14px" height="14px">
+                    ${detailedPacket["Flags"]["Title"]} 
+                <div class="sub-items">
+
+                    <div class="item">
+                        ${padding}${detailedPacket["Flags"]["Reserved"]} 
+                    </div>
+
+                    <div class="item">
+                        ${padding}${detailedPacket["Flags"]["ECN"]} 
+                    </div>
+                    
+                    <div class="item">
+                        ${padding}${detailedPacket["Flags"]["Congestion_Window"]} 
+                    </div>
+                    
+                    <div class="item">
+                        ${padding}${detailedPacket["Flags"]["ECN-Echo"]} 
+                    </div>
+
+                    <div class="item">
+                        ${padding}${detailedPacket["Flags"]["Urgent"]} 
+                    </div>
+
+                    <div class="item">
+                        ${padding}${detailedPacket["Flags"]["Acknowledgement"]} 
+                    </div>
+
+                    <div class="item">
+                        ${padding}${detailedPacket["Flags"]["Push"]} 
+                    </div>
+                    
+                    <div class="item">
+                        ${padding}${detailedPacket["Flags"]["Reset"]} 
+                    </div>
+
+                    <div class="item">
+                        ${padding}${detailedPacket["Flags"]["Syn"]} 
+                    </div>
+
+                    <div class="item">
+                        ${padding}${detailedPacket["Flags"]["Fin"]} 
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="item payload highlightable" onclick="toggleFieldHighlight('payload', event);">
+                ${small_padding}${detailedPacket["Window"]} 
+            </div>
+ 
+            <div class="item payload highlightable" onclick="toggleFieldHighlight('payload', event);">
+                ${small_padding}${detailedPacket["Checksum"]} 
+            </div>
+ 
+            <div class="item payload highlightable" onclick="toggleFieldHighlight('payload', event);">
+                ${small_padding}${detailedPacket["Urgent_Pointer"]} 
+            </div>
+            
+        </div>
+    </div>
+   </div>`
+    return tcp_detailed_packet_info;
+}
+
 function stringToHex(str) {
   let result = "";
   for (let i = 0; i < str.length; i++) {
@@ -370,6 +465,7 @@ function renderDetailedInfo(packet_num, element) {
       ${(detailedPackets.length > 1 && detailedPackets[1]["title"].includes("Internet Protocol Version 4")) ? createIPDetailedInfo(detailedPackets[1]) : ""}
       ${(detailedPackets.length > 1 && detailedPackets[1]["title"].includes("Address Resolution Protocol")) ? createARPDetailedInfo(detailedPackets[1]) : ""}
       ${(detailedPackets.length > 2 && detailedPackets[2]["title"].includes("User Datagram Protocol")) ? createUDPDetailedInfo(detailedPackets[2]) : ""}
+      ${(detailedPackets.length > 2 && detailedPackets[2]["title"].includes("Transmission Control Protocol")) ? createTCPDetailedInfo(detailedPackets[2]) : ""}
       ${(detailedPackets.length === 3 && detailedPackets[2]["title"].includes("User Datagram Protocol")) ? createUDPPayload(detailedPackets[2]) : ""}
   </div>
   `

@@ -97,6 +97,8 @@ json Ether_Packet::print()
             detailed_packet_info.push_back(packet->print());
         if (packet->packet_type == "UDP")
             detailed_packet_info.push_back(packet->print());
+        if (packet->packet_type == "TCP")
+            detailed_packet_info.push_back(packet->print());
     }
     // full_packet["detailed_info"] = detailed_packet_info;
     full_packet["detailed_info"] = detailed_packet_info;
@@ -134,6 +136,7 @@ std::string Ether_Packet::print_type()
     printf("ETHER TYPE IS %x", ntohs(eth_hdr->ether_type));
     std::ostringstream oss;
     oss << "0x" << std::hex << std::setw(4) << std::setfill('0') << ntohs(eth_hdr->ether_type);
+    printf("got to here in ether print type func?\n");
     return oss.str();
 }
 

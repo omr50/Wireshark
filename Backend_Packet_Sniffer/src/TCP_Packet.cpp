@@ -33,8 +33,7 @@ void TCP_Packet::parse()
 
 json TCP_Packet::print()
 {
-    std::string msg((char *)this->tcp_hdr, this->data_length);
-    return msg;
+    return detailed_protocol_info_print();
 }
 
 json TCP_Packet::detailed_protocol_info_print()
@@ -110,21 +109,21 @@ json TCP_Packet::detailed_protocol_info_print()
     TCP_Packet["Source_Port"] = "Source Port: " + src_string;
     TCP_Packet["Destination_Port"] = "Destination Port: " + dest_string;
     TCP_Packet["Sequence_Number"] = "Sequence Number (raw): " + seq_string;
-    TCP_Packet["Acknolwedgement_Number"] = "Acknowledgement Number (raw): " + ack_string;
+    TCP_Packet["Acknowledgement_Number"] = "Acknowledgement Number (raw): " + ack_string;
     TCP_Packet["Header_Length"] = data_offset_binary_string + " .... = Header Length: " + std::to_string(4 * data_offset) + " bytes (" + std::to_string(data_offset) + ")";
 
     json Flags;
     Flags["Title"] = "Flags: " + flags_big_endian_string;
     Flags["Reserved"] = reserved_string + ". .... .... = Reserved: " + set_not_set(reserved);
-    Flags["ECN"] = std::to_string(ecn) + ". .... .... = Accurate ECN: " + set_not_set(ecn);
-    Flags["Congestion_Window"] = std::to_string(cwr) + ". .... .... = Congestion Window Reduction: " + set_not_set(cwr);
-    Flags["ECN-Echo"] = std::to_string(ece) + ". .... .... = ECN-Echo: " + set_not_set(ece);
-    Flags["Urgent"] = std::to_string(urg) + ". .... .... = Urgent: " + set_not_set(urg);
-    Flags["Acknowledgement"] = std::to_string(ack) + ". .... .... = Acknowledgement: " + set_not_set(ack);
-    Flags["Push"] = std::to_string(psh) + ". .... .... = Push: " + set_not_set(psh);
-    Flags["Reset"] = std::to_string(rst) + ". .... .... = Reset: " + set_not_set(rst);
-    Flags["Syn"] = std::to_string(syn) + ". .... .... = Syn: " + set_not_set(syn);
-    Flags["Fin"] = std::to_string(fin) + ". .... .... = Fin: " + set_not_set(fin);
+    Flags["ECN"] = "..." + std::to_string(ecn) + " .... .... = Accurate ECN: " + set_not_set(ecn);
+    Flags["Congestion_Window"] = ".... " + std::to_string(cwr) + "... .... = Congestion Window Reduction: " + set_not_set(cwr);
+    Flags["ECN-Echo"] = ".... ." + std::to_string(ece) + ".. .... = ECN-Echo: " + set_not_set(ece);
+    Flags["Urgent"] = ".... .." + std::to_string(urg) + ". .... = Urgent: " + set_not_set(urg);
+    Flags["Acknowledgement"] = ".... ..." + std::to_string(ack) + " .... = Acknowledgement: " + set_not_set(ack);
+    Flags["Push"] = ".... .... " + std::to_string(psh) + "... = Push: " + set_not_set(psh);
+    Flags["Reset"] = ".... .... ." + std::to_string(rst) + ".. = Reset: " + set_not_set(rst);
+    Flags["Syn"] = ".... .... .." + std::to_string(syn) + ". = Syn: " + set_not_set(syn);
+    Flags["Fin"] = ".... .... ..." + std::to_string(fin) + " = Fin: " + set_not_set(fin);
 
     TCP_Packet["Flags"] = Flags;
 
