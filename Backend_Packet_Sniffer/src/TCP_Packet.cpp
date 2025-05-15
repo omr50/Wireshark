@@ -101,9 +101,9 @@ json TCP_Packet::detailed_protocol_info_print()
     std::string data_offset_binary_string = to_binary_string(data_offset, 4, false);
     std::string reserved_string = to_binary_string(reserved, 3, false);
     std::string flags_big_endian_string = to_hex(flag_big_endian);
-    std::string window_string = std::to_string(window);
-    std::string checksum_string = std::to_string(check);
-    std::string urgent_pointer_string = std::to_string(urg_ptr);
+    std::string window_string = "Window: " + std::to_string(window);
+    std::string checksum_string = "Checksum: " + std::to_string(check) + "[unverified]";
+    std::string urgent_pointer_string = "Urgent Pointer: " + std::to_string(urg_ptr);
 
     TCP_Packet["title"] = "Transmission Control Protocol, Src Port: " + src_string + ", Dst Port: " + dest_string + ", Seq: " + seq_string + ", Ack: " + ack_string;
     TCP_Packet["Source_Port"] = "Source Port: " + src_string;
