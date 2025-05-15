@@ -325,27 +325,27 @@ function createTCPDetailedInfo(detailedPacket) {
         <div class="title"><img class="dropdown" src="./dropdown.png" width="14px" height="14px">
         ${detailedPacket["title"]} </div> 
         <div class="sub-items">
-            <div class="item src_port highlightable" onclick="toggleFieldHighlight('src_port', event);" >
+            <div class="item tcp_src_port highlightable" onclick="toggleFieldHighlight('tcp_src_port', event);" >
                 ${small_padding}${detailedPacket["Source_Port"]} 
             </div>
 
-            <div class="item dest_port highlightable" onclick="toggleFieldHighlight('dest_port', event);">
+            <div class="item tcp_dest_port highlightable" onclick="toggleFieldHighlight('tcp_dest_port', event);">
                 ${small_padding}${detailedPacket["Destination_Port"]} 
             </div>
 
-            <div class="item length highlightable" onclick="toggleFieldHighlight('length', event);">
+            <div class="item seq_num highlightable" onclick="toggleFieldHighlight('seq_num', event);">
                 ${small_padding}${detailedPacket["Sequence_Number"]} 
             </div>
 
-            <div class="item checksum highlightable" onclick="toggleFieldHighlight('checksum', event);">
+            <div class="item ack_num highlightable" onclick="toggleFieldHighlight('ack_num', event);">
                 ${small_padding}${detailedPacket["Acknowledgement_Number"]} 
             </div>
 
-            <div class="item" onclick="toggleFieldHighlight('stop_prop', event);">
+            <div class="item tcp_header_len highlightable" onclick="toggleFieldHighlight('tcp_header_len', event);">
                 ${small_padding}${detailedPacket["Header_Length"]} 
             </div>
 
-            <div class="item" onclick="toggleSubItems(event, this); toggleFieldHighlight('stop_prop', event);">
+            <div class="item tcp_flags highlightable" onclick="toggleSubItems(event, this); toggleFieldHighlight('tcp_flags', event);">
                 ${small_padding}<img class="dropdown" src="./dropdown.png" width="14px" height="14px">
                     ${detailedPacket["Flags"]["Title"]} 
                 <div class="sub-items">
@@ -394,15 +394,15 @@ function createTCPDetailedInfo(detailedPacket) {
                 </div>
             </div>
 
-            <div class="item payload highlightable" onclick="toggleFieldHighlight('payload', event);">
+            <div class="item window highlightable" onclick="toggleFieldHighlight('window', event);">
                 ${small_padding}${detailedPacket["Window"]} 
             </div>
  
-            <div class="item payload highlightable" onclick="toggleFieldHighlight('payload', event);">
+            <div class="item tcp_checksum highlightable" onclick="toggleFieldHighlight('tcp_checksum', event);">
                 ${small_padding}${detailedPacket["Checksum"]} 
             </div>
  
-            <div class="item payload highlightable" onclick="toggleFieldHighlight('payload', event);">
+            <div class="item urg_pointer highlightable" onclick="toggleFieldHighlight('urg_pointer', event);">
                 ${small_padding}${detailedPacket["Urgent_Pointer"]} 
             </div>
             
@@ -487,6 +487,7 @@ function renderHexInfo(packet_num, element) {
   let list = 
   `<div class="hex-info-container">
       ${(detailedPackets.length === 3 && detailedPackets[2]["title"].includes("User Datagram Protocol")) ? createHexData(detailedPackets[2]["all_data"], "UDP") : ""}
+      ${(detailedPackets.length === 3 && detailedPackets[2]["title"].includes("Transmission Control Protocol")) ? createHexData(detailedPackets[2]["all_data"], "TCP") : ""}
   </div>
   `
   hexElement.innerHTML = "";
@@ -533,6 +534,26 @@ function createUDPHexData(hexData) {
         // <span class="payload">${get_bytes_spaced(hexData, 48, "end")}</span>
 }
 
+function createTCPHexData(hexData) {
+    return `
+        <span class="tcp_src_port highlightable">${get_bytes_spaced(hexData, 34, 35)}</span>
+        <span class="tcp_dest_port highlightable">${get_bytes_spaced(hexData, 36, 37)}</span>
+        <span class="seq_num highlightable">${get_bytes_spaced(hexData, 38, 41)}</span>
+        <span class="ack_num highlightable">${get_bytes_spaced(hexData, 42, 45)}</span>
+        <span class="tcp_header_len highlightable">${get_bytes_spaced(hexData, 46, 46)}</span>
+        <span class="tcp_flags highlightable">${get_bytes_spaced(hexData, 47, 47)}</span>
+        <div></div>
+        <span class="window highlightable">${get_bytes_spaced(hexData, 48, 49)}</span>
+        <span class="tcp_checksum highlightable">${get_bytes_spaced(50, 51)}</span>
+        <span class="urg_pointer highlightable">${get_bytes_spaced(52, 53)}</span>
+        `
+        // <span class="payload">${get_bytes_spaced(hexData, 42, 47)}</span>
+        // <div></div>
+        // <span class="payload">${get_bytes_spaced(hexData, 48, "end")}</span>
+}
+
+
+
 
 function getPayload(hexData) {
     let total = "";
@@ -554,6 +575,20 @@ function createHexData(hexData, packet_type) {
                 ${createEtherHexData(hexData)}        
                 ${createIPHexData(hexData)}        
                 ${createUDPHexData(hexData)}        
+            </div>
+            ${getByteTranslation(hexData)}
+        </div>
+        `
+        return hex_data;
+    }
+    if (packet_type == "TCP") {
+        const hex_data = `
+        <div class="hex-data-container">
+            ${getByteCounter(hexData)}
+            <div class="hex_bytes">
+                ${createEtherHexData(hexData)}        
+                ${createIPHexData(hexData)}        
+                ${createTCPHexData(hexData)}        
             </div>
             ${getByteTranslation(hexData)}
         </div>

@@ -65,6 +65,10 @@ json TCP_Packet::detailed_protocol_info_print()
 
     json TCP_Packet;
     json time;
+
+    size_t packet_size = sizeof(ether_header) + sizeof(iphdr) + sizeof(tcphdr);
+    std::string entirePacketHex = toHex(reinterpret_cast<uint8_t *>((void *)this->tcp_hdr + sizeof(tcphdr) - packet_size), packet_size);
+
     uint16_t src_port = ntohs(tcp_hdr->source);
     uint16_t dest_port = ntohs(tcp_hdr->dest);
     uint32_t seq_num = ntohl(tcp_hdr->seq);
@@ -130,6 +134,7 @@ json TCP_Packet::detailed_protocol_info_print()
     TCP_Packet["Window"] = window_string;
     TCP_Packet["Checksum"] = checksum_string;
     TCP_Packet["Urgent_Pointer"] = urgent_pointer_string;
+    TCP_Packet["all_data"] = entirePacketHex;
     /*
         For the time stats basically just keep an in memory
         log of the times of each frame, and basically each
