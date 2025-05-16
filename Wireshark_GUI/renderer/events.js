@@ -595,6 +595,19 @@ function createHexData(hexData, packet_type) {
         `
         return hex_data;
     }
+    if (packet_type == "ARP") {
+        const hex_data = `
+        <div class="hex-data-container">
+            ${getByteCounter(hexData)}
+            <div class="hex_bytes">
+                ${createEtherHexData(hexData)}        
+                ${createARPHexData(hexData)}        
+            </div>
+            ${getByteTranslation(hexData)}
+        </div>
+        `
+        return hex_data;
+    }
 }
 
 // Function displays the byte values for each row
