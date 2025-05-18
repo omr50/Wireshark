@@ -38,7 +38,7 @@ json ARP_Packet::detailed_protocol_info_print()
     int hardware_type = ntohs(this->arp_hdr->ea_hdr.ar_hrd);
 
     size_t packet_size = sizeof(ether_header) + sizeof(ether_arp);
-    std::string entirePacketHex = toHex(reinterpret_cast<uint8_t *>((void *)this->arp_hdr + sizeof(ether_arp) - packet_size), packet_size);
+    std::string entirePacketHex = toHex(reinterpret_cast<uint8_t *>((void *)this->arp_hdr - sizeof(ether_header)), packet_size + 1);
 
     // std::ofstream arp_binary_file("arp_binary_file.bin", std::ios::out | std::ios::binary);
     // arp_binary_file.write((char *)this->arp_hdr, sizeof(struct ether_arp));

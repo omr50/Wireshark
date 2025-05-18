@@ -90,40 +90,40 @@ function search(event, element) {
 
 function createARPDetailedInfo(detailedPacket) {
     let arp_detailed_packet_info = `
-    <div class="item" onclick="toggleSubItems(event, this)">
+    <div class="item highlightable" onclick="toggleSubItems(event, this)">
         <div class="title"><img class="dropdown" src="./dropdown.png" width="14px" height="14px">
         ${detailedPacket["title"]} </div> 
         <div class="sub-items">
-            <div class="item">
+            <div class="item hardware_type highlightable" onclick="toggleFieldHighlight('hardware_type', event);">
                 ${small_padding}${detailedPacket["hardware_type"]} 
             </div>
-            <div class="item">
+            <div class="item protocol_type highlightable" onclick="toggleFieldHighlight('protocol_type', event);">
                 ${small_padding}${detailedPacket["protocol_type"]} 
             </div>
 
-            <div class="item">
+            <div class="hardware_len highlightable" onclick="toggleFieldHighlight('hardware_len', event);">
                 ${small_padding}${detailedPacket["hardware_size"]} 
             </div>
 
-            <div class="item">
+            <div class="item protocol_len highlightable" onclick="toggleFieldHighlight('protocol_len', event);">
                 ${small_padding}${detailedPacket["target_size"]} 
             </div>
-            <div class="item">
+            <div class="item operation highlightable" onclick="toggleFieldHighlight('operation', event);">
                 ${small_padding}${detailedPacket["opcode"]} 
             </div>
 
-            <div class="item">
+            <div class="item sender_hardware_addr highlightable" onclick="toggleFieldHighlight('sender_hardware_addr', event);">
                 ${small_padding}${detailedPacket["sender_mac"]} 
             </div>
 
-            <div class="item">
+            <div class="item sender_protocol_addr highlightable" onclick="toggleFieldHighlight('sender_protocol_addr', event);">
                 ${small_padding}${detailedPacket["sender_ip"]} 
             </div>
-            <div class="item">
+            <div class="item target_hardware_addr highlightable" onclick="toggleFieldHighlight('target_hardware_addr', event);">
                 ${small_padding}${detailedPacket["target_mac"]} 
             </div>
 
-            <div class="item">
+            <div class="item target_protocol_addr highlightable" onclick="toggleFieldHighlight('target_protocol_addr', event);">
                 ${small_padding}${detailedPacket["target_ip"]} 
             </div>
         </div>
@@ -486,6 +486,7 @@ function renderHexInfo(packet_num, element) {
 
   let list = 
   `<div class="hex-info-container">
+      ${(detailedPackets.length === 2 && detailedPackets[1]["title"].includes("Address Resolution Protocol")) ? createHexData(detailedPackets[1]["all_data"], "ARP") : ""}
       ${(detailedPackets.length === 3 && detailedPackets[2]["title"].includes("User Datagram Protocol")) ? createHexData(detailedPackets[2]["all_data"], "UDP") : ""}
       ${(detailedPackets.length === 3 && detailedPackets[2]["title"].includes("Transmission Control Protocol")) ? createHexData(detailedPackets[2]["all_data"], "TCP") : ""}
   </div>
@@ -554,17 +555,17 @@ function createTCPHexData(hexData) {
 
 function createARPHexData(hexData) {
     return `
-        <span class="hardware_type highlightable">${get_bytes_spaced(hexData, 34, 35)}</span>
-        <span class="protocol_type highlightable">${get_bytes_spaced(hexData, 36, 37)}</span>
-        <span class="hardware_len highlightable">${get_bytes_spaced(hexData, 38, 38)}</span>
-        <span class="protocol_len highlightable">${get_bytes_spaced(hexData, 39, 39)}</span>
-        <span class="operation highlightable">${get_bytes_spaced(hexData, 40, 41)}</span>
-        <span class="sender_hardware_addr highlightable">${get_bytes_spaced(hexData, 42, 46)}</span>
-        <span class="sender_protocol_addr highlightable">${get_bytes_spaced(hexData, 47, 48)}</span>
+        <span class="hardware_type highlightable">${get_bytes_spaced(hexData, 14, 15)}</span>
         <div></div>
-        <span class="sender_protocol_addr highlightable">${get_bytes_spaced(hexData, 49, 49)}</span>
-        <span class="target_hardware_addr highlightable">${get_bytes_spaced(hexData, 50, 55)}</span>
-        <span class="target_protocol_addr highlightable">${get_bytes_spaced(hexData, 56, 60)}</span>
+        <span class="protocol_type highlightable">${get_bytes_spaced(hexData, 16, 17)}</span>
+        <span class="hardware_len highlightable">${get_bytes_spaced(hexData, 18, 18)}</span>
+        <span class="protocol_len highlightable">${get_bytes_spaced(hexData, 19, 19)}</span>
+        <span class="operation highlightable">${get_bytes_spaced(hexData, 20, 21)}</span>
+        <span class="sender_hardware_addr highlightable">${get_bytes_spaced(hexData, 22, 27)}</span>
+        <span class="sender_protocol_addr highlightable">${get_bytes_spaced(hexData, 28, 31)}</span>
+        <div></div>
+        <span class="target_hardware_addr highlightable">${get_bytes_spaced(hexData, 32, 37)}</span>
+        <span class="target_protocol_addr highlightable">${get_bytes_spaced(hexData, 38, 41)}</span>
         `
         // <span class="payload">${get_bytes_spaced(hexData, 42, 47)}</span>
         // <div></div>
