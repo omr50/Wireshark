@@ -1,4 +1,5 @@
 #include "../include/PacketClasses/ARP_Packet.hpp"
+#include "../include/utils.hpp"
 #include <iostream>
 #include <fstream>
 
@@ -35,6 +36,10 @@ json ARP_Packet::detailed_protocol_info_print()
     int opcode = ntohs(this->arp_hdr->ea_hdr.ar_op);
     std::string opcode_string = ((opcode == 1) ? "request" : "response");
     int hardware_type = ntohs(this->arp_hdr->ea_hdr.ar_hrd);
+
+    size_t packet_size = sizeof(ether_header) + sizeof(ether_arp);
+    std::string entirePacketHex = toHex(reinterpret_cast<uint8_t *>((void *)this->arp_hdr + sizeof(ether_arp) - packet_size), packet_size);
+
     // std::ofstream arp_binary_file("arp_binary_file.bin", std::ios::out | std::ios::binary);
     // arp_binary_file.write((char *)this->arp_hdr, sizeof(struct ether_arp));
 
@@ -71,6 +76,7 @@ json ARP_Packet::detailed_protocol_info_print()
     ARP_Packet["sender_ip"] = "Sender IP address: " + sender_protocol_address;
     ARP_Packet["target_mac"] = "Target MAC address: " + target_hardware_address + "(placeholder also add manuf prefix)";
     ARP_Packet["target_ip"] = "Target IP address: " + target_protocol_address;
+    ARP_Packet["all_data"] = entirePacketHex;
 
     return ARP_Packet;
 }

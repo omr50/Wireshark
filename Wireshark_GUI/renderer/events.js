@@ -552,6 +552,24 @@ function createTCPHexData(hexData) {
         // <span class="payload">${get_bytes_spaced(hexData, 48, "end")}</span>
 }
 
+function createARPHexData(hexData) {
+    return `
+        <span class="tcp_src_port highlightable">${get_bytes_spaced(hexData, 34, 35)}</span>
+        <span class="tcp_dest_port highlightable">${get_bytes_spaced(hexData, 36, 37)}</span>
+        <span class="seq_num highlightable">${get_bytes_spaced(hexData, 38, 41)}</span>
+        <span class="ack_num highlightable">${get_bytes_spaced(hexData, 42, 45)}</span>
+        <span class="tcp_header_len highlightable">${get_bytes_spaced(hexData, 46, 46)}</span>
+        <span class="tcp_flags highlightable">${get_bytes_spaced(hexData, 47, 47)}</span>
+        <div></div>
+        <span class="window highlightable">${get_bytes_spaced(hexData, 48, 49)}</span>
+        <span class="tcp_checksum highlightable">${get_bytes_spaced(50, 51)}</span>
+        <span class="urg_pointer highlightable">${get_bytes_spaced(52, 53)}</span>
+        `
+        // <span class="payload">${get_bytes_spaced(hexData, 42, 47)}</span>
+        // <div></div>
+        // <span class="payload">${get_bytes_spaced(hexData, 48, "end")}</span>
+}
+
 
 
 
