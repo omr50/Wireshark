@@ -554,16 +554,17 @@ function createTCPHexData(hexData) {
 
 function createARPHexData(hexData) {
     return `
-        <span class="tcp_src_port highlightable">${get_bytes_spaced(hexData, 34, 35)}</span>
-        <span class="tcp_dest_port highlightable">${get_bytes_spaced(hexData, 36, 37)}</span>
-        <span class="seq_num highlightable">${get_bytes_spaced(hexData, 38, 41)}</span>
-        <span class="ack_num highlightable">${get_bytes_spaced(hexData, 42, 45)}</span>
-        <span class="tcp_header_len highlightable">${get_bytes_spaced(hexData, 46, 46)}</span>
-        <span class="tcp_flags highlightable">${get_bytes_spaced(hexData, 47, 47)}</span>
+        <span class="hardware_type highlightable">${get_bytes_spaced(hexData, 34, 35)}</span>
+        <span class="protocol_type highlightable">${get_bytes_spaced(hexData, 36, 37)}</span>
+        <span class="hardware_len highlightable">${get_bytes_spaced(hexData, 38, 38)}</span>
+        <span class="protocol_len highlightable">${get_bytes_spaced(hexData, 39, 39)}</span>
+        <span class="operation highlightable">${get_bytes_spaced(hexData, 40, 41)}</span>
+        <span class="sender_hardware_addr highlightable">${get_bytes_spaced(hexData, 42, 46)}</span>
+        <span class="sender_protocol_addr highlightable">${get_bytes_spaced(hexData, 47, 48)}</span>
         <div></div>
-        <span class="window highlightable">${get_bytes_spaced(hexData, 48, 49)}</span>
-        <span class="tcp_checksum highlightable">${get_bytes_spaced(50, 51)}</span>
-        <span class="urg_pointer highlightable">${get_bytes_spaced(52, 53)}</span>
+        <span class="sender_protocol_addr highlightable">${get_bytes_spaced(hexData, 49, 49)}</span>
+        <span class="target_hardware_addr highlightable">${get_bytes_spaced(hexData, 50, 55)}</span>
+        <span class="target_protocol_addr highlightable">${get_bytes_spaced(hexData, 56, 60)}</span>
         `
         // <span class="payload">${get_bytes_spaced(hexData, 42, 47)}</span>
         // <div></div>
