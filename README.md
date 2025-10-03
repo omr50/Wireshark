@@ -1,7 +1,8 @@
 # Wireshark (Custom Packet Sniffer & Analyzer)
 
 A custom-built packet capture, analysis, and visualization tool inspired by Wireshark.  
-This project provides a low-level network sniffer backend written in C++ and a graphical interface for displaying captured packets in real time.
+This project provides a low-level network sniffer backend written in C++ and a graphical 
+interface for displaying captured packets in real time.
 
 ---
 
